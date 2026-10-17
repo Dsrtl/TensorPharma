@@ -10,12 +10,12 @@ Given a compound as a SMILES string, predict its likely protein targets, the can
 
 | Path | Contents |
 |---|---|
-| **[`side/github-ready/TensorPharma/`](side/github-ready/TensorPharma/)** | **The modeling work: all scripts, experiment reports, protocols and results. Start here.** |
+| **[`main/github-ready/TensorPharma/`](main/github-ready/TensorPharma/)** | **The modeling work: all scripts, experiment reports, protocols and results. Start here.** |
 | `scripts/` | Dataset build and export utilities for the app pipeline |
 | `src/tensorpharma/` | Target-retrieval module used by the app |
 | `data/processed/` | Cleaned, joined tables, committed as compressed CSV (see the caveat below) |
 
-The modeling work lives under `side/` for historical reasons; it is the substantive part of this repository, not a side note. Its own [README](side/github-ready/TensorPharma/README.md) is the entry point.
+Start at [`main/github-ready/TensorPharma/`](main/github-ready/TensorPharma/) and read its own [README](main/github-ready/TensorPharma/README.md). That folder holds the substantive work: every script, protocol, experiment report and result.
 
 ## Headline result
 
@@ -25,16 +25,16 @@ Simple baselines are competitive: the cell-mean baseline reaches 0.2960 validati
 
 | Document | What it covers |
 |---|---|
-| [RANK_BENCHMARK.md](side/github-ready/TensorPharma/RANK_BENCHMARK.md) | Six-family response comparison protocol |
-| [CHEMBL_LIBRARY.md](side/github-ready/TensorPharma/CHEMBL_LIBRARY.md) | Protein-target retrieval from ChEMBL similarity |
-| [STEP3.md](side/github-ready/TensorPharma/STEP3.md) | Literature contexts and observed-response associations |
-| [TARGET_EXPRESSION_TEST.md](side/github-ready/TensorPharma/TARGET_EXPRESSION_TEST.md) | A feature addition that did not help; incumbent retained |
-| [DATA_AND_ARTIFACTS.md](side/github-ready/TensorPharma/DATA_AND_ARTIFACTS.md) | Which artifacts exist, where, and what is excluded |
-| [MODELING.md](side/github-ready/TensorPharma/MODELING.md) | Historical runbooks |
+| [RANK_BENCHMARK.md](main/github-ready/TensorPharma/RANK_BENCHMARK.md) | Six-family response comparison protocol |
+| [CHEMBL_LIBRARY.md](main/github-ready/TensorPharma/CHEMBL_LIBRARY.md) | Protein-target retrieval from ChEMBL similarity |
+| [STEP3.md](main/github-ready/TensorPharma/STEP3.md) | Literature contexts and observed-response associations |
+| [TARGET_EXPRESSION_TEST.md](main/github-ready/TensorPharma/TARGET_EXPRESSION_TEST.md) | A feature addition that did not help; incumbent retained |
+| [DATA_AND_ARTIFACTS.md](main/github-ready/TensorPharma/DATA_AND_ARTIFACTS.md) | Which artifacts exist, where, and what is excluded |
+| [MODELING.md](main/github-ready/TensorPharma/MODELING.md) | Historical runbooks |
 
 ## Reproducing
 
-A clone alone cannot retrain or serve predictions. Fitted model binaries, reference matrices and target caches are **not** in this repository; see [DATA_AND_ARTIFACTS.md](side/github-ready/TensorPharma/DATA_AND_ARTIFACTS.md) for how to obtain them.
+A clone alone cannot retrain or serve predictions. Fitted model binaries, reference matrices and target caches are **not** in this repository; see [DATA_AND_ARTIFACTS.md](main/github-ready/TensorPharma/DATA_AND_ARTIFACTS.md) for how to obtain them.
 
 ```bash
 python3 -m venv .venv
@@ -42,7 +42,7 @@ python3 -m venv .venv
 brew install libomp   # macOS only, needed by LightGBM
 ```
 
-For the modeling environment, use `side/github-ready/TensorPharma/requirements-reproducible.txt`, which pins the versions the recorded results were produced with. Frozen experiments must use their original RDKit version; an arbitrary fresh install is not a substitute.
+For the modeling environment, use `main/github-ready/TensorPharma/requirements-reproducible.txt`, which pins the versions the recorded results were produced with. Frozen experiments must use their original RDKit version; an arbitrary fresh install is not a substitute.
 
 Cluster runbooks use `<user>@<cluster-host>` as placeholders. Substitute your own authorized account.
 
@@ -56,4 +56,4 @@ Raw downloads (including the 83 GB LINCS level-4 `.gctx`) are not committed and 
 
 Predictions are experimental associations, not laboratory confirmation, clinical indications or treatment recommendations. Cell lines do not capture patient biology, toxicity, resistance or treatment context. Similarity votes and response ranks are not calibrated probabilities or binding affinities. Evaluation is compound/scaffold-cold and cell-warm: unseen chemicals in known cell lines, which does not demonstrate performance on unseen cells or patients.
 
-Full limitations are listed in [the modeling README](side/github-ready/TensorPharma/README.md#limitations).
+Full limitations are listed in [the modeling README](main/github-ready/TensorPharma/README.md#limitations).
