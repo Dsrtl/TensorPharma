@@ -309,7 +309,7 @@ a.score:hover { box-shadow: var(--ao-2); }
 <div class="top"><div class="in">
   <a class="brand" href="#/"><span class="led live" style="margin:0"></span>Tensor<span class="full">Pharma</span></a>
   <nav class="tabs"><a href="#/" data-tab="">Demo</a><a href="#/how" data-tab="#/how">What we did</a></nav>
-  <div class="search"><input id="q" placeholder="Find a drug, protein or cancer" autocomplete="off" aria-label="Search"><kbd>/</kbd><div class="drop" id="drop"></div></div>
+  <div class="search" style="display:none"><input id="q" placeholder="Find a drug, protein or cancer" autocomplete="off" aria-label="Search"><kbd>/</kbd><div class="drop" id="drop"></div></div>
 </div></div>
 <main class="page" id="app"><div class="engr">Loading results…</div></main>
 <div id="tip"></div>
@@ -317,7 +317,7 @@ a.score:hover { box-shadow: var(--ao-2); }
 <script src="https://unpkg.com/@rdkit/rdkit@2024.3.5-1.0.0/dist/RDKit_minimal.js"></script>
 <script>
 const DATA = "data/";
-let LIB = [], BY_ID = {}, VAL, MAPS, OV = null, LINKS = null, STEP3 = { links: [], chains: {} }, STRICT = null, RDKIT = null, OPEN = 1, S1VIEW = "curve";
+let CLUSTER = {}, LIB = [], BY_ID = {}, VAL, MAPS, OV = null, LINKS = null, STEP3 = { links: [], chains: {} }, STRICT = null, RDKIT = null, OPEN = 1, S1VIEW = "curve";
 const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content; };
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const pct = (x) => (x == null ? "–" : Math.round(100 * x) + "%");
@@ -367,6 +367,7 @@ async function load() {
   LIB.forEach((d) => (BY_ID[d.drug_id] = d));
   try { LINKS = await get("links.json"); } catch { LINKS = null; }
   try { OV = await get("overview.json"); } catch { OV = null; }
+  try { CLUSTER = await get("cluster.json"); } catch { CLUSTER = {}; }
   try { STEP3 = await get("step3.json"); } catch { STEP3 = { links: [], chains: {} }; }
   window.RDKIT_READY = window.initRDKitModule ? initRDKitModule().then((m) => { RDKIT = m; drawMols(); return m; }).catch((e) => { console.error("rdkit", e); }) : Promise.resolve();
   setupSearch();
@@ -427,7 +428,7 @@ function setupSearch() {
 }
 
 // ---------- home: the demo ----------
-const EXAMPLES = ["lapatinib", "gefitinib", "imatinib", "cobimetinib", "atorvastatin"];
+const EXAMPLES = ["afatinib", "cobimetinib", "pitavastatin", "lapatinib", "imatinib"];
 let EXAMPLE = "imatinib", FAM = null;
 // map colours: the protein family of each drug's top predicted target
 const FAMILIES = [
@@ -476,7 +477,7 @@ function chainLink(d) {
   return ok.find((g) => g.kind === "prespecified" && g.subtype === killsMost(d) && g.genes.some((x) => ts.includes(x))) || null;
 }
 
-let QUERY = new URLSearchParams(location.search).get("q") || "lapatinib", LIBFP = null;
+let QUERY = new URLSearchParams(location.search).get("q") || "afatinib", LIBFP = null;
 const NEW_EXAMPLE = "Cc1ccc(NC(=O)c2ccc(CN3CCOCC3)cc2)cc1Nc1nccc(-c2cccnc2)n1";
 function demoPage() {
   const m = VAL.target_prediction.methods, s2 = VAL.step2, L = linkGroups();
@@ -484,8 +485,8 @@ function demoPage() {
   <section class="hero">
     <div class="engr">Challenge 6 · compound → target → cancer</div>
     <h1 class="voice">Drug to mechanism.</h1>
-    <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
-    <div class="picker" id="picker"><span style="font-size:13px;color:var(--ink-3);margin-right:4px">No molecule handy? Load an example:</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
+    <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Show results</button></form>
+    <div class="picker" id="picker"><span style="font-size:13px;color:var(--ink-3);margin-right:4px">No molecule handy? Load an example:</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule not in our data</button></div>
   </section>
   <section id="answer"></section>
   ${OV ? dataSection() : ""}
@@ -624,7 +625,7 @@ function dataSection() {
 }
 function step3Why(d) {
   const hits = (STEP3.chains[d.name] || []).map((c) => ({ c, l: STEP3.links.find((l) => l.id === c.id) })).filter((x) => x.l);
-  if (!hits.length) return { html: `${esc(whyPlain(d))} <span style="color:var(--ink-3)">None of our 8 tested links covers this drug, so this is a lead, not a finding.</span>`, tag: '<span class="tag Medium">unproven</span>' };
+  if (!hits.length) return { html: `None of our 8 tested links covers this drug, so we make no mechanism claim.`, tag: '<span class="tag" style="color:var(--ink-3)">no claim</span>' };
   const x = hits.sort((a, b) => ["holds", "trend", "none", "untestable"].indexOf(a.l.status) - ["holds", "trend", "none", "untestable"].indexOf(b.l.status))[0];
   const eff = x.c.effect != null ? ` Its ${esc(x.l.cancer.toLowerCase())} lines rank ${x.c.effect >= 0 ? "higher" : "lower"} than its other lines (${x.c.effect >= 0 ? "+" : ""}${x.c.effect.toFixed(2)}).` : "";
   return { html: `Predicted to hit <b>${esc(x.l.protein)}</b>, which links to <b>${esc(x.l.cancer)}</b>.${eff} ${esc(x.l.plain)}`, tag: S3_TAG[x.l.status] };
@@ -634,33 +635,17 @@ function step3Why(d) {
 // cell-line response is not predicted here, only what the look-alikes did in the lab.
 const VOTE_CUTOFF = 0.4;
 function newMolCard(r) {
-  const votersAll = r.near.filter((x) => x.sim >= VOTE_CUTOFF), voters = votersAll.filter((x) => x.d.known_targets?.length);
-  const votes = {};
-  voters.forEach((x) => x.d.known_targets.forEach((g) => (votes[g] = (votes[g] || 0) + x.sim)));
-  const top = Object.entries(votes).sort((a, b) => b[1] - a[1]).slice(0, 5), total = voters.reduce((a, x) => a + x.sim, 0);
-  const look = r.near.slice(0, 3).map((x) => { const ov = OV?.drugs?.[x.d.drug_id], t = ov?.top_types?.[0];
-    return `<div class="hbar"><span><a href="#/" data-q="${esc(x.d.name)}" class="lookalike">${esc(x.d.name)}</a><small>${f2(x.sim)} alike</small></span><span style="font-size:13px;color:var(--ink-2)">${ov ? `${ov.responders} of ${ov.tested} cell lines respond${t ? ` · most in ${esc(t.name)}` : ""}` : "no lab data"}</span><span>${ov ? GROUP_TAG[ov.group].split("</span>")[0] + "</span>" : ""}</span></div>`; }).join("");
-  const g0 = top.length ? (/^MAP2K[12]$/.test(top[0][0]) ? "MEK" : top[0][0]) : null, s3 = g0 ? STEP3.links.find((l) => l.id.split("_")[0] === g0) : null;
-  return `<div class="card fade" style="gap:16px">
-    <div class="head"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="mol" data-smiles="${esc(r.smiles)}" data-w="150" data-h="90" style="min-height:80px;width:150px;flex:none"></div>
-      <div><div style="font-size:22px;font-weight:500">New molecule</div><div style="font-size:13px;color:var(--ink-2)">Not in our ${LIB.length} screened drugs, so there is no lab data for it. Below is what we can predict from its structure alone.</div></div></div></div>
-    <div class="qa">
-      <div class="q"><span class="engr">1</span>Which proteins does it bind?</div>
-      <div class="a">${top.length ? top.map(([g, v]) => `<span class="tag Medium" style="text-transform:none">${esc(g)} · ${Math.round((100 * v) / total)}%</span>`).join("") : `<span style="color:var(--ink-2)">No prediction.</span>`}</div>
-      <div class="h">${top.length ? `<b>Predicted.</b> ${voters.length} known drug${voters.length > 1 ? "s" : ""} at least 40% alike voted, weighted by how alike. % = share of those look-alikes that bind it.` : `No known drug is at least 40% alike (closest: ${esc(r.d.name)}, ${f2(r.sim)}). Too different to guess, so we abstain.`}</div>
-      <div class="q"><span class="engr">2–3</span>Which cell lines and cancers respond?</div>
-      <div class="a" style="flex-direction:column;align-items:stretch;gap:8px">${look}</div>
-      <div class="h"><b>Not predicted.</b> These are its 3 closest screened drugs and what they did in the lab. Look-alikes alone ranked cell lines worse than the simple baseline on the cluster (0.278 vs 0.310), so we don't claim a response for a new molecule.</div>
-      <div class="q"><span class="engr">4</span>Mechanism: what kills the cell?</div>
-      <div class="a">${s3 ? `If it hits <b>${esc(top[0][0])}</b>: our tested link ${esc(s3.protein)} → ${esc(s3.cancer)} ${{ holds: "held up on unseen drugs", trend: "trended on unseen drugs", none: "did not hold", untestable: "had too few drugs to test" }[s3.status]}.` : `No claim. A mechanism needs lab data on this molecule, or a predicted protein covered by one of our 8 tested links.`}</div>
-      <div class="h">${s3 ? S3_TAG[s3.status] : '<span class="tag" style="color:var(--ink-3)">no claim</span>'}</div>
-    </div></div>`;
+  return `<div class="card fade" style="gap:14px">
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="mol" data-smiles="${esc(r.smiles)}" data-w="150" data-h="90" style="min-height:80px;width:150px;flex:none"></div>
+      <div><div style="font-size:22px;font-weight:500">Not in our results</div>
+      <div style="font-size:14px;color:var(--ink-2);max-width:620px">This page only shows what our HPC runs actually produced, for the ${LIB.length} drugs in our data. A new molecule has to go through the cluster pipeline first, so we show nothing made up here.</div></div></div>
+    <div style="font-size:14px;color:var(--ink-2)">Closest drug we did run: <a href="#/" data-q="${esc(r.d.name)}" class="lookalike" style="color:var(--ink)">${esc(r.d.name)}</a> (${f2(r.sim)} alike by structure fingerprint).</div></div>`;
 }
 
 function answerCard(r) {
   if (r.error) return `<div class="note">${r.error}</div>`;
   if (r.how === "nearest") return newMolCard(r);
-  const d = r.d, ov = OV?.drugs?.[d.drug_id], top = d.predicted_targets.slice(0, 5), w3 = step3Why(d), pred = !!d.predicted?.top_cells;
+  const d = r.d, ov = OV?.drugs?.[d.drug_id], cl = CLUSTER[d.name], known = d.known_targets || [], w3 = step3Why(d), pred = false;
   const cells = (pred ? d.predicted.top_cells : d.measured_top_cells || []).slice(0, 5);
   let subs = (d.predicted?.cancer_subtypes || d.measured_cancer_subtypes || []).filter((x) => !(d.breast_screen_artifact && /breast/i.test(x.name)));
   subs = subs.filter((x) => x.share_responsive > 0).sort((a, b) => (b.rank_score ?? 0) - (a.rank_score ?? 0)).slice(0, 3);
@@ -669,12 +654,14 @@ function answerCard(r) {
   return `<div class="card fade" style="gap:16px">
     ${r.how === "nearest" ? `<div class="note" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="mol" data-smiles="${esc(r.smiles)}" data-w="150" data-h="90" style="min-height:80px;width:150px;flex:none"></div>
       <span><b style="font-weight:500;color:var(--ink)">New molecule.</b> Its closest screened drug is <b style="font-weight:500;color:var(--ink)">${esc(d.name)}</b>, ${f2(r.sim)} alike, so the answers below are ${esc(d.name)}'s. ${weak ? "Under 0.5 alike: treat them as a weak guess." : ""} The full model in the repo searches ChEMBL instead.</span></div>` : ""}
-    <div class="head"><div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-size:24px;font-weight:500">${esc(d.name)}</span>${tag(d.confidence)}<span style="font-size:13px;color:var(--ink-2)">${d.labeled ? esc(d.moa || "") : "no known target · every protein below is a new prediction"}</span></div>
-      <a class="engr" href="${drugLink(d)}" style="text-decoration:none">Full evidence →</a></div>
+    <div class="head"><div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-size:24px;font-weight:500">${esc(d.name)}</span><span style="font-size:13px;color:var(--ink-2)">${esc(d.moa || "")}</span></div>
+      ${cl ? `<span class="engr">${cl.split === "test" ? "held-out test drug" : cl.split === "validation" ? "validation drug" : "training drug"}</span>` : ""}</div>
     <div class="qa">
       <div class="q"><span class="engr">1</span>Which proteins does it bind?</div>
-      <div class="a">${top.length ? top.map((t) => `<span class="pill ${t.is_known_target ? "ok" : ""}">${esc(t.gene)}${t.is_known_target ? " ✓" : ""}</span>`).join("") : "Nothing similar enough to learn from."}</div>
-      <div class="h">${d.confidence} confidence: closest known molecule is ${f2(d.nearest_similarity)} alike (1 = identical). ✓ = confirmed target.</div>
+      <div class="a" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span style="font-size:12.5px;color:var(--ink-3);margin-right:4px">Cluster predicted</span>${cl && cl.targets.length ? cl.targets.map((t) => `<span class="pill ${known.includes(t.gene) ? "ok" : ""}">${esc(t.gene)}${known.includes(t.gene) ? " ✓" : ""}</span>`).join("") : `<span style="color:var(--ink-2);font-size:13.5px">not exported for this drug</span>`}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span style="font-size:12.5px;color:var(--ink-3);margin-right:4px">Known (ChEMBL)</span>${known.length ? known.slice(0, 6).map((g) => `<span class="pill">${esc(g)}</span>`).join("") : `<span style="color:var(--ink-2);font-size:13.5px">none listed</span>`}</div></div>
+      <div class="h">${cl && cl.targets.length ? `From the HPC run: similar compounds among 498,671 in ChEMBL voted; the closest is ${f2(cl.targets[0].nn)} alike. ✓ = matches a known target.` : "The cluster run exported target predictions only for drugs under our 8 tested links."}</div>
 
       <div class="q"><span class="engr">2</span>Which cancer cell lines respond?</div>
       <div class="a" style="display:flex;flex-direction:column;align-items:stretch;gap:10px">
