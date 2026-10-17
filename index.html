@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TensorPharma</title>
+<script>
+  // Theme: ?theme=light|dark forces one; otherwise follow the system and keep following it.
+  (function () {
+    const forced = new URLSearchParams(location.search).get("theme");
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const set = () => (document.documentElement.dataset.theme = forced || (mq.matches ? "dark" : "light"));
+    set();
+    if (!forced) mq.addEventListener("change", () => { set(); window.redraw && window.redraw(); });
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Quiet platinum surfaces, inset wells for data, one amber accent only on what is selected or live. */
+:root {
+  color-scheme: light;
+  --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --bg: #e6e5e0; --panel: #f6f6f3; --display: #edece8; --line: #d6d4ce; --hair: #e3e1db;
+  --ink: #1c1c1a; --ink-2: #5b5a56; --ink-3: #8f8d87;
+  --uv: #b8702a; --uv-soft: #f3e5d2; --ok: #36784c; --mid: #a07a1e; --bad: #a4503f; --led-off: #cfcdc6;
+  --ao-1: 0 0 0 1px rgba(28,28,26,.045), 0 1px 1px rgba(28,28,26,.04), 0 3px 8px -2px rgba(28,28,26,.07);
+  --ao-2: 0 0 0 1px rgba(28,28,26,.05), 0 1px 2px rgba(28,28,26,.05), 0 6px 14px -4px rgba(28,28,26,.10), 0 18px 40px -18px rgba(28,28,26,.22);
+  --ao-in: inset 0 1px 2px rgba(28,28,26,.09), inset 0 0 0 1px rgba(28,28,26,.045);
+  --mol-filter: none;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #151514; --panel: #1f1f1d; --display: #181817; --line: #2d2d2a; --hair: #292927;
+  --ink: #ececea; --ink-2: #a5a49f; --ink-3: #6f6e69;
+  --uv: #d3873a; --uv-soft: #2e2318; --ok: #8fbd9b; --mid: #d8b56a; --bad: #e09a87; --led-off: #34332f;
+  --ao-1: 0 0 0 1px rgba(0,0,0,.5), 0 1px 1px rgba(0,0,0,.3), 0 3px 8px -2px rgba(0,0,0,.45);
+  --ao-2: 0 0 0 1px rgba(0,0,0,.55), 0 1px 2px rgba(0,0,0,.4), 0 6px 14px -4px rgba(0,0,0,.5), 0 18px 40px -18px rgba(0,0,0,.8);
+  --ao-in: inset 0 1px 2px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.3);
+  --mol-filter: invert(.88) hue-rotate(180deg);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--uv-soft); }
+
+/* top bar */
+.top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.top .in { max-width: 1120px; margin: 0 auto; padding: 12px 24px; display: flex; gap: 16px; align-items: center; }
+.brand { font-family: var(--mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+.search { flex: 1; position: relative; max-width: 420px; margin-left: auto; min-width: 0; }
+.search input { width: 100%; font: inherit; font-size: 14px; padding: 8px 12px 8px 32px; border: 0; border-radius: 9px; background: var(--panel); color: var(--ink); box-shadow: var(--ao-in); outline: none; }
+.search::before { content: ""; position: absolute; left: 12px; top: 50%; width: 9px; height: 9px; border: 1.5px solid var(--ink-3); border-radius: 50%; transform: translateY(-62%); pointer-events: none; }
+.search::after { content: ""; position: absolute; left: 21px; top: 58%; width: 5px; height: 1.5px; background: var(--ink-3); transform: rotate(45deg); pointer-events: none; }
+.search input:focus { box-shadow: var(--ao-in), 0 0 0 2px var(--uv); }
+.search kbd { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); font: 500 10.5px var(--mono); color: var(--ink-3); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.drop { position: absolute; top: 44px; left: 0; right: 0; background: var(--panel); border-radius: 12px; box-shadow: var(--ao-2); overflow: hidden; display: none; max-height: 60vh; overflow-y: auto; }
+.drop a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 14px; text-decoration: none; border-bottom: 1px solid var(--hair); font-size: 14px; }
+.drop a:last-child { border-bottom: 0; }
+.drop a:hover, .drop a.on { background: var(--uv-soft); }
+@media (max-width: 560px) { .search kbd { display: none; } .brand span.full { display: none; } }
+
+/* page + type */
+.page { max-width: 1120px; margin: 0 auto; padding: 40px 24px 96px; display: flex; flex-direction: column; gap: 28px; }
+@media (max-width: 760px) { .page { padding: 24px 16px 64px; gap: 20px; } .top .in { padding: 10px 16px; } }
+.voice { font-weight: 300; font-size: clamp(28px, 4.4vw, 42px); letter-spacing: -.022em; line-height: 1.08; margin: 0; text-wrap: balance; }
+.lede { font-size: 16px; color: var(--ink-2); margin: 0; max-width: 62ch; }
+.engr { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+.readout { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.take { font-size: 19px; font-weight: 400; letter-spacing: -.01em; line-height: 1.3; margin: 0; text-wrap: balance; }
+.take b { font-weight: 500; }
+.card { background: var(--panel); border-radius: 16px; box-shadow: var(--ao-1); padding: 28px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+@media (max-width: 760px) { .card { padding: 18px; border-radius: 14px; } }
+.display { background: var(--display); border-radius: 14px; box-shadow: var(--ao-in); padding: 18px; min-width: 0; }
+@media (max-width: 760px) { .display { padding: 12px; } }
+.head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* explanation: technical first, plain words after */
+.ex { display: flex; flex-direction: column; gap: 8px; max-width: 76ch; }
+.ex .tech { margin: 0; color: var(--ink); font-size: 14px; }
+.ex .plain { margin: 0; color: var(--ink-2); font-size: 14px; padding-left: 12px; border-left: 2px solid var(--line); }
+.ex .plain::before { content: "In plain words"; display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 1px; }
+
+/* pipeline overview */
+.pipe { display: grid; grid-template-columns: 1fr 22px 1fr 22px 1fr; align-items: stretch; }
+.pipe .arr { align-self: center; justify-self: center; width: 22px; height: 1px; background: var(--line); position: relative; }
+.pipe .arr::after { content: ""; position: absolute; right: 0; top: -3px; border: 3.5px solid transparent; border-left: 5px solid var(--ink-3); border-right: 0; }
+@media (max-width: 820px) { .pipe { grid-template-columns: 1fr; } .pipe .arr { width: 1px; height: 14px; } .pipe .arr::after { right: -3px; top: auto; bottom: 0; border: 3.5px solid transparent; border-top: 5px solid var(--ink-3); border-bottom: 0; } }
+.stage { text-align: left; border: 0; cursor: pointer; background: var(--panel); border-radius: 16px; box-shadow: var(--ao-1); padding: 20px 22px; display: flex; flex-direction: column; gap: 4px; transition: box-shadow .2s, transform .2s; position: relative; }
+.stage:hover { box-shadow: var(--ao-2); transform: translateY(-2px); }
+.stage:focus-visible { outline: 2px solid var(--uv); outline-offset: 2px; }
+.stage.on { box-shadow: var(--ao-2), 0 0 0 1.5px var(--uv); }
+.stage .t { font-size: 16px; font-weight: 500; margin-top: 6px; }
+.stage .num { font-family: var(--mono); font-size: 32px; font-weight: 400; letter-spacing: -.03em; line-height: 1.15; margin-top: 6px; }
+.stage .num small { font-size: 13px; letter-spacing: 0; color: var(--ink-3); margin-left: 6px; }
+.stage .s { font-size: 13px; color: var(--ink-2); }
+.stage .go { position: absolute; right: 18px; top: 18px; font: 500 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); opacity: 0; transition: opacity .2s; }
+.stage:hover .go { opacity: 1; }
+.stage.on .go { opacity: 1; color: var(--uv); }
+.led { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--led-off); margin-right: 7px; vertical-align: 1px; }
+.led.live { background: var(--uv); box-shadow: 0 0 6px var(--uv); }
+.led.wait { animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* rows */
+.strips { display: flex; flex-direction: column; }
+.strip { display: grid; grid-template-columns: minmax(110px, 170px) 1fr auto; gap: 16px; align-items: center; padding: 11px 10px; border: 0; border-bottom: 1px solid var(--hair); background: transparent; text-align: left; cursor: pointer; border-radius: 9px; text-decoration: none; transition: background .15s; width: 100%; min-width: 0; }
+.strip:last-child { border-bottom-color: transparent; }
+.strip:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.strip.on { background: var(--uv-soft); border-bottom-color: transparent; }
+.strip b { font-weight: 500; }
+.strip .d { color: var(--ink-2); font-size: 13px; min-width: 0; }
+.strip.t { grid-template-columns: minmax(0,1fr) auto 72px; }
+.strip.t .d { white-space: nowrap; font-family: var(--mono); font-size: 12px; }
+.strip.t .meter { width: 72px; }
+.strip.static { cursor: default; } .strip.static:hover { background: transparent; }
+@media (max-width: 640px) { .strip { grid-template-columns: 1fr auto; gap: 2px 12px; } .strip .d { grid-column: 1 / -1; grid-row: 2; } }
+.spec .kv { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--hair); align-items: baseline; }
+.spec .kv:last-child { border-bottom: 0; }
+.spec .k { flex: none; width: 11ch; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.spec .v { flex: 1; font-size: 14px; color: var(--ink-2); min-width: 0; }
+.spec .r { font-family: var(--mono); font-size: 14px; color: var(--ink-2); }
+.spec .kv.best .v, .spec .kv.best .r { color: var(--ink); font-weight: 500; }
+
+/* bars (method comparison) */
+.bars { display: flex; flex-direction: column; gap: 12px; }
+.bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 13.5px; color: var(--ink-2); }
+.bar .track { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--display); box-shadow: var(--ao-in); overflow: hidden; }
+.bar .track i { display: block; height: 100%; border-radius: 4px; background: var(--ink-3); transform-origin: left; animation: grow .7s cubic-bezier(.2,.7,.2,1) both; }
+.bar.best { color: var(--ink); font-weight: 500; } .bar.best .track i { background: var(--ink); }
+.bar .readout { font-size: 14px; }
+@keyframes grow { from { transform: scaleX(0); } }
+
+.tag { display: inline-flex; align-items: center; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; box-shadow: inset 0 0 0 1px currentColor; white-space: nowrap; font-weight: 500; }
+.tag.High { color: var(--ok); } .tag.Medium { color: var(--mid); } .tag.Low { color: var(--bad); }
+.gene { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.known { color: var(--ok); }
+.meter { height: 6px; border-radius: 3px; background: var(--display); box-shadow: var(--ao-in); overflow: hidden; width: 110px; }
+.meter i { display: block; height: 100%; background: var(--ink-2); border-radius: 3px; }
+.strip.on .meter i { background: var(--uv); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.split.wide { grid-template-columns: 5fr 7fr; }
+@media (max-width: 860px) { .split, .split.wide { grid-template-columns: 1fr; gap: 20px; } }
+
+/* chain: hits -> kills -> why */
+.chain { display: grid; grid-template-columns: 1fr 22px 1fr 22px 1fr; align-items: stretch; }
+.chain .arr { align-self: center; justify-self: center; width: 22px; height: 1px; background: var(--line); position: relative; }
+.chain .arr::after { content: ""; position: absolute; right: 0; top: -3px; border: 3.5px solid transparent; border-left: 5px solid var(--ink-3); border-right: 0; }
+.chain .node { background: var(--display); box-shadow: var(--ao-in); border-radius: 12px; padding: 12px 14px; text-decoration: none; display: flex; flex-direction: column; gap: 3px; min-width: 0; transition: box-shadow .2s; }
+a.node:hover { box-shadow: var(--ao-in), 0 0 0 1.5px var(--line); }
+.chain .node .val { font-size: 16px; font-weight: 500; line-height: 1.25; }
+.chain .node .sub { font-size: 12.5px; color: var(--ink-2); }
+@media (max-width: 760px) { .chain { grid-template-columns: 1fr; } .chain .arr { width: 1px; height: 12px; } .chain .arr::after { right: -3px; top: auto; bottom: 0; border: 3.5px solid transparent; border-top: 5px solid var(--ink-3); border-bottom: 0; } }
+
+/* molecules */
+.mol { background: var(--display); box-shadow: var(--ao-in); border-radius: 12px; display: flex; align-items: center; justify-content: center; min-height: 120px; overflow: hidden; }
+.mol svg { max-width: 100%; height: auto; filter: var(--mol-filter); }
+.mol .ph { font: 500 10px var(--mono); letter-spacing: .14em; color: var(--ink-3); text-transform: uppercase; }
+.mols { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.molcard { background: var(--panel); border-radius: 12px; box-shadow: var(--ao-1); padding: 10px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; min-width: 0; }
+.molcard .mol { min-height: 130px; }
+.molcard .row { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+.molcard a { text-decoration: none; } .molcard a:hover { text-decoration: underline; }
+.sim { display: inline-flex; align-items: center; gap: 6px; }
+.sim i { display: inline-block; width: 38px; height: 4px; border-radius: 2px; background: var(--display); box-shadow: var(--ao-in); position: relative; overflow: hidden; }
+.sim i b { position: absolute; inset: 0 auto 0 0; background: var(--ink-2); }
+.note { font-size: 13px; color: var(--ink-2); padding: 10px 14px; border-radius: 10px; background: var(--display); box-shadow: var(--ao-in); }
+
+/* segmented control */
+.seg { display: inline-flex; background: var(--display); box-shadow: var(--ao-in); border-radius: 9px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 5px 12px; border-radius: 7px; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); cursor: pointer; transition: background .15s, color .15s; }
+@media (max-width: 560px) { .wide-only { display: none; } }
+.seg button.on { background: var(--panel); color: var(--ink); box-shadow: var(--ao-1); }
+
+/* charts (SVG, drawn at real pixel width) */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: var(--mono); font-size: 10px; fill: var(--ink-3); letter-spacing: .06em; }
+.chart text.lab { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+.chart text.big { font-family: var(--sans); font-size: 12.5px; fill: var(--ink-2); letter-spacing: 0; }
+.chart text.uv { fill: var(--uv); }
+.chart .grid { stroke: var(--hair); stroke-width: 1; }
+.chart .axis { stroke: var(--line); stroke-width: 1; }
+.chart .zone { fill: var(--ink); }
+.chart .curve { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .area { fill: var(--ink); opacity: .06; }
+.chart .dot { fill: var(--ink-2); opacity: .6; }
+.chart .dot.miss { fill: none; stroke: var(--bad); stroke-width: 1.3; opacity: .9; }
+.chart .dot.new { fill: var(--ink-3); opacity: .4; }
+.chart .ring { fill: none; stroke: var(--uv); stroke-width: 2; }
+.chart .focus { stroke: var(--uv); stroke-width: 1.5; }
+.chart .guide { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart .knob { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.chart .hot { cursor: pointer; }
+.chart image { filter: blur(5px); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); margin-top: 12px; align-items: center; }
+.legend .sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
+/* heatmap */
+.heatwrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+.heat { display: grid; gap: 3px; min-width: 560px; }
+.heat .ch { height: 132px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; cursor: default; }
+.heat .ch span { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 11px var(--sans); color: var(--ink-2); white-space: nowrap; transition: color .15s; }
+.heat .ch.hl span { color: var(--ink); font-weight: 500; }
+.heat .grp { font: 500 9.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); padding-bottom: 4px; text-align: center; white-space: nowrap; overflow: hidden; }
+.heat .rh { font: 500 11.5px var(--mono); color: var(--ink-2); display: flex; align-items: center; justify-content: flex-end; gap: 6px; padding-right: 8px; white-space: nowrap; cursor: pointer; border-radius: 6px; transition: color .15s; }
+.heat .rh { position: sticky; left: 0; z-index: 3; background: var(--display); }
+.heat .rh small { font-weight: 400; color: var(--ink-3); font-size: 10px; }
+.heat .rh:hover, .heat .rh.hl { color: var(--ink); }
+.heat .rh.sel { color: var(--uv); }
+.heat .c { height: 26px; border-radius: 4px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; font: 500 9.5px var(--mono); transition: box-shadow .15s, transform .15s; }
+.heat .c.nil { background: repeating-linear-gradient(135deg, transparent 0 3px, var(--hair) 3px 4px); cursor: default; }
+.heat .c:not(.nil):hover { box-shadow: 0 0 0 1.5px var(--ink); z-index: 1; }
+.heat .c.known { box-shadow: 0 0 0 1.5px var(--ink-3); }
+.heat .c.sel { box-shadow: none !important; outline: 2px solid var(--uv); outline-offset: 1px; z-index: 2; }
+.heat .gap { width: 6px; }
+.scale { display: flex; align-items: center; gap: 8px; font: 10px var(--mono); color: var(--ink-3); letter-spacing: .06em; }
+.scale i { display: block; width: 120px; height: 8px; border-radius: 4px; }
+.links { display: flex; flex-direction: column; gap: 8px; }
+.link { border: 0; text-align: left; cursor: pointer; background: var(--display); box-shadow: var(--ao-in); border-radius: 10px; padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; transition: box-shadow .15s, background .15s; }
+.link:hover { box-shadow: var(--ao-in), 0 0 0 1px var(--line); }
+.link.on { background: var(--uv-soft); box-shadow: 0 0 0 1.5px var(--uv); }
+.link .nm { font-size: 14px; font-weight: 500; }
+.link .why { grid-column: 1 / -1; font-size: 12.5px; color: var(--ink-2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; gap: 8px; align-items: center; text-decoration: none; background: var(--panel); box-shadow: var(--ao-1); border-radius: 999px; padding: 5px 12px; font-size: 13px; transition: box-shadow .15s, transform .15s; }
+.chip:hover { box-shadow: var(--ao-2); transform: translateY(-1px); }
+.chip span { color: var(--ink-3); font-size: 12px; }
+
+#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--panel); color: var(--ink); box-shadow: var(--ao-2); font: 12.5px/1.45 var(--sans); padding: 8px 11px; border-radius: 9px; opacity: 0; transform: translateY(3px); transition: opacity .12s, transform .12s; max-width: 260px; }
+#tip.on { opacity: 1; transform: none; }
+#tip b { font-weight: 500; }
+#tip .m { font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+#tip .p { color: var(--ink-2); font-size: 12px; margin-top: 3px; }
+
+/* home: one example, three numbers, one map, the links */
+.hero { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
+.hero h1 { font-size: clamp(32px, 5.2vw, 54px); }
+.sec { font-weight: 400; font-size: clamp(22px, 3vw, 28px); letter-spacing: -.015em; margin: 0; line-height: 1.2; text-wrap: balance; }
+.picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.picker button { border: 0; cursor: pointer; background: var(--panel); box-shadow: var(--ao-1); border-radius: 999px; padding: 6px 14px; font-size: 14px; transition: box-shadow .15s, background .15s; }
+.picker button:hover { box-shadow: var(--ao-2); }
+.picker button.on { background: var(--ink); color: var(--panel); }
+.trio { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 14px; }
+@media (max-width: 860px) { .trio { grid-template-columns: 1fr; } }
+.trio .col { background: var(--display); box-shadow: var(--ao-in); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.hrow { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--hair); font-size: 14px; }
+.hrow:last-child { border-bottom: 0; }
+.hrow .rk { font: 500 11px var(--mono); color: var(--ink-3); }
+.hrow .s { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.hrow .s.known { color: var(--ok); }
+.scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 860px) { .scores { grid-template-columns: 1fr; } }
+.score { background: var(--panel); border-radius: 16px; box-shadow: var(--ao-1); padding: 20px 22px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; transition: box-shadow .2s; }
+a.score:hover { box-shadow: var(--ao-2); }
+.score .big { font: 400 40px/1.1 var(--mono); letter-spacing: -.03em; }
+.score .s { font-size: 14px; color: var(--ink-2); }
+.score .tech { font: 11px/1.5 var(--mono); color: var(--ink-3); }
+.lrow { display: grid; grid-template-columns: minmax(160px, 230px) minmax(0, 1fr) 110px; gap: 16px; align-items: center; padding: 12px 10px; border: 0; border-bottom: 1px solid var(--hair); background: transparent; text-align: left; cursor: pointer; border-radius: 9px; width: 100%; transition: background .15s; }
+.lrow:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.lrow.on { background: var(--uv-soft); border-bottom-color: transparent; }
+.lrow .nm { font-size: 15px; font-weight: 500; }
+.lrow .w { font-size: 13.5px; color: var(--ink-2); }
+.lrow .n { font: 11.5px var(--mono); color: var(--ink-3); text-align: right; }
+.lopen { padding: 4px 10px 14px; }
+@media (max-width: 640px) { .lrow { grid-template-columns: 1fr auto; gap: 2px 12px; } .lrow .w { grid-column: 1 / -1; grid-row: 2; } }
+.tag.kb { color: var(--ok); } .tag.hy { color: var(--mid); }
+.fam { display: flex; flex-wrap: wrap; gap: 6px; }
+.fam button { border: 0; cursor: pointer; background: transparent; border-radius: 999px; padding: 3px 10px 3px 8px; font-size: 12.5px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; box-shadow: inset 0 0 0 1px var(--line); }
+.fam button.on { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.fam i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart text.fl { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0; paint-order: stroke; stroke: var(--display); stroke-width: 3.5px; }
+.more { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; text-decoration: none; color: var(--ink-2); padding: 10px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); align-self: flex-start; }
+.more:hover { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+.ask { display: flex; gap: 8px; max-width: 760px; }
+.ask input { flex: 1; min-width: 0; font: 15px var(--mono); padding: 14px 16px; border: 0; border-radius: 12px; background: var(--panel); color: var(--ink); box-shadow: var(--ao-in); outline: none; }
+.ask input:focus { box-shadow: var(--ao-in), 0 0 0 2px var(--uv); }
+.ask button { border: 0; cursor: pointer; border-radius: 12px; padding: 0 22px; background: var(--ink); color: var(--panel); font-weight: 500; font-size: 15px; }
+.qa { display: grid; grid-template-columns: minmax(150px, 210px) minmax(0, 1fr) minmax(160px, 250px); }
+.qa > div { padding: 14px 8px; border-top: 1px solid var(--hair); }
+.qa .q { font-size: 14px; font-weight: 500; display: flex; gap: 10px; align-items: baseline; }
+.qa .a { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 0; }
+.qa .h { font-size: 12.5px; color: var(--ink-2); }
+@media (max-width: 760px) { .qa { grid-template-columns: 1fr; } .qa .a, .qa .h { border-top: 0; padding-top: 0; } }
+.pill { font: 500 13px var(--mono); padding: 4px 10px; border-radius: 999px; background: var(--display); box-shadow: var(--ao-in); white-space: nowrap; }
+.pill small { font: 400 11.5px var(--sans); color: var(--ink-3); margin-left: 4px; }
+.pill.ok { color: var(--ok); }
+.fade { animation: in .35s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes in { from { opacity: 0; transform: translateY(6px); } }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
+@media (prefers-reduced-motion: reduce) { .fade, .bar .track i { animation: none; } .stage, .chip { transition: none; } }
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <a class="brand" href="#/"><span class="led live" style="margin:0"></span>Tensor<span class="full">Pharma</span></a>
+  <div class="search"><input id="q" placeholder="Find a drug, protein or cancer" autocomplete="off" aria-label="Search"><kbd>/</kbd><div class="drop" id="drop"></div></div>
+</div></div>
+<main class="page" id="app"><div class="engr">Loading results…</div></main>
+<div id="tip"></div>
+
+<script src="https://unpkg.com/@rdkit/rdkit@2024.3.5-1.0.0/dist/RDKit_minimal.js"></script>
+<script>
+const DATA = "data/";
+let LIB = [], BY_ID = {}, VAL, MAPS, LINKS = null, STRICT = null, RDKIT = null, OPEN = 1, S1VIEW = "curve";
+const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content; };
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (x) => (x == null ? "–" : Math.round(100 * x) + "%");
+const f2 = (x) => (x == null ? "–" : (+x).toFixed(2));
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const tag = (c) => `<span class="tag ${c}">${c}</span>`;
+const meter = (x) => `<div class="meter"><i style="width:${Math.round(100 * clamp(x))}%"></i></div>`;
+const ex = (tech, plain) => `<div class="ex"><p class="tech">${tech}</p><p class="plain">${plain}</p></div>`;
+const drugLink = (d) => "#/drug/" + encodeURIComponent(d.drug_id);
+const genes = (d, n = 2, sep = " · ") => (d.predicted_targets || []).slice(0, n).map((x) => x.gene).join(sep);
+
+// Short, readable names for cancer subtypes (full name stays in tooltips).
+const SHORT = {
+  "Non-Small Cell Lung Cancer": "Lung (non-small cell)", "Mature B-Cell Neoplasms": "B-cell lymphoma", "Invasive Breast Carcinoma": "Breast",
+  "Colorectal Adenocarcinoma": "Colorectal", "Ovarian Epithelial Tumor": "Ovarian", "Diffuse Glioma": "Glioma",
+  "Lung Neuroendocrine Tumor": "Lung neuroendocrine", "Head and Neck Squamous Cell Carcinoma": "Head & neck squamous",
+  "Esophagogastric Adenocarcinoma": "Stomach / oesophagus", "Pancreatic Adenocarcinoma": "Pancreatic", "Acute Myeloid Leukemia": "AML (myeloid leukemia)",
+  "Endometrial Carcinoma": "Endometrial", "Esophageal Squamous Cell Carcinoma": "Oesophageal squamous", "Bladder Urothelial Carcinoma": "Bladder",
+  "Renal Cell Carcinoma": "Kidney", "Hepatocellular Carcinoma": "Liver", "B-Lymphoblastic Leukemia/Lymphoma": "B-cell leukemia (B-ALL)",
+  "Myeloproliferative Neoplasms": "CML / MPN", "Pleural Mesothelioma": "Mesothelioma",
+};
+const short = (n) => SHORT[n] || n;
+const BLOOD = new Set(["Mature B-Cell Neoplasms", "Acute Myeloid Leukemia", "B-Lymphoblastic Leukemia/Lymphoma", "Myeloproliferative Neoplasms"]);
+const KNOWN_LINKS = [
+  { g: "ABL1", c: "Myeloproliferative Neoplasms", name: "ABL1 → CML", why: "CML cells run on the BCR-ABL1 fusion; imatinib and dasatinib block it." },
+  { g: "MAP2K1", c: "Melanoma", name: "MAP2K1 → Melanoma", why: "Most melanomas carry BRAF mutations that signal through MEK (MAP2K1)." },
+  { g: "NR3C1", c: "B-Lymphoblastic Leukemia/Lymphoma", name: "NR3C1 → B-cell leukemia", why: "Steroids act on the glucocorticoid receptor and kill leukemic B cells; standard ALL therapy." },
+  { g: "EGFR", c: "Head and Neck Squamous Cell Carcinoma", name: "EGFR → Squamous cancers", why: "Head & neck and oesophageal squamous tumours often over-express EGFR." },
+];
+
+// ---------- tooltip ----------
+const TIP = document.getElementById("tip");
+function tip(e, html) {
+  if (!html) { TIP.classList.remove("on"); return; }
+  TIP.innerHTML = html; TIP.classList.add("on");
+  const w = TIP.offsetWidth, h = TIP.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY + 16;
+  if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+  TIP.style.left = Math.max(8, x) + "px"; TIP.style.top = Math.max(8, y) + "px";
+}
+
+// ---------- load + route ----------
+async function load() {
+  const get = (f) => fetch(DATA + f).then((r) => { if (!r.ok) throw new Error(f + " " + r.status); return r.json(); });
+  [LIB, VAL, MAPS] = await Promise.all([get("library.json"), get("validation.json"), get("maps.json")]);
+  LIB.forEach((d) => (BY_ID[d.drug_id] = d));
+  try { LINKS = await get("links.json"); } catch { LINKS = null; }
+  window.RDKIT_READY = window.initRDKitModule ? initRDKitModule().then((m) => { RDKIT = m; drawMols(); return m; }).catch((e) => { console.error("rdkit", e); }) : Promise.resolve();
+  setupSearch();
+  render();
+}
+const swap = (fn) => (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches ? document.startViewTransition(fn) : fn());
+window.addEventListener("hashchange", () => swap(render));
+function render() {
+  const h = location.hash, app = document.getElementById("app");
+  const step = h.match(/^#\/step(\d)(\/map)?$/);
+  if (step) { OPEN = +step[1]; if (step[2]) S1VIEW = "map"; }
+  tip(null);
+  app.innerHTML = "";
+  app.append(h.startsWith("#/drug/") ? drugPage(decodeURIComponent(h.slice(7))) : step || h.startsWith("#/proof") ? homePage() : demoPage());
+  window.scrollTo(0, 0);
+  afterRender();
+}
+function afterRender() { drawMols(); redraw(); }
+window.redraw = function redraw() {
+  document.querySelectorAll("[data-chart]").forEach((el) => {
+    const k = el.dataset.chart;
+    if (k === "sim") simChart(el, { focus: el.dataset.focus, compact: el.dataset.compact === "1" });
+    if (k === "map") chemMap(el);
+    if (k === "pmap") proteinMap(el);
+  });
+};
+let rz; let lastW = innerWidth;
+addEventListener("resize", () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(rz); rz = setTimeout(redraw, 120); });
+
+// ---------- shared pieces ----------
+const killsMost = (d) => d.predicted_top_cancer_subtype || d.top_cancer_subtype;
+const killSource = (d) => (d.predicted_top_cancer_subtype ? "predicted" : "measured in the lab");
+const bandAccuracy = (c) => VAL.accuracy_by_confidence[c]?.top5_accuracy;
+const BAND_RULE = { High: "closest relative ≥ 0.7 alike", Medium: "closest relative 0.5–0.7 alike", Low: "closest relative under 0.5 alike" };
+
+function setupSearch() {
+  const q = document.getElementById("q"), drop = document.getElementById("drop");
+  let hits = [], sel = 0;
+  const draw = () => {
+    const s = q.value.trim().toLowerCase();
+    hits = !s ? [] : LIB.filter((d) => [d.name, killsMost(d), short(killsMost(d) || ""), ...d.predicted_targets.map((t) => t.gene)].join(" ").toLowerCase().includes(s))
+      .sort((a, b) => (b.name.toLowerCase().startsWith(s)) - (a.name.toLowerCase().startsWith(s))).slice(0, 12);
+    sel = 0;
+    drop.style.display = hits.length ? "block" : "none";
+    drop.innerHTML = hits.map((d, i) => `<a href="${drugLink(d)}" class="${i === sel ? "on" : ""}"><span><b style="font-weight:500">${esc(d.name)}</b> <span class="engr" style="margin-left:6px">${esc(genes(d))}</span></span>${tag(d.confidence)}</a>`).join("");
+  };
+  q.addEventListener("input", draw);
+  q.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && hits[sel]) { location.hash = drugLink(hits[sel]); q.value = ""; draw(); q.blur(); }
+    if ((e.key === "ArrowDown" || e.key === "ArrowUp") && hits.length) { sel = (sel + (e.key === "ArrowDown" ? 1 : hits.length - 1)) % hits.length; [...drop.children].forEach((a, i) => a.classList.toggle("on", i === sel)); e.preventDefault(); }
+    if (e.key === "Escape") { q.value = ""; draw(); q.blur(); }
+  });
+  q.addEventListener("blur", () => setTimeout(() => (drop.style.display = "none"), 150));
+  q.addEventListener("focus", draw);
+  drop.addEventListener("click", () => { q.value = ""; setTimeout(draw); });
+  document.addEventListener("keydown", (e) => { if (e.key === "/" && document.activeElement !== q) { e.preventDefault(); q.focus(); } });
+}
+
+// ---------- home: the demo ----------
+const EXAMPLES = ["imatinib", "cobimetinib", "trametinib", "BIIB-057", "nutlin-3"];
+let EXAMPLE = "imatinib", FAM = null;
+// map colours: the protein family of each drug's top predicted target
+const FAMILIES = [
+  { k: "EGFR / HER2", c: "#4f7cac", re: /^(EGFR|ERBB[234])$/ },
+  { k: "MEK / BRAF", c: "#c27a30", re: /^(MAP2K[12]|BRAF|RAF1)$/ },
+  { k: "HDAC", c: "#8466b0", re: /^HDAC/ },
+  { k: "Hormone receptors", c: "#3d9077", re: /^(NR3C1|AR|ESR[12]|PGR|CYP19A1)$/ },
+  { k: "Cell division", c: "#b9533e", re: /^(CDK\d+|AURK[ABC]|PLK1|TUBB.*|KIF11|TOP[12].*)$/ },
+  { k: "PI3K / mTOR", c: "#a8902a", re: /^(MTOR|PIK3.*|AKT[123])$/ },
+];
+const family = (g) => FAMILIES.find((f) => g && f.re.test(g));
+
+// step 3 links, with MEK1/MEK2 and EGFR/HER2 shown as one link each
+const LINK_LABEL = { MAP2K1: "MEK", MAP2K2: "MEK", EGFR: "EGFR", ERBB2: "EGFR" };
+const PRIMARY = new Set(["MAP2K1", "EGFR"]);
+const HYPOTHESES = new Set(["NR3C1|Pleural Mesothelioma", "HMGCR|Diffuse Glioma"]);
+const PLAIN_WHY = {
+  "ABL1|Myeloproliferative Neoplasms": "CML is driven by one broken gene, BCR-ABL1. Imatinib was built to block it.",
+  "MEK|Melanoma": "Most melanomas carry a BRAF or NRAS mutation whose growth signal runs through MEK. Block MEK and the signal stops.",
+  "MEK|Colorectal Adenocarcinoma": "Many colorectal tumours carry KRAS or BRAF mutations that signal through MEK.",
+  "MEK|Pancreatic Adenocarcinoma": "Nine in ten pancreatic tumours carry a KRAS mutation that signals through MEK.",
+  "EGFR|Head and Neck Squamous Cell Carcinoma": "Head & neck squamous tumours over-produce EGFR; an EGFR drug (cetuximab) is approved for them.",
+  "EGFR|Esophageal Squamous Cell Carcinoma": "Oesophageal squamous tumours often over-produce EGFR.",
+  "NR3C1|Pleural Mesothelioma": "Steroids slowed 9 of 10 mesothelioma lines. Not in the textbooks: worth a lab test.",
+  "HMGCR|Diffuse Glioma": "Glioma cells make their own cholesterol, and statins block that. Not proven: worth a lab test.",
+};
+function linkGroups() {
+  const by = new Map();
+  for (const l of LINKS?.links || []) {
+    const label = LINK_LABEL[l.gene] || l.gene, key = label + "|" + l.subtype, cur = by.get(key);
+    const genes = [...new Set([...(cur?.genes || []), l.gene])];
+    by.set(key, { ...(!cur || PRIMARY.has(l.gene) ? l : cur), label, key, genes });
+  }
+  const all = [...by.values()].sort((a, b) => b.effect - a.effect);
+  return { known: all.filter((g) => g.verdict === "known biology"), hyp: all.filter((g) => HYPOTHESES.has(g.key)), all };
+}
+function chainLink(d) {
+  const c = LINKS?.chains?.[d.drug_id], shown = linkGroups(), ok = [...shown.known, ...shown.hyp];
+  if (c?.explained && c.verdict !== "suspicious") {
+    const ts = (c.linked_target || "").split(";");
+    const g = ok.find((g) => g.subtype === c.best_subtype && g.genes.some((x) => ts.includes(x)));
+    if (g) return g;
+  }
+  // links checked in advance (ABL1 -> CML) are not in the scan's chains: match top-3 targets to the top kill
+  const ts = d.predicted_targets.slice(0, 3).map((t) => t.gene);
+  return ok.find((g) => g.kind === "prespecified" && g.subtype === killsMost(d) && g.genes.some((x) => ts.includes(x))) || null;
+}
+
+let QUERY = new URLSearchParams(location.search).get("q") || "imatinib", LIBFP = null;
+const NEW_EXAMPLE = "Cc1ccc(NC(=O)c2ccc(CN3CCOCC3)cc2)cc1Nc1nccc(-c2cccnc2)n1";
+function demoPage() {
+  const m = VAL.target_prediction.methods, s2 = VAL.step2, L = linkGroups();
+  const frag = $(`<div class="fade" style="display:flex;flex-direction:column;gap:52px">
+  <section class="hero">
+    <div class="engr">Challenge 6 · compound → target → cancer</div>
+    <h1 class="voice">Give it a molecule. It tells you what it binds, which cancers respond, and why.</h1>
+    <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
+    <div class="picker" id="picker"><span class="engr" style="margin-right:4px">Try</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
+  </section>
+  <section id="answer"></section>
+
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 class="sec">Can you trust it?</h2>
+    <div class="scores">
+      <div class="score"><span class="engr">Binds</span><span class="big">80%</span>
+        <span class="s">of unseen test compounds had a real target in our top 5. Whole chemical families were held out.</span>
+        <span class="tech">HPC run · 84 test compounds · scaffold split · 498,671 ChEMBL reference compounds</span></div>
+      <div class="score"><span class="engr">Responds</span><span class="big">0.319</span>
+        <span class="s">ranking accuracy on unseen drugs, against 0.310 for guessing each cell line's usual sensitivity.</span>
+        <span class="tech">HPC run · 144 test drugs · 74,640 responses · per-drug Spearman</span></div>
+      <div class="score"><span class="engr">Why</span><span class="big">${L.known.length}</span>
+        <span class="s">textbook protein → cancer links found on its own, plus ${L.hyp.length} new hypotheses.</span>
+        <span class="tech">Mann-Whitney · BH q &lt; 0.05 · survives leaving out the top drug</span></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 class="sec">What kills what, and why.</h2>
+    <p class="lede">Group the drugs by the protein they bind, and the cancers biology predicts fall out on their own. Click a link for the drugs behind it.</p>
+    <div class="card" style="gap:6px">
+      <div class="engr" style="padding:0 10px 4px">Matches known biology</div>
+      <div>${L.known.map(linkRow).join("")}</div>
+      <div class="engr" style="padding:18px 10px 4px">New hypotheses · not proven</div>
+      <div>${L.hyp.map(linkRow).join("")}</div>
+    </div>
+  </section>
+
+  </div>`);
+  setTimeout(() => {
+    const input = document.getElementById("smi");
+    const run = (q) => {
+      QUERY = q; input.value = q;
+      document.querySelectorAll("#picker button").forEach((b) => b.classList.toggle("on", b.dataset.q === q));
+      const el = document.getElementById("answer");
+      if (!RDKIT && !LIB.some((d) => d.name.toLowerCase() === q.trim().toLowerCase())) { el.innerHTML = `<div class="note">Reading the structure…</div>`; RDKIT_READY.then(() => RDKIT && QUERY === q && run(q)); return; }
+      swap(() => { try { el.innerHTML = answerCard(resolve(q)); } catch (err) { el.innerHTML = `<div class="note">Could not read that molecule (${esc(err.message || err)}).</div>`; } drawMols(); });
+    };
+    document.getElementById("ask").onsubmit = (e) => { e.preventDefault(); run(input.value); };
+    document.querySelectorAll("#picker button").forEach((b) => (b.onclick = () => run(b.dataset.q)));
+    run(QUERY);
+    document.querySelectorAll(".lrow").forEach((b) => (b.onclick = () => {
+      const open = b.nextElementSibling?.classList.contains("lopen");
+      document.querySelectorAll(".lopen").forEach((x) => x.remove());
+      document.querySelectorAll(".lrow").forEach((x) => x.classList.remove("on"));
+      if (open) return;
+      b.classList.add("on");
+      const g = L.all.find((x) => x.key === b.dataset.k);
+      const ds = g.drugs.map((n) => LIB.find((d) => d.name === n)).filter(Boolean);
+      b.insertAdjacentHTML("afterend", `<div class="lopen fade">${ex(`${esc(g.why)}. Effect ${g.effect.toFixed(2)} in mean kill rank · ${g.n_drugs} drugs × ${g.n_lines} lines · ${g.kind === "prespecified" ? `p ${g.p.toFixed(3)}, checked in advance` : `q ${g.q < 1e-4 ? "< 0.0001" : g.q.toFixed(4)}`}.`, PLAIN_WHY[g.key] || "")}
+        <div class="chips" style="margin-top:12px">${ds.map((d) => `<a class="chip" href="${drugLink(d)}">${esc(d.name)}</a>`).join("")}</div></div>`);
+    }));
+  });
+  return frag;
+}
+
+// A name or SMILES -> a drug in the set. New structures go to their closest screened drug (Morgan r2, 2048 bits).
+function bits(s) { const a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i) === 49; return a; }
+function fpOf(smiles) {
+  const m = RDKIT.get_mol(smiles); if (!m || !m.is_valid()) { m?.delete(); return null; }
+  const s = m.get_morgan_fp(JSON.stringify({ radius: 2, nBits: 2048 })); m.delete(); return bits(s);
+}
+function tanimoto(a, b) { let both = 0, either = 0; for (let i = 0; i < a.length; i++) { both += a[i] & b[i]; either += a[i] | b[i]; } return either ? both / either : 0; }
+function resolve(q) {
+  q = q.trim(); const lq = q.toLowerCase();
+  if (!q) return { error: "Paste a SMILES or type a drug name." };
+  const d = LIB.find((x) => x.name.toLowerCase() === lq) || (q.length > 2 && !/[=()#\[\]]/.test(q) && LIB.find((x) => x.name.toLowerCase().startsWith(lq)));
+  if (d) return { d, how: "name" };
+  if (!RDKIT) return { error: "The structure reader is still loading. Try again in a second." };
+  const fp = fpOf(q);
+  if (!fp) return { error: `"${q}" is not a drug in our set or a valid SMILES.` };
+  if (!LIBFP) LIBFP = LIB.map((x) => fpOf(x.smiles));
+  let best = null, bs = -1;
+  LIB.forEach((x, i) => { if (!LIBFP[i]) return; const s = tanimoto(fp, LIBFP[i]); if (s > bs) { bs = s; best = x; } });
+  return { d: best, how: bs > 0.999 ? "smiles" : "nearest", sim: bs, smiles: q };
+}
+
+function linkRow(g) {
+  const genes = g.genes.length > 1 ? g.genes.join(" / ") : "";
+  return `<button class="lrow" data-k="${esc(g.key)}"><span class="nm">${esc(g.label)} <span style="color:var(--ink-3)">→</span> ${esc(short(g.subtype))}</span>
+    <span class="w">${esc(PLAIN_WHY[g.key] || g.why)}</span>
+    <span class="n">${g.n_drugs} drugs${genes ? `<br>${esc(genes)}` : ""}</span></button>`;
+}
+
+function answerCard(r) {
+  if (r.error) return `<div class="note">${esc(r.error)}</div>`;
+  const d = r.d, top = d.predicted_targets.slice(0, 5), g = chainLink(d), pred = !!d.predicted?.top_cells;
+  const cells = (pred ? d.predicted.top_cells : d.measured_top_cells || []).slice(0, 5);
+  let subs = (d.predicted?.cancer_subtypes || d.measured_cancer_subtypes || []).filter((x) => !(d.breast_screen_artifact && /breast/i.test(x.name)));
+  subs = subs.filter((x) => x.share_responsive > 0).sort((a, b) => (b.rank_score ?? 0) - (a.rank_score ?? 0)).slice(0, 3);
+  const weak = r.how === "nearest" && r.sim < 0.5;
+  const why = g
+    ? `Drugs we predict bind <b>${esc(g.label)}</b> kill <b>${esc(short(g.subtype))}</b> harder than other drugs do (${g.n_drugs} drugs agree). ${esc(PLAIN_WHY[g.key] || g.why)}`
+    : `${esc(whyPlain(d))} <span style="color:var(--ink-3)">No proven protein → cancer link backs this yet: a lead, not a finding.</span>`;
+  return `<div class="card fade" style="gap:16px">
+    ${r.how === "nearest" ? `<div class="note" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="mol" data-smiles="${esc(r.smiles)}" data-w="150" data-h="90" style="min-height:80px;width:150px;flex:none"></div>
+      <span><b style="font-weight:500;color:var(--ink)">New molecule.</b> Its closest screened drug is <b style="font-weight:500;color:var(--ink)">${esc(d.name)}</b>, ${f2(r.sim)} alike, so the answers below are ${esc(d.name)}'s. ${weak ? "Under 0.5 alike: treat them as a weak guess." : ""} The full model in the repo searches all 652,788 ChEMBL compounds instead.</span></div>` : ""}
+    <div class="head"><div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font-size:24px;font-weight:500">${esc(d.name)}</span>${tag(d.confidence)}<span style="font-size:13px;color:var(--ink-2)">${d.labeled ? esc(d.moa || "") : "no known target · every protein below is a new prediction"}</span></div>
+      <a class="engr" href="${drugLink(d)}" style="text-decoration:none">Full evidence →</a></div>
+    <div class="qa">
+      <div class="q"><span class="engr">1</span>Which proteins does it bind?</div>
+      <div class="a">${top.length ? top.map((t) => `<span class="pill ${t.is_known_target ? "ok" : ""}">${esc(t.gene)}${t.is_known_target ? " ✓" : ""}</span>`).join("") : "Nothing similar enough to learn from."}</div>
+      <div class="h">${d.confidence} confidence: closest known molecule is ${f2(d.nearest_similarity)} alike (1 = identical). ✓ = confirmed target.</div>
+
+      <div class="q"><span class="engr">2</span>Which cancer cell lines respond?</div>
+      <div class="a">${cells.length ? cells.map((c) => `<span class="pill">${esc(c.cell_name)} <small>${esc(short(c.cancer_subtype))}</small></span>`).join("") : "No line responds strongly."}</div>
+      <div class="h">${pred ? "Predicted by the model." : "Measured in the lab."} ${d.responsive_cell_lines} of ${d.tested_cell_lines} lines respond.</div>
+
+      <div class="q"><span class="engr">3</span>Which cancer types?</div>
+      <div class="a">${subs.length ? subs.map((x) => `<span class="pill">${esc(short(x.name))} <small>${pct(x.share_responsive)} of lines</small></span>`).join("") : "None stands out."}</div>
+      <div class="h">Types ranked by how hard their lines are hit; small groups are pulled toward average.</div>
+
+      <div class="q"><span class="engr">4</span>Why?</div>
+      <div class="a" style="display:block;font-size:15px;line-height:1.5">${why}</div>
+      <div class="h">${g ? (HYPOTHESES.has(g.key) ? '<span class="tag hy">new hypothesis</span>' : '<span class="tag kb">known biology ✓</span>') : '<span class="tag Medium">unproven</span>'}</div>
+    </div></div>`;
+}
+
+// Protein map: the chemistry map coloured by protein family, labelled where each family clusters.
+function proteinMap(host) {
+  const W = Math.max(280, Math.round(host.clientWidth)), H = Math.round(W * (W < 560 ? 0.95 : 0.52)), P = 14;
+  const pts = MAPS.chemistry.map((p) => ({ ...p, f: family(p.top_target) }));
+  const X = (p) => P + p.x * (W - 2 * P), Y = (p) => P + (1 - p.y) * (H - 2 * P), rr = W < 560 ? 2.4 : 3;
+  let o = "";
+  const order = [...pts].sort((a, b) => !!a.f - !!b.f);
+  order.forEach((p) => {
+    const on = FAM == null || p.f === FAMILIES[FAM];
+    o += `<circle cx="${X(p).toFixed(1)}" cy="${Y(p).toFixed(1)}" r="${p.f ? rr : rr - 0.6}" fill="${p.f ? p.f.c : "var(--ink-3)"}" opacity="${!on ? 0.08 : p.f ? 0.9 : 0.25}"/>`;
+  });
+  // one label per family, at its densest patch
+  FAMILIES.forEach((f, i) => {
+    if (FAM != null && FAM !== i) return;
+    const fp = pts.filter((p) => p.f === f);
+    let best = null, bn = 0;
+    fp.forEach((p) => { const nb = fp.filter((q) => (q.x - p.x) ** 2 + (q.y - p.y) ** 2 < 0.004); if (nb.length > bn) { bn = nb.length; best = nb; } });
+    if (!best || bn < 3) return;
+    const cx = best.reduce((s, p) => s + X(p), 0) / bn, cy = Math.min(...best.map(Y)) - 9;
+    o += `<text class="fl" x="${clamp(cx, 50, W - 50)}" y="${Math.max(14, cy)}" text-anchor="middle" fill="${f.c}">${esc(f.k)}</text>`;
+  });
+  o += `<g id="hov"></g>`;
+  host.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of ${pts.length} drugs coloured by predicted protein">${o}</svg>`;
+  const svg = host.querySelector("svg"), hov = svg.querySelector("#hov");
+  const at = (e) => { const b = svg.getBoundingClientRect(); return [(e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height]; };
+  const nearest = (mx, my) => { let best = null, bd = 120; pts.forEach((p) => { const dd = (X(p) - mx) ** 2 + (Y(p) - my) ** 2; if (dd < bd) { bd = dd; best = p; } }); return best; };
+  svg.onmousemove = (e) => {
+    const p = nearest(...at(e));
+    svg.style.cursor = p ? "pointer" : "default";
+    hov.innerHTML = p ? `<circle class="ring" cx="${X(p)}" cy="${Y(p)}" r="${rr + 3.5}"/>` : "";
+    tip(e, p ? `<b>${esc(p.name)}</b> ${tag(p.confidence)}<div class="m">hits ${esc(p.top_target || "–")}${p.f ? " · " + esc(p.f.k) : ""}</div><div class="p">Closest known relative ${f2(p.nearest_similarity)} alike. Click to open.</div>` : null);
+  };
+  svg.onmouseleave = () => { hov.innerHTML = ""; tip(null); };
+  svg.onclick = (e) => { const p = nearest(...at(e)); if (p) { tip(null); location.hash = drugLink(p); } };
+}
+
+// ---------- proof: the pipeline ----------
+function homePage() {
+  const m = VAL.target_prediction.methods, s2 = VAL.step2;
+  const frag = $(`<div class="fade" style="display:flex;flex-direction:column;gap:28px">
+  <a class="engr" href="#/" style="text-decoration:none">← Overview</a>
+  <div style="display:flex;flex-direction:column;gap:12px"><div class="engr">Track 6 · compound → cancer · ${VAL.dataset.drugs} drugs · ${VAL.dataset.cell_lines} cancer cell lines</div>
+    <h1 class="voice">A molecule in. The proteins it hits, the cancers it kills, and why.</h1>
+    <p class="lede">Three steps, each checked against held-out data. Pick a step to see its proof, or search any drug.</p></div>
+  <div class="pipe">
+    <button class="stage" data-s="1"><span class="go">Proof ↓</span><span class="engr"><span class="led live"></span>01 · What it hits</span>
+      <span class="t">Structure → proteins</span><span class="num">${pct(m.full.top5)}<small>right in top 5</small></span>
+      <span class="s">on ${VAL.target_prediction.drugs_evaluated} drugs it never saw · copying the closest molecule: ${pct(m["1-NN"].top5)}</span></button>
+    <div class="arr"></div>
+    <button class="stage" data-s="2"><span class="go">Proof ↓</span><span class="engr"><span class="led ${s2 ? "live" : "wait"}"></span>02 · What it kills</span>
+      <span class="t">Proteins + cell genes → cancer lines</span><span class="num">${s2 ? f2(s2.model) + `<small>rank accuracy</small>` : `<span style="font-size:24px">in training</span>`}</span>
+      <span class="s">${s2 ? `vs ${f2(s2.baseline)} for each cell line's usual sensitivity` : "must beat 0.30 · lab data shown meanwhile"}</span></button>
+    <div class="arr"></div>
+    <button class="stage" data-s="3"><span class="go">Examples ↓</span><span class="engr"><span class="led live"></span>03 · Together</span>
+      <span class="t">What kills what, and why</span><span class="num" style="font-size:19px;font-family:var(--sans);letter-spacing:-.01em;padding:7px 0 6px">imatinib → ABL1 → CML</span>
+      <span class="s">one chain for each of the ${LIB.length} drugs, with how sure we are</span></button>
+  </div>
+  <div id="detail"></div>
+  </div>`);
+  setTimeout(() => {
+    document.querySelectorAll(".stage").forEach((b) => (b.onclick = () => {
+      if (OPEN === +b.dataset.s) return;
+      OPEN = +b.dataset.s; history.replaceState(null, "", "#/step" + OPEN);
+      swap(showDetail);
+      const el = document.getElementById("detail");
+      if (el.getBoundingClientRect().top > innerHeight * 0.75) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+    }));
+    showDetail();
+  });
+  return frag;
+}
+
+function showDetail() {
+  document.querySelectorAll(".stage").forEach((b) => { b.classList.toggle("on", +b.dataset.s === OPEN); b.setAttribute("aria-pressed", +b.dataset.s === OPEN); });
+  const el = document.getElementById("detail");
+  if (!el) return;
+  el.innerHTML = "";
+  el.append(OPEN === 2 ? step2() : OPEN === 3 ? step3() : step1());
+  el.style.scrollMarginTop = "72px";
+  afterRender();
+}
+
+// ---------- step 1 ----------
+function missStats() {
+  const lab = MAPS.chemistry.filter((p) => p.hit != null);
+  const lo = lab.filter((p) => p.nearest_similarity < 0.5), hi = lab.filter((p) => p.nearest_similarity >= 0.7);
+  const rate = (a) => a.filter((p) => !p.hit).length / Math.max(1, a.length);
+  return { lo: rate(lo), hi: rate(hi) };
+}
+const frac = (r) => { const opts = [[1, 10], [1, 8], [1, 6], [1, 5], [1, 4], [1, 3], [2, 5], [1, 2], [3, 5], [2, 3], [3, 4], [4, 5], [5, 6]]; let b = opts[0]; opts.forEach((o) => { if (Math.abs(o[0] / o[1] - r) < Math.abs(b[0] / b[1] - r)) b = o; }); return b[0] === 1 ? `1 in ${b[1]}` : `${b[0]} of ${b[1]}`; };
+
+function step1() {
+  const t = VAL.target_prediction, m = t.methods, c = t.ceiling_on_drugs_in_chembl, ms = missStats();
+  const frag = $(`<div class="card fade">
+    <div class="head"><div class="engr">01 · What it hits · proof</div><div class="seg" id="s1seg"><button data-v="curve">Accuracy<span class="wide-only"> vs. similarity</span></button><button data-v="map"><span class="wide-only">Chemistry </span>map</button></div></div>
+    <div class="display" style="display:flex;flex-direction:column;gap:14px">
+      <p class="take" id="s1take"></p>
+      <div id="s1chart"></div>
+    </div>
+    <div class="split wide">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="engr">Right in top 5 · ${t.drugs_evaluated} drugs it never saw</div>
+        <div class="bars">
+          <div class="bar"><span>Guess the most common proteins</span><span class="readout">${pct(m.popularity.top5)}</span><span class="track"><i style="width:${100 * m.popularity.top5}%"></i></span></div>
+          <div class="bar"><span>Copy the single closest molecule</span><span class="readout">${pct(m["1-NN"].top5)}</span><span class="track"><i style="width:${100 * m["1-NN"].top5}%"></i></span></div>
+          <div class="bar best"><span>Ours · 25 look-alikes vote</span><span class="readout">${pct(m.full.top5)}</span><span class="track"><i style="width:${100 * m.full.top5}%"></i></span></div>
+          ${STRICT ? `<div class="bar"><span>Strict test · whole chemical families hidden</span><span class="readout">${pct(STRICT.test.hit_at_5)}</span><span class="track"><i style="width:${100 * STRICT.test.hit_at_5}%"></i></span></div>` : ""}
+          <div class="bar"><span>Ceiling · look the drug itself up (ours ${pct(c.full.top5)} on the same ${c.drugs})</span><span class="readout">${pct(c.look_up_drug_itself.top5)}</span><span class="track"><i style="width:${100 * c.look_up_drug_itself.top5}%"></i></span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="engr">How it works</div>
+        ${ex(`Morgan fingerprints (radius 2, 2,048 bits) of the query are compared by Tanimoto similarity with 652,788 ChEMBL compounds. The 25 nearest vote for their measured targets, each vote weighted by similarity × potency (pChEMBL) × replicate trust. The query and its stereoisomers are always hidden.`,
+             `We find the 25 known molecules that look most like this one and ask which proteins they are proven to hit. Look-alike molecules usually hit the same proteins.`)}
+        ${ex(`Top-5 accuracy is a step function of nearest-neighbour Tanimoto similarity: ${pct(1 - ms.lo)} below 0.5 versus ${pct(1 - ms.hi)} at 0.7 and above. The confidence band shown on every drug is this similarity, binned.`,
+             `When a drug has a close known relative we are usually right; when it has none we usually miss. That is why every drug carries a High / Medium / Low tag.`)}
+      </div>
+    </div></div>`);
+  setTimeout(() => {
+    const seg = document.getElementById("s1seg");
+    const set = (v) => {
+      S1VIEW = v;
+      seg.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.v === v));
+      document.getElementById("s1take").innerHTML = v === "curve"
+        ? `<b>Misses cluster where drugs have no close relatives.</b> Below 0.5 alike, ${frac(ms.lo)} drugs are missed; at 0.7 and above, only ${frac(ms.hi)}.`
+        : `<b>Same story on the map:</b> misses (rings) sit in pale, sparse patches where a drug has no close relative. Dark wash = drugs with close relatives.`;
+      const host = document.getElementById("s1chart");
+      host.innerHTML = `<div class="chart" data-chart="${v === "curve" ? "sim" : "map"}"></div>${v === "curve" ? legendSim() : legendMap()}`;
+      redraw();
+    };
+    seg.querySelectorAll("button").forEach((b) => (b.onclick = () => set(b.dataset.v)));
+    set(S1VIEW);
+  });
+  return frag;
+}
+const legendSim = () => `<div class="legend"><span><span class="sw" style="background:var(--ink-2);opacity:.7"></span>right: a known target in the top 5</span><span><span class="sw" style="box-shadow:inset 0 0 0 1.3px var(--bad)"></span>missed</span><span><span class="sw" style="background:var(--ink-3);opacity:.5"></span>no answer key yet</span><span style="margin-left:auto;color:var(--ink-3)">hover a dot · click to open the drug</span></div>`;
+const legendMap = () => `<div class="legend"><span><span class="sw" style="background:var(--ink-2);opacity:.7"></span>right</span><span><span class="sw" style="box-shadow:inset 0 0 0 1.3px var(--bad)"></span>missed</span><span><span class="sw" style="background:var(--ink-3);opacity:.5"></span>no answer key yet</span><span style="margin-left:auto;color:var(--ink-3)">nearby dots are chemically alike · click to open</span></div>`;
+
+// Accuracy vs. closest-relative similarity: smooth hit-rate curve on top, one dot per drug in lanes below.
+function simChart(host, { focus, compact } = {}) {
+  const W = Math.max(280, Math.round(host.clientWidth)), narrow = W < 560;
+  const pts = MAPS.chemistry, X0 = 0.15, X1 = 1.0;
+  const M = { l: narrow ? 34 : 44, r: narrow ? 10 : 16, t: 34 };
+  const CH = compact ? 92 : narrow ? 120 : 168;
+  const r = compact || narrow ? 2.1 : 2.6;
+  const lab = pts.filter((p) => p.hit != null);
+  const lanes = [
+    { k: "hit", label: "Right", pts: lab.filter((p) => p.hit), h: compact ? 40 : narrow ? 56 : 70 },
+    { k: "miss", label: "Missed", pts: lab.filter((p) => !p.hit), h: compact ? 30 : narrow ? 44 : 54 },
+    { k: "new", label: "No answer key yet", pts: pts.filter((p) => p.hit == null), h: compact ? 30 : narrow ? 40 : 48 },
+  ];
+  const x = (s) => M.l + ((s - X0) / (X1 - X0)) * (W - M.l - M.r);
+  const inv = (px) => X0 + ((px - M.l) / (W - M.l - M.r)) * (X1 - X0);
+  const yC = (v) => M.t + (1 - v) * CH;
+  // kernel-smoothed hit rate
+  const bw = 0.045, rate = (s) => { let w = 0, h = 0; for (const p of lab) { const k = Math.exp(-(((p.nearest_similarity - s) / bw) ** 2) / 2); w += k; h += k * p.hit; } return { v: h / w, n: w }; };
+  const curve = []; for (let s = X0; s <= X1 + 1e-9; s += 0.005) { const q = rate(s); if (q.n > 3) curve.push([s, q.v]); }
+  let o = "";
+  let y = M.t + CH + 26;
+  const laneY = lanes.map((ln) => { const top = y + 14; y = top + ln.h + 10; return top; });
+  const yAxis = y + 2, H = yAxis + 34;
+  // zones = confidence bands
+  const zones = [[X0, 0.5, "Low", 0.05], [0.5, 0.7, "Medium", 0.025], [0.7, X1, "High", 0]];
+  zones.forEach(([a, b, k, op]) => {
+    o += `<rect class="zone" x="${x(a)}" y="${M.t - 22}" width="${x(b) - x(a)}" height="${yAxis - M.t + 22}" opacity="${op}"/>`;
+    const zw = x(b) - x(a), long = `${k} confidence · ${pct(bandAccuracy(k))}`, mid = `${k} · ${pct(bandAccuracy(k))}`;
+    o += `<text class="lab" x="${(x(a) + x(b)) / 2}" y="${M.t - 9}" text-anchor="middle">${zw > long.length * 7.4 ? long : zw > mid.length * 7.4 ? mid : pct(bandAccuracy(k))}</text>`;
+  });
+  [0.5, 0.7].forEach((s) => (o += `<line class="axis" x1="${x(s)}" x2="${x(s)}" y1="${M.t - 22}" y2="${yAxis}"/>`));
+  // curve grid
+  [0, 0.5, 1].forEach((v) => { o += `<line class="grid" x1="${M.l}" x2="${W - M.r}" y1="${yC(v)}" y2="${yC(v)}"/><text x="${M.l - 8}" y="${yC(v) + 3.5}" text-anchor="end">${v * 100}%</text>`; });
+  const path = curve.map(([s, v], i) => `${i ? "L" : "M"}${x(s).toFixed(1)},${yC(v).toFixed(1)}`).join("");
+  if (curve.length) o += `<path class="area" d="${path}L${x(curve.at(-1)[0])},${yC(0)}L${x(curve[0][0])},${yC(0)}Z"/><path class="curve" d="${path}"/>`;
+  if (!compact && !narrow) o += `<text class="big" x="${x(0.99)}" y="${yC(curve.at(-1)?.[1] ?? 0.9) - 10}" text-anchor="end">share of drugs right</text>`;
+  // lanes + dots (deterministic beeswarm)
+  const hot = [];
+  lanes.forEach((ln, li) => {
+    const top = laneY[li], mid = top + ln.h / 2, half = ln.h / 2 - r - 1;
+    o += `<text class="lab" x="${M.l}" y="${top - 4}">${ln.label} · ${ln.pts.length}</text>`;
+    o += `<line class="grid" x1="${M.l}" x2="${W - M.r}" y1="${top + ln.h + 4}" y2="${top + ln.h + 4}"/>`;
+    const placed = [], d = 2 * r + 0.8;
+    [...ln.pts].sort((a, b) => a.nearest_similarity - b.nearest_similarity).forEach((p) => {
+      const px = x(p.nearest_similarity);
+      const near = placed.filter((q) => px - q.x < d);
+      let py = mid;
+      for (let k = 0; k < 60; k++) {
+        const off = (k % 2 ? 1 : -1) * Math.ceil(k / 2) * (d * 0.62);
+        if (Math.abs(off) > half) { py = mid + (Math.random() * 2 - 1) * half; break; }
+        const cand = mid + off;
+        if (near.every((q) => (q.x - px) ** 2 + (q.y - cand) ** 2 >= d * d)) { py = cand; break; }
+      }
+      placed.push({ x: px, y: py });
+      if (placed.length > 80) placed.splice(0, placed.length - 80);
+      hot.push({ x: px, y: py, p, k: ln.k });
+      o += `<circle class="dot ${ln.k}" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}"/>`;
+    });
+  });
+  // x axis
+  o += `<line class="axis" x1="${M.l}" x2="${W - M.r}" y1="${yAxis}" y2="${yAxis}"/>`;
+  for (let s = 0.2; s <= 1.0001; s += narrow ? 0.2 : 0.1) o += `<text x="${x(s)}" y="${yAxis + 14}" text-anchor="middle">${s.toFixed(1)}</text>`;
+  o += `<text class="lab" x="${(M.l + W - M.r) / 2}" y="${yAxis + 30}" text-anchor="middle">${narrow ? "Closest relative · 1 = same" : "Closest known relative · 1 = identical"}</text>`;
+  // focus drug
+  const fp = focus && hot.find((h) => h.p.drug_id === focus);
+  if (fp) {
+    const fx = fp.x, v = rate(fp.p.nearest_similarity).v;
+    o += `<line class="focus" x1="${fx}" x2="${fx}" y1="${M.t - 22}" y2="${yAxis}"/><circle class="ring" cx="${fx}" cy="${fp.y}" r="${r + 3.5}"/>`;
+    o += `<circle cx="${fx}" cy="${yC(v)}" r="4" fill="var(--uv)"/>`;
+  }
+  o += `<g id="hov"></g><rect class="hit" x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+  host.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Share of drugs with a correct target in the top 5, by similarity of the closest known relative">${o}</svg>`;
+  const svg = host.querySelector("svg"), hov = svg.querySelector("#hov");
+  const at = (e) => { const b = svg.getBoundingClientRect(); return [(e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height]; };
+  const nearest = (mx, my) => { let best = null, bd = 100; hot.forEach((h) => { const dd = (h.x - mx) ** 2 + (h.y - my) ** 2; if (dd < bd) { bd = dd; best = h; } }); return best; };
+  svg.onmousemove = (e) => {
+    const [mx, my] = at(e);
+    if (my < M.t + CH + 6 && mx >= M.l && mx <= W - M.r) {
+      const s = clamp(inv(mx), X0, X1), q = rate(s);
+      svg.style.cursor = "default";
+      hov.innerHTML = q.n > 3 ? `<line class="guide" x1="${mx}" x2="${mx}" y1="${M.t}" y2="${yAxis}"/><circle class="knob" cx="${mx}" cy="${yC(q.v)}" r="4"/>` : "";
+      tip(e, q.n > 3 ? `<b>${pct(q.v)} right</b><div class="m">closest relative ≈ ${f2(s)} alike</div><div class="p">Drugs whose nearest known molecule is this similar get a known target in our top 5 ${pct(q.v)} of the time.</div>` : null);
+      return;
+    }
+    const h = nearest(mx, my);
+    svg.style.cursor = h ? "pointer" : "default";
+    hov.innerHTML = h ? `<circle class="ring" cx="${h.x}" cy="${h.y}" r="${r + 3}"/>` : "";
+    tip(e, h ? `<b>${esc(h.p.name)}</b> ${tag(h.p.confidence)}<div class="m">top protein ${esc(h.p.top_target || "–")} · closest relative ${f2(h.p.nearest_similarity)}</div><div class="p">${h.k === "hit" ? "A known target is in our top 5." : h.k === "miss" ? "No known target in our top 5." : "No known target to check against: a new prediction."}</div>` : null);
+  };
+  svg.onmouseleave = () => { hov.innerHTML = ""; tip(null); };
+  svg.onclick = (e) => { const [mx, my] = at(e); const h = nearest(mx, my); if (h) { tip(null); location.hash = "#/drug/" + encodeURIComponent(h.p.drug_id); } };
+}
+
+// Chemistry map: t-SNE positions, smooth wash of "how close is the nearest relative", dots on top.
+function chemMap(host) {
+  const W = Math.max(280, Math.round(host.clientWidth)), H = Math.round(W * (W < 560 ? 0.95 : 0.56)), P = 12;
+  const pts = MAPS.chemistry, X = (p) => P + p.x * (W - 2 * P), Y = (p) => P + (1 - p.y) * (H - 2 * P);
+  const GX = 140, GY = Math.round((GX * H) / W), cnt = new Float32Array(GX * GY), sum = new Float32Array(GX * GY), sg = 2.6, R = 8;
+  pts.forEach((p) => {
+    const gx = p.x * (GX - 1), gy = (1 - p.y) * (GY - 1);
+    for (let j = Math.max(0, Math.floor(gy - R)); j <= Math.min(GY - 1, Math.ceil(gy + R)); j++)
+      for (let i = Math.max(0, Math.floor(gx - R)); i <= Math.min(GX - 1, Math.ceil(gx + R)); i++) {
+        const k = Math.exp(-((i - gx) ** 2 + (j - gy) ** 2) / (2 * sg * sg));
+        cnt[j * GX + i] += k; sum[j * GX + i] += k * p.nearest_similarity;
+      }
+  });
+  const cv = document.createElement("canvas"); cv.width = GX; cv.height = GY;
+  const ctx = cv.getContext("2d"), img = ctx.createImageData(GX, GY);
+  const ink = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim();
+  const rgb = ink.length === 7 ? [1, 3, 5].map((i) => parseInt(ink.slice(i, i + 2), 16)) : [128, 128, 128];
+  for (let i = 0; i < GX * GY; i++) {
+    const c = cnt[i]; if (c < 0.02) continue;
+    const mean = sum[i] / c, mask = clamp(c / 0.6) ** 0.8, a = mask * (0.04 + 0.42 * clamp((mean - 0.45) / 0.45) ** 1.2);
+    img.data.set([...rgb, Math.round(255 * a)], i * 4);
+  }
+  ctx.putImageData(img, 0, 0);
+  let o = `<image href="${cv.toDataURL()}" x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none"/>`;
+  const hot = [], rr = W < 560 ? 1.9 : 2.4;
+  pts.forEach((p) => {
+    const k = p.hit == null ? "new" : p.hit ? "hit" : "miss", cx = X(p), cy = Y(p);
+    hot.push({ x: cx, y: cy, p, k });
+  });
+  ["new", "hit", "miss"].forEach((k) => hot.filter((h) => h.k === k).forEach((h) => (o += `<circle class="dot ${k}" cx="${h.x.toFixed(1)}" cy="${h.y.toFixed(1)}" r="${k === "miss" ? rr + 0.8 : rr}"/>`)));
+  o += `<g id="hov"></g>`;
+  host.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Chemistry map of ${pts.length} drugs">${o}</svg>`;
+  const svg = host.querySelector("svg"), hov = svg.querySelector("#hov");
+  const at = (e) => { const b = svg.getBoundingClientRect(); return [(e.clientX - b.left) * W / b.width, (e.clientY - b.top) * H / b.height]; };
+  const nearest = (mx, my) => { let best = null, bd = 120; hot.forEach((h) => { const dd = (h.x - mx) ** 2 + (h.y - my) ** 2; if (dd < bd) { bd = dd; best = h; } }); return best; };
+  svg.onmousemove = (e) => {
+    const h = nearest(...at(e));
+    svg.style.cursor = h ? "pointer" : "default";
+    hov.innerHTML = h ? `<circle class="ring" cx="${h.x}" cy="${h.y}" r="${rr + 3.5}"/>` : "";
+    tip(e, h ? `<b>${esc(h.p.name)}</b> ${tag(h.p.confidence)}<div class="m">top protein ${esc(h.p.top_target || "–")} · closest relative ${f2(h.p.nearest_similarity)}</div><div class="p">${h.k === "hit" ? "Right: a known target is in our top 5." : h.k === "miss" ? "Missed: no known target in our top 5." : "No answer key yet: a new prediction."}</div>` : null);
+  };
+  svg.onmouseleave = () => { hov.innerHTML = ""; tip(null); };
+  svg.onclick = (e) => { const h = nearest(...at(e)); if (h) { tip(null); location.hash = "#/drug/" + encodeURIComponent(h.p.drug_id); } };
+}
+
+// ---------- step 2 ----------
+function step2() {
+  const h = MAPS.target_cancer, s2 = VAL.step2;
+  const order = h.cols.map((c, i) => i).sort((a, b) => BLOOD.has(h.cols[a]) - BLOOD.has(h.cols[b]));
+  const nSolid = order.filter((i) => !BLOOD.has(h.cols[i])).length;
+  const all = h.values.flat().filter((v) => v != null), vmax = Math.max(...all);
+  const t = (v) => clamp((v - 0.5) / (vmax - 0.5));
+  const bg = (v) => (v <= 0.5 ? "var(--display)" : `color-mix(in srgb, var(--ink) ${Math.round(6 + 82 * t(v) ** 1.6)}%, var(--display))`);
+  const fg = (v) => (t(v) ** 1.6 > 0.28 ? "var(--panel)" : "var(--ink-2)");
+  const knownKey = new Set(KNOWN_LINKS.map((k) => k.g + "|" + k.c).concat(["EGFR|Esophageal Squamous Cell Carcinoma"]));
+  const cols = `minmax(78px, 104px) ${order.map((i, j) => (j === nSolid ? "6px " : "") + "minmax(20px, 1fr)").join(" ")}`;
+  let g = `<div></div><div class="grp" style="grid-column: span ${nSolid}">Solid tumours</div><div></div><div class="grp" style="grid-column: span ${order.length - nSolid}">Blood</div>`;
+  g += `<div></div>` + order.map((i, j) => `${j === nSolid ? "<div></div>" : ""}<div class="ch" data-col="${i}" title="${esc(h.cols[i])}"><span>${esc(short(h.cols[i]))}</span></div>`).join("");
+  h.rows.forEach((rname, ri) => {
+    g += `<div class="rh" data-row="${ri}">${esc(rname)}<small>${h.row_drugs[ri]}</small></div>`;
+    order.forEach((ci, j) => {
+      const v = h.values[ri][ci], kn = knownKey.has(rname + "|" + h.cols[ci]);
+      if (j === nSolid) g += `<div></div>`;
+      g += v == null ? `<div class="c nil" data-r="${ri}" data-c="${ci}"></div>`
+        : `<div class="c ${kn ? "known" : ""}" data-r="${ri}" data-c="${ci}" style="background:${bg(v)};color:${fg(v)}">${v >= 0.68 || kn ? Math.round(v * 100) : ""}</div>`;
+    });
+  });
+  const frag = $(`<div class="card fade">
+    <div class="engr">02 · What it kills · proof</div>
+    ${s2 ? `<div class="display" style="display:flex;flex-direction:column;gap:14px"><p class="take"><b>Knowing the targets beats knowing the cell line alone:</b> ${f2(s2.model)} vs ${f2(s2.baseline)} rank accuracy on drugs the model never saw.</p>
+      <div class="bars"><div class="bar"><span>Each cell line's usual sensitivity</span><span class="readout">${f2(s2.baseline)}</span><span class="track"><i style="width:${100 * clamp(s2.baseline)}%"></i></span></div>
+      <div class="bar best"><span>Ours · predicted targets + cell genes</span><span class="readout">${f2(s2.model)}</span><span class="track"><i style="width:${100 * clamp(s2.model)}%"></i></span></div></div></div>`
+      : `<div class="note"><span class="led wait"></span>The step 2 model is training. Below is the lab-measured signal it learns from; predictions replace it when they arrive.</div>`}
+    ${ex(`A model learns each drug–cell kill rank from the drug's predicted target scores and the cell line's gene expression. It is scored on held-out drugs by per-drug rank correlation, against a baseline that predicts each cell line's average sensitivity (0.30).`,
+         `Knowing what the drug hits and what each cancer cell is made of, we predict which cells die. It has to beat simply guessing each cell's usual sensitivity.`)}
+    <div class="display" style="display:flex;flex-direction:column;gap:16px">
+      <p class="take"><b>The textbook links show up on their own.</b> Drugs grouped by the protein we predict they hit kill exactly the cancers biology says they should.</p>
+      <div class="split wide" style="grid-template-columns: minmax(0,1fr)">
+        <div class="heatwrap"><div class="heat" id="heat" style="grid-template-columns:${cols}">${g}</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+        <div class="scale"><span>0.50</span><i style="background:linear-gradient(90deg, var(--display), color-mix(in srgb, var(--ink) 30%, var(--display)), var(--ink))"></i><span>${f2(vmax)}</span><span style="margin-left:6px">mean kill rank · number = top ×100</span></div>
+        <span class="engr">Rows: protein · drugs that hit it</span>
+      </div>
+    </div>
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:10px"><div class="engr">Known biology · click one</div><div class="links" id="links">${KNOWN_LINKS.map((k, i) => {
+        const ri = h.rows.indexOf(k.g), ci = h.cols.indexOf(k.c), v = ri >= 0 && ci >= 0 ? h.values[ri][ci] : null;
+        return `<button class="link" data-i="${i}"><span class="nm">${esc(k.name)}</span><span class="readout" style="font-size:13px">${f2(v)}</span><span class="why">${esc(k.why)}</span></button>`; }).join("")}</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="rowdrugs"></div>
+    </div>
+    ${ex(`Mean within-drug kill rank (${h.source}), drugs grouped by their top predicted protein, across the 20 largest cancer subtypes; each cell shrunk toward 0.5 with 10 pseudo-lines. Hatched cells have too few lines.`,
+         `Rows are proteins, columns are cancers. A stronger shade means drugs that hit that protein kill that cancer harder than they kill other cancers (0.5 = average, 1 = always the most killed).`)}
+  </div>`);
+  setTimeout(() => wireHeat(h), 0);
+  return frag;
+}
+
+function wireHeat(h) {
+  const heat = document.getElementById("heat"); if (!heat) return;
+  const hl = (ri, ci) => {
+    heat.querySelectorAll(".rh").forEach((e) => e.classList.toggle("hl", +e.dataset.row === ri));
+    heat.querySelectorAll(".ch").forEach((e) => e.classList.toggle("hl", +e.dataset.col === ci));
+  };
+  const select = (ri, ci, linkIdx) => {
+    heat.querySelectorAll(".c.sel").forEach((e) => e.classList.remove("sel"));
+    heat.querySelectorAll(".rh").forEach((e) => e.classList.toggle("sel", +e.dataset.row === ri));
+    if (ci != null) heat.querySelector(`.c[data-r="${ri}"][data-c="${ci}"]`)?.classList.add("sel");
+    document.querySelectorAll("#links .link").forEach((b) => b.classList.toggle("on", +b.dataset.i === linkIdx));
+    const gene = h.rows[ri], col = ci != null ? h.cols[ci] : null;
+    const drugs = LIB.filter((d) => d.top_target === gene).sort((a, b) => b.nearest_similarity - a.nearest_similarity);
+    const el = document.getElementById("rowdrugs");
+    el.innerHTML = `<div class="engr">Drugs we predict hit ${esc(gene)} · ${drugs.length}</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+      ${col ? `<p style="margin:0;font-size:14px;color:var(--ink-2)">${esc(short(col))} lines rank on average in the top <b style="color:var(--ink);font-weight:500">${Math.max(1, Math.round(100 * (1 - h.values[ri][ci])))}%</b> most killed by these drugs.</p>` : ""}
+      <div class="chips">${drugs.slice(0, 14).map((d) => `<a class="chip" href="${drugLink(d)}">${esc(d.name)}<span>${esc(short(killsMost(d) || "–"))}</span></a>`).join("")}</div></div>`;
+  };
+  heat.addEventListener("mousemove", (e) => {
+    const c = e.target.closest(".c"); if (!c || c.classList.contains("nil")) { hl(-1, -1); tip(null); return; }
+    const ri = +c.dataset.r, ci = +c.dataset.c, v = h.values[ri][ci];
+    hl(ri, ci);
+    tip(e, `<b>${esc(h.rows[ri])} → ${esc(short(h.cols[ci]))}</b><div class="m">${esc(h.cols[ci])}</div><div class="m">mean kill rank ${f2(v)} · ${h.row_drugs[ri]} drugs</div><div class="p">These cancer lines rank in the top ${Math.max(1, Math.round(100 * (1 - v)))}% most killed by drugs that hit ${esc(h.rows[ri])}.</div>`);
+  });
+  heat.addEventListener("mouseleave", () => { hl(-1, -1); tip(null); });
+  heat.addEventListener("click", (e) => {
+    const c = e.target.closest(".c:not(.nil)"), r = e.target.closest(".rh");
+    if (c) select(+c.dataset.r, +c.dataset.c, KNOWN_LINKS.findIndex((k) => k.g === h.rows[+c.dataset.r] && k.c === h.cols[+c.dataset.c]));
+    else if (r) select(+r.dataset.row, null, -1);
+  });
+  document.querySelectorAll("#links .link").forEach((b) => (b.onclick = () => { const k = KNOWN_LINKS[+b.dataset.i]; select(h.rows.indexOf(k.g), h.cols.indexOf(k.c), +b.dataset.i); }));
+  const k0 = KNOWN_LINKS[0];
+  if (h.rows.includes(k0.g)) select(h.rows.indexOf(k0.g), h.cols.indexOf(k0.c), 0);
+}
+
+// ---------- step 3 ----------
+function chainRow(d) {
+  return `<a class="strip" href="${drugLink(d)}"><b>${esc(d.name)}</b>
+    <span class="d"><span class="gene" style="color:var(--ink)">${esc(genes(d) || "–")}</span> <span style="color:var(--ink-3)">→</span> ${esc(short(killsMost(d) || "no strong response"))}</span>${tag(d.confidence)}</a>`;
+}
+function step3() {
+  const ex3 = ["imatinib", "BIIB-057", "nutlin-3", "dasatinib", "vorinostat", "trametinib"].map((n) => LIB.find((d) => d.name === n)).filter(Boolean);
+  const fresh = LIB.filter((d) => !d.labeled && !ex3.includes(d) && d.confidence === "High" && killsMost(d) && d.predicted_targets.length).sort((a, b) => b.nearest_similarity - a.nearest_similarity).slice(0, 6);
+  return $(`<div class="card fade">
+    <div class="engr">03 · Together · examples</div>
+    <div class="display"><p class="take"><b>One line per drug:</b> the protein it hits, the cancer it kills most, and how sure we are. Click any line for the full evidence.</p></div>
+    ${ex(`Each drug's top predicted targets are joined with its most responsive cancer subtype (predicted when available, otherwise measured; small groups shrunk toward the mean). Safety off-targets (hERG, CYPs, efflux pumps) are reported separately; confidence comes from nearest-neighbour similarity.`,
+         `For every drug we say what it hits, which cancer it kills, and how much to trust that. Look-alike molecules are the evidence.`)}
+    <div class="split">
+      <div><div class="engr" style="margin-bottom:6px">Well-known drugs</div><div class="strips">${ex3.map(chainRow).join("")}</div></div>
+      <div><div class="engr" style="margin-bottom:6px">Confident new predictions · no known target yet</div><div class="strips">${fresh.map(chainRow).join("")}</div></div>
+    </div>
+    <div class="note">Search any of the ${LIB.length} drugs with the box at the top (press <span class="readout">/</span>).</div>
+  </div>`);
+}
+
+// ---------- drug page ----------
+function drugPage(id) {
+  const d = BY_ID[id];
+  if (!d) return $(`<div class="card">Drug not found. <a href="#/">Back to overview</a></div>`);
+  const k = killsMost(d), acc = bandAccuracy(d.confidence), top = d.predicted_targets[0];
+  const frag = $(`<div class="fade" style="display:flex;flex-direction:column;gap:24px">
+  <a class="engr" href="#/" style="text-decoration:none">← Overview</a>
+  <div class="split" style="align-items:center">
+    <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <div class="engr">${d.labeled ? "Drug with known targets" : "No known target · every prediction is new"}</div>
+      <h1 class="voice" style="overflow-wrap:anywhere">${esc(d.name)}</h1>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${tag(d.confidence)}<span style="font-size:13.5px;color:var(--ink-2)">${esc(d.moa || "Mechanism not annotated")}</span></div>
+      ${d.known_targets.length ? `<div style="font-size:13px;color:var(--ink-2)"><span class="engr" style="margin-right:8px">Known targets</span><span class="gene">${esc(d.known_targets.join(" · "))}</span></div>` : ""}
+    </div>
+    <div class="mol" data-smiles="${esc(d.smiles)}" data-w="480" data-h="260" style="min-height:240px"><span class="ph">drawing structure…</span></div>
+  </div>
+
+  <div class="chain">
+    <a class="node" href="#s-hits"><span class="engr">01 · Hits</span><span class="val gene" style="font-size:16px">${esc(genes(d) || "–")}</span><span class="sub">${top ? `${top.evidence.length} of 25 look-alikes proven on ${esc(top.gene)}` : "no protein predicted"}</span></a>
+    <span class="arr"></span>
+    <a class="node" href="#s-kills"><span class="engr">02 · Kills most</span><span class="val">${esc(k ? short(k) : "no line responds strongly")}</span><span class="sub">${k ? `${killSource(d)} · ${d.responsive_cell_lines} of ${d.tested_cell_lines} lines die` : `${d.tested_cell_lines} lines tested`}</span></a>
+    <span class="arr"></span>
+    <a class="node" href="#s-why"><span class="engr">03 · How sure</span><span class="val">${pct(acc)} <span style="font-weight:400;color:var(--ink-2);font-size:13.5px">for drugs like it</span></span><span class="sub">${BAND_RULE[d.confidence]} (${f2(d.nearest_similarity)})</span></a>
+  </div>
+
+  <div class="card" id="s-hits" style="scroll-margin-top:72px">
+    <div class="engr">01 · What it hits</div>
+    ${ex(`Nearest known compound is ${f2(d.nearest_similarity)} Tanimoto-similar; drugs in the ${d.confidence} band score ${pct(acc)} top-5 on held-out tests. Scores are similarity-weighted votes, not probabilities.`,
+         `Its closest known relative is ${f2(d.nearest_similarity)} alike (1 = identical). For drugs like this we are right ${pct(acc)} of the time. Click a protein to see the look-alike molecules behind it.`)}
+    <div class="split">
+      <div><div class="engr" style="margin-bottom:6px">Predicted proteins · click one for its evidence</div>
+        ${d.predicted_targets.length ? `<div class="strips" id="targets">${d.predicted_targets.map((t, i) => `<button class="strip t" data-i="${i}" title="${t.evidence.length} of the 25 closest look-alikes are proven to hit ${esc(t.gene)}; the nearest of them is ${f2(t.evidence[0]?.similarity)} alike">
+          <span><span class="gene ${t.is_known_target ? "known" : ""}">${esc(t.gene)}</span>${t.is_known_target ? ' <span class="engr" style="color:var(--ok);margin-left:4px">known ✓</span>' : ""}</span>
+          <span class="d">${t.evidence.length} look-alike${t.evidence.length === 1 ? "" : "s"} · ${f2(t.evidence[0]?.similarity)}</span>
+          ${meter(t.score / (d.predicted_targets[0].score || 1))}</button>`).join("")}</div>` : `<div class="note">No look-alike has a measured protein target, so nothing is predicted.</div>`}
+      </div>
+      <div><div class="engr" style="margin-bottom:10px">Where it sits on the accuracy curve</div><div class="display" style="padding:10px 12px"><div class="chart" data-chart="sim" data-compact="1" data-focus="${esc(d.drug_id)}"></div>
+        <div class="legend" style="margin-top:6px"><span><span class="sw" style="background:var(--uv)"></span>${esc(d.name)} · closest relative ${f2(d.nearest_similarity)} alike</span><span style="color:var(--ink-3)">curve = share of drugs right</span></div></div></div>
+    </div>
+    <div id="evidence"></div>
+    ${d.safety_flags.length ? `<div class="note"><span class="engr" style="margin-right:8px">Safety flag</span>Look-alikes also hit <span class="gene">${esc(d.safety_flags.join(", "))}</span>. These are screened for heart risk (KCNH2) or liver metabolism (CYPs): possible side effects, not how it works.</div>` : ""}
+  </div>
+
+  <div class="card" id="s-kills" style="scroll-margin-top:72px">
+    <div class="engr">02 · What it kills</div>
+    ${ex(`Cell lines ranked by within-drug kill rank (PharmacoDB DSS3); ${d.responsive_cell_lines} of ${d.tested_cell_lines} tested lines pass DSS3 ≥ ${VAL.dataset.responsive_dss3_cutoff}. Subtype scores are shrunk toward the mean for small groups.`,
+         `${d.responsive_cell_lines} of the ${d.tested_cell_lines} cancer cell lines it was tested on actually die. These are the cancers and the lines it kills hardest.`)}
+    <div class="split">
+      <div><div class="engr" style="margin-bottom:6px">Cancers it kills most · ${d.predicted?.cancer_subtypes ? "predicted" : "measured"}</div>${subtypeRows(d)}</div>
+      <div><div class="engr" style="margin-bottom:6px">Hardest-hit cell lines · measured</div>${cellRows(d.measured_top_cells, "sensitivity_rank", "measured")}
+        <div class="engr" style="margin:14px 0 6px">Predicted by the model</div>${d.predicted?.top_cells ? cellRows(d.predicted.top_cells, "predicted_rank", "predicted") : `<div class="note"><span class="led wait"></span>Waiting on step 2.</div>`}</div>
+    </div>
+    ${d.breast_screen_artifact ? `<div class="note"><span class="engr" style="margin-right:8px">Data note</span>This drug's breast lines come from an extra screen on a different scale, so breast cancer is left out of its ranking.</div>` : ""}
+  </div>
+
+  <div class="card" id="s-why" style="scroll-margin-top:72px">
+    <div class="engr">03 · Why · the whole chain</div>
+    <div class="display"><p class="take">${chainSentence(d)}</p></div>
+    ${ex(whyTech(d), whyPlain(d))}
+  </div></div>`);
+  setTimeout(() => {
+    document.querySelectorAll("#targets .strip").forEach((b) => (b.onclick = () => {
+      const on = b.classList.contains("on");
+      document.querySelectorAll("#targets .strip").forEach((x) => x.classList.remove("on"));
+      document.getElementById("evidence").innerHTML = "";
+      if (!on) { b.classList.add("on"); showEvidence(d, d.predicted_targets[+b.dataset.i]); }
+    }));
+    document.querySelector("#targets .strip")?.click();
+  });
+  return frag;
+}
+
+function chainSentence(d) {
+  const g = d.predicted_targets[0]?.gene, k = killsMost(d);
+  if (!g) return `<b>${esc(d.name)}</b> has no look-alike with a known protein target, so we cannot explain what it does.`;
+  return `<b>${esc(d.name)}</b> <span style="color:var(--ink-3)">→</span> <span class="gene" style="font-size:inherit">${esc(g)}</span> <span style="color:var(--ink-3)">→</span> ${k ? esc(short(k)) : "no cancer killed strongly"} <span style="color:var(--ink-3);font-size:15px">· ${d.confidence.toLowerCase()} confidence</span>`;
+}
+
+function subtypeRows(d) {
+  let rows = (d.predicted?.cancer_subtypes || d.measured_cancer_subtypes || []).slice();
+  if (d.breast_screen_artifact) rows = rows.filter((r) => !/breast/i.test(r.name));
+  const score = (r) => r.rank_score ?? r.avg_kill_rank ?? r.score ?? 0;
+  rows.sort((a, b) => score(b) - score(a));
+  if (!rows.length) return `<div class="note">No subtype data.</div>`;
+  const k = killsMost(d);
+  return `<div class="strips">${rows.slice(0, 6).map((r) => `<div class="strip static ${r.name === k ? "on" : ""}" title="${esc(r.name)}"><b>${esc(short(r.name))}</b>
+    <span class="d">${r.n_cell_lines != null ? `${r.n_cell_lines} lines` : ""}${r.share_responsive != null ? ` · ${pct(r.share_responsive)} die` : ""}${r.low_confidence ? " · few lines" : ""}</span>${meter(score(r))}</div>`).join("")}</div>`;
+}
+
+function cellRows(rows, key) {
+  if (!rows || !rows.length) return `<div class="note">No cancer line responds strongly.</div>`;
+  return `<div class="strips">${rows.slice(0, 5).map((c) => `<div class="strip static" title="${esc(c.cancer_subtype)}"><b class="readout" style="font-size:13px">${esc(c.cell_name)}</b><span class="d">${esc(short(c.cancer_subtype))}</span>${meter(c[key] ?? 0)}</div>`).join("")}</div>`;
+}
+
+function showEvidence(d, t) {
+  const el = document.getElementById("evidence");
+  el.innerHTML = `<div class="fade" style="display:flex;flex-direction:column;gap:14px;margin-top:4px">
+    <div class="engr">The evidence for ${esc(t.gene)} · look-alikes proven to hit it</div>
+    ${ex(`Score ${t.score.toFixed(1)} = Σ similarity × pChEMBL × trust over the ${t.evidence.length} of 25 nearest neighbours with a measured ${esc(t.gene)} result.`,
+         `${t.evidence.length} of the 25 closest known molecules are proven in the lab to hit ${esc(t.gene)}. The closest is ${f2(t.evidence[0]?.similarity)} alike. Compare their shapes with ${esc(d.name)} above.`)}
+    <div class="mols">${t.evidence.map((e) => `<div class="molcard"><div class="mol" data-smiles="${esc(e.smiles || "")}" data-w="240" data-h="150"><span class="ph">${e.smiles ? "drawing…" : "no structure"}</span></div>
+      <a class="gene" href="https://www.ebi.ac.uk/chembl/compound_report_card/${esc(e.similar_compound)}/" target="_blank" rel="noopener">${esc(e.similar_compound)} ↗</a>
+      <div class="row"><span>alike</span><span class="sim"><i><b style="width:${Math.round(100 * e.similarity)}%"></b></i>${f2(e.similarity)}</span></div>
+      <div class="row"><span>potency</span><span>pChEMBL ${e.pchembl.toFixed(1)}</span></div>
+      <div class="row"><span>lab tests</span><span>${e.n_tests}</span></div></div>`).join("")}</div></div>`;
+  drawMols();
+}
+
+function whyTech(d) {
+  const t = genes(d, 2, " and "), k = killsMost(d);
+  if (!t) return `No neighbour within the reference set carries a measured target, so no mechanism can be proposed.`;
+  if (!k) return `Predicted ${t} engagement, but no cell line passes the response cutoff: target binding without measurable cytotoxicity in vitro.`;
+  return `Predicted ${t} engagement; the most responsive subtype (${killSource(d)}) is ${k}. Hypothesis: ${k} lines depend on the ${d.predicted_targets[0].gene} pathway.`;
+}
+function whyPlain(d) {
+  const g = d.predicted_targets[0]?.gene, k = killsMost(d);
+  if (!g) return `We have nothing similar enough to learn from, so we make no claim.`;
+  if (!k) return `It probably hits ${g}, but it barely kills cancer cells in a dish.`;
+  return `It probably blocks ${g}. ${short(k)} cells seem to need ${g} to survive, so blocking it kills them. ${d.confidence === "Low" ? "Treat this as a weak guess: no close relative is known." : ""}`;
+}
+
+// ---------- molecules ----------
+function drawMols() {
+  if (!RDKIT) return;
+  document.querySelectorAll(".mol[data-smiles]:not([data-done])").forEach((el) => {
+    el.dataset.done = "1";
+    if (!el.dataset.smiles) return;
+    try {
+      const m = RDKIT.get_mol(el.dataset.smiles);
+      if (!m) throw 0;
+      const w = +el.dataset.w || 300, h = +el.dataset.h || 180;
+      let svg;
+      try { svg = m.get_svg_with_highlights(JSON.stringify({ width: w, height: h, backgroundColour: [1, 1, 1, 0], bondLineWidth: 1.4, padding: 0.06 })); } catch { svg = m.get_svg(w, h); }
+      el.innerHTML = svg; m.delete();
+    } catch { el.innerHTML = `<span class="ph">structure unavailable</span>`; }
+  });
+}
+
+load().catch((e) => (document.getElementById("app").innerHTML = `<div class="card">Could not load results (${esc(e.message)}). From the repo root run <span class="readout">python3 -m http.server 8000</span> and open <span class="readout">http://localhost:8000/ui/</span>.</div>`));
+</script>
+</body>
+</html>
