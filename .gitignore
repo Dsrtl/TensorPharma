@@ -1,0 +1,23 @@
+# Data stays local: raw downloads are ~100 GB and far past GitHub's limits
+data/*
+!data/README.md
+*.gctx
+*.h5
+*.parquet
+*.db
+*.sqlite
+
+# Trained models and run outputs
+models/
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
