@@ -50,6 +50,7 @@ button { font: inherit; color: inherit; }
 /* top bar */
 .top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .top .in { max-width: 1120px; margin: 0 auto; padding: 12px 24px; display: flex; gap: 16px; align-items: center; }
+.tabs { display: flex; gap: 18px; margin-right: auto; margin-left: 28px; font-size: 13px; } .tabs a { color: var(--ink-3); text-decoration: none; } .tabs a.on { color: var(--ink); }
 .brand { font-family: var(--mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; text-decoration: none; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
 .search { flex: 1; position: relative; max-width: 420px; margin-left: auto; min-width: 0; }
 .search input { width: 100%; font: inherit; font-size: 14px; padding: 8px 12px 8px 32px; border: 0; border-radius: 9px; background: var(--panel); color: var(--ink); box-shadow: var(--ao-in); outline: none; }
@@ -304,6 +305,7 @@ a.score:hover { box-shadow: var(--ao-2); }
 <body>
 <div class="top"><div class="in">
   <a class="brand" href="#/"><span class="led live" style="margin:0"></span>Tensor<span class="full">Pharma</span></a>
+  <nav class="tabs"><a href="#/" data-tab="">Demo</a><a href="#/how" data-tab="#/how">How it works</a></nav>
   <div class="search"><input id="q" placeholder="Find a drug, protein or cancer" autocomplete="off" aria-label="Search"><kbd>/</kbd><div class="drop" id="drop"></div></div>
 </div></div>
 <main class="page" id="app"><div class="engr">Loading results…</div></main>
@@ -375,7 +377,8 @@ function render() {
   if (step) { OPEN = +step[1]; if (step[2]) S1VIEW = "map"; }
   tip(null);
   app.innerHTML = "";
-  app.append(h.startsWith("#/drug/") ? drugPage(decodeURIComponent(h.slice(7))) : step || h.startsWith("#/proof") ? homePage() : demoPage());
+  app.append(h.startsWith("#/drug/") ? drugPage(decodeURIComponent(h.slice(7))) : step || h.startsWith("#/proof") ? homePage() : h === "#/how" ? howPage() : demoPage());
+  document.querySelectorAll(".tabs a").forEach((a) => a.classList.toggle("on", a.dataset.tab === (h === "#/how" ? "#/how" : "")));
   window.scrollTo(0, 0);
   afterRender();
 }
@@ -477,13 +480,12 @@ function demoPage() {
   const frag = $(`<div class="fade" style="display:flex;flex-direction:column;gap:52px">
   <section class="hero">
     <div class="engr">Challenge 6 · compound → target → cancer</div>
-    <h1 class="voice">Give it a molecule. It tells you what it binds, which cancers respond, and why.</h1>
+    <h1 class="voice">Drug to mechanism.</h1>
     <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
     <div class="picker" id="picker"><span class="engr" style="margin-right:4px">Try</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
   </section>
-  ${piecesSection()}
-  ${OV ? dataSection() : ""}
   <section id="answer"></section>
+  ${OV ? dataSection() : ""}
 
   <section style="display:flex;flex-direction:column;gap:16px">
     <h2 class="sec">Can you trust it?</h2>
@@ -564,13 +566,14 @@ function linkRow(g) {
     <span class="n">${S3_TAG[g.status]}${g.q != null ? `<br>q ${g.q.toFixed(3)}` : ""}</span></button>`;
 }
 const GROUP_TAG = { broad: '<span class="tag kb">broad</span> kills 1 in 5 or more of its lines', niche: '<span class="tag hy">niche</span> kills fewer than 1 in 5, in a few cancers', inactive: '<span class="tag" style="color:var(--ink-3)">inactive</span> fewer than 10 lines respond' };
-function piecesSection() {
-  const P = [["1", "Combine the data", "Three public sources joined on drug and cell line: ChEMBL (what each molecule binds), PharmacoDB (which cancer cell lines it kills), DepMap (which cancer each line comes from).", `${LIB.length} drugs · ${OV ? OV.panel.total : 976} cancer cell lines · 498,671 known binders`],
-    ["2", "Similarity is the math", "Every molecule becomes a 2,048-point structure fingerprint. A new molecule is compared to every known one; the closest look-alikes vote on what it binds and which lines it kills.", "Morgan fingerprint · Tanimoto similarity · 25 nearest neighbours"],
-    ["3", "Report what it finds", "For any molecule: the proteins it binds, the cell lines that respond, the cancer types, and why. Every score below is from drugs the model never saw.", "Run on the HPC cluster · whole chemical families held out"]];
-  return `<section style="display:flex;flex-direction:column;gap:16px">
-    <h2 class="sec">How it works, in 3 pieces</h2>
-    <div class="scores">${P.map(([i, t, s, tech]) => `<div class="score"><span class="engr">Piece ${i}</span><span style="font-size:18px;font-weight:500">${t}</span><span class="s">${s}</span><span class="tech">${tech}</span></div>`).join("")}</div></section>`;
+function howPage() {
+  const P = [["1", "Combine the data", "We joined three public datasets: which proteins each drug binds (ChEMBL), which cancer cell lines it kills (PharmacoDB), and which cancer each cell line comes from (DepMap).", `${LIB.length} drugs · ${OV ? OV.panel.total : 976} cancer cell lines`],
+    ["2", "Compare by similarity", "Each molecule becomes a structure fingerprint. Molecules that look alike tend to act alike, so for a new molecule the closest known ones vote on what it binds and what it kills.", "Fingerprint similarity (Tanimoto) · 25 closest look-alikes"],
+    ["3", "Report what it finds", "For any drug: the proteins it binds, the cell lines that respond, the cancer types, and why. Every score is measured on drugs the model never saw.", "Run on the HPC cluster · whole chemical families held out"]];
+  return $(`<div class="fade" style="display:flex;flex-direction:column;gap:24px">
+    <section class="hero"><div class="engr">Backstory</div><h1 class="voice">How it works, in 3 pieces.</h1></section>
+    <div class="scores">${P.map(([i, t, s, tech]) => `<div class="score"><span class="engr">Piece ${i}</span><span style="font-size:18px;font-weight:500">${t}</span><span class="s">${s}</span><span class="tech">${tech}</span></div>`).join("")}</div>
+    <div><a href="#/" style="color:var(--ink-2);font-size:13.5px">← Back to the demo</a></div></div>`);
 }
 function dataSection() {
   const g = OV.groups, n = g.inactive + g.niche + g.broad, P = OV.panel;
