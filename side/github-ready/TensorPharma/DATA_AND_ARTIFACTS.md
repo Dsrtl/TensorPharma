@@ -6,6 +6,7 @@
 - Target metrics/manifest/environment from completed ARCC job 949350.
 - Final cancer-only response summary/full report/environment and dataset-change report from completed ARCC job 950090.
 - Earlier mixed-cell response reports from ARCC job 949920, retained separately as historical evidence.
+- Completed target-expression test (job 950385): compact summary, full machine-produced report, validation selection, and environment. The 45-gene filter hash was verified locally. Added features did not improve the matched control; 124 of 954 drugs had no expression-mapped target features.
 - Response data audit, mapping exclusions, four low-rank optimization histories, and descriptive LightGBM feature importance.
 
 Source-path strings in copied JSON reports are normalized to a repository-relative path. All metrics, source hashes, and split hashes remain unchanged. No dataset archive, response-label table, test-prediction table, model binary, target reference, or cancer-only `input/` directory is included.
@@ -61,6 +62,8 @@ This update removes nine `Non-Cancerous` cells and recomputes within-drug ranks.
 Existing result folders contain completed evidence. Use a new experiment output directory and keep the original reports unchanged. More repeated tuning on this already-inspected test set does not create independent validation.
 
 ## Before publishing this folder
+
+For the additional target-expression test, the small `report.json`, `validation_selection.json`, `environment.txt`, and reconciled `summary.json` are already included under `results/target_expression_filtered_test/`. Do not copy the entire experimental output folder into Git: it also contains model binaries, feature arrays, cached predictions, and prepared labels. Scheduler completion details are drawn from the modeling lead's shared terminal output, not fabricated as part of the machine report.
 
 1. Review contributors' code ownership and agree on a license; none is assumed.
 2. Check `.gitignore` and the staged file list. The included small audit CSVs intentionally contain chemical identifiers and structure strings, not personal records.

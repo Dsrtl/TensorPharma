@@ -99,12 +99,15 @@ def build(source, frozen, output, workers):
 
 
 class Library:
-    def __init__(self, path):
+    def __init__(self, path, excluded_genes=()):
         self.manifest = json.loads((path / "manifest.json").read_text())
         self.fingerprints = np.load(path / "fingerprints.npy", mmap_mode="r", allow_pickle=False)
         self.popcount = np.array([value.bit_count() if hasattr(value, "bit_count") else bin(value).count("1") for value in range(256)])
         self.counts = self.popcount[self.fingerprints].sum(axis=1)
         self.labels = pd.read_csv(path / "labels.csv.gz", keep_default_na=False)
+        self.labels = self.labels[~self.labels["target_gene"].isin(excluded_genes)].reset_index(drop=True)
+        if self.labels.empty:
+            raise ValueError("No target labels remain in the reference")
         self.genes = sorted(self.labels["target_gene"].unique())
         lookup = {gene: index for index, gene in enumerate(self.genes)}
         self.columns = self.labels["target_gene"].map(lookup).to_numpy()

@@ -1,0 +1,16 @@
+{
+  "status": "45 supplied symbols; corrupted entry resolved with partner confirmation",
+  "source": "Partner-provided table in project conversation, October 17 2026",
+  "resolved_entry": {
+    "original_text": "20,00 CYP",
+    "source_compounds": 98,
+    "source_rows": 107,
+    "confirmed_symbol": "CYP2E1",
+    "evidence": "CYP2E1 has exactly 98 unique compounds and 107 rows in the supplied drug_targets.csv.gz",
+    "applied": true,
+    "partner_confirmation": "Confirm CYP2E1"
+  },
+  "scope": "Proposed oncology-feature exclusion, not a claim that all listed genes are biologically irrelevant or universally anti-targets",
+  "safety": "Original ChEMBL library and safety/off-target evidence are preserved; exclusions apply only to experimental target-expression features",
+  "not_excluded": ["CA9", "CA12", "CYP11B1", "CYP11B2", "CYP17A1", "CYP19A1", "CYP21A2"]
+}

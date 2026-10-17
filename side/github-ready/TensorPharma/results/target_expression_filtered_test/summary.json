@@ -1,0 +1,52 @@
+{
+  "provenance": {
+    "source": "Numerical results reconciled with included report.json; scheduler status from the modeling lead's shared sacct output",
+    "original_report_included": true,
+    "scope": "Compact summary of the original report and scheduler status; see report.json for full configuration and coverage",
+    "normalization": "Absolute input directory in report.json replaced with repository-relative path; metrics and hashes unchanged"
+  },
+  "job_id": 950385,
+  "state": "COMPLETED",
+  "elapsed": "00:12:43",
+  "exit_code": "0:0",
+  "selected_new_candidate": "lightgbm_control",
+  "beats_incumbent_on_validation": false,
+  "incumbent": "ridge_1000",
+  "automatic_deployment": false,
+  "excluded_gene_count": 45,
+  "excluded_gene_file_sha256": "6f5a61b643a9a5fa474169b96188b1d4a34ca44a81abbfd24e5ed73f958fbea6",
+  "excluded_gene_file_hash_verified_locally": true,
+  "queries_without_expression_mapped_targets": 124,
+  "total_query_compounds": 954,
+  "models": {
+    "lightgbm_control": {
+      "validation_observations": 71817,
+      "validation_drugs": 140,
+      "validation_spearman": 0.30736808695498036,
+      "validation_rmse": 0.2629489553630896,
+      "test_observations": 74640,
+      "test_drugs": 144,
+      "test_spearman": 0.3252266948344579,
+      "test_rmse": 0.2625470244479141,
+      "best_iteration": 598
+    },
+    "lightgbm_target_expression": {
+      "validation_observations": 71817,
+      "validation_drugs": 140,
+      "validation_spearman": 0.3056850363704792,
+      "validation_rmse": 0.2631362196870674,
+      "test_observations": 74640,
+      "test_drugs": 144,
+      "test_spearman": 0.32372364421507793,
+      "test_rmse": 0.2628366465178078,
+      "best_iteration": 351
+    }
+  },
+  "interpretation": "The seven target-expression summary features did not improve this matched LightGBM comparison; retain the validation-selected cancer-only Ridge model",
+  "limitations": [
+    "124 of 954 compounds have no expression-mapped predicted targets and receive zero target-expression summary features; this is not evidence of biological inactivity",
+    "No statistical significance, general failure of biological features, clinical efficacy, or causal mechanism claim is made",
+    "Follow-up testing uses previously inspected compounds and is exploratory",
+    "Stage C enrichment and Stage D mechanism validation remain unimplemented"
+  ]
+}

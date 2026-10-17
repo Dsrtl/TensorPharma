@@ -53,3 +53,9 @@ __pycache__/
 /results/rank_benchmark_cancer_only/prepared/cells.csv
 /results/chembl_library/library/
 /results/chembl_library/query_predictions.csv
+/results/target_expression_test/
+/results/target_expression_filtered_test/*
+!/results/target_expression_filtered_test/summary.json
+!/results/target_expression_filtered_test/report.json
+!/results/target_expression_filtered_test/validation_selection.json
+!/results/target_expression_filtered_test/environment.txt

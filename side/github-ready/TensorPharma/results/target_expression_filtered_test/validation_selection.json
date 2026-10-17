@@ -1,0 +1,6 @@
+{
+  "selected_new_candidate": "lightgbm_control",
+  "beats_incumbent_on_validation": false,
+  "incumbent": "ridge_1000",
+  "automatic_deployment": false
+}

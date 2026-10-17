@@ -21,13 +21,14 @@ This folder is a **code, documentation, and results handoff**, not a complete de
 
 ## What has actually completed
 
-All three ARCC jobs below finished successfully on October 17, 2026. **The cancer-only run is the final response model for integration**; the earlier run is retained as historical evidence.
+All four ARCC jobs below finished successfully on October 17, 2026. **The cancer-only Ridge model remains the final response model for integration**; the additional feature test did not improve its matched control.
 
 | Experiment | Job | Runtime | Outcome |
 |---|---:|---:|---|
 | Expanded ChEMBL target retrieval | 949350 | 57 min 56 sec | Completed, exit `0:0` |
 | Earlier mixed-cell response comparison | 949920 | 5 min 29 sec | Completed, exit `0:0`; historical |
 | Final cancer-only response comparison | 950090 | 5 min 22 sec | Completed, exit `0:0`; selected `ridge_1000` |
+| Target-expression feature test | 950385 | 12 min 43 sec | Completed, exit `0:0`; added features did not help |
 
 ### 1. Protein-target retrieval
 
@@ -189,6 +190,19 @@ Target CSVs include gene, vote score, nearest similarity, supporting potency max
 The planned application should distinguish **measured evidence**, **predicted associations**, and **mechanism hypotheses**. A query identical to a reference compound produces known-compound evidence, not proof of novel generalization.
 
 ## Scientific and sharing limits
+
+### Additional experiment completed: no improvement
+
+The [target-expression test](TARGET_EXPRESSION_TEST.md) compared the fixed cancer-only LightGBM control with the same model plus seven summaries of **predicted target votes × cell expression**. The protocol reuses the LINCS-excluded reference and frozen split, with the partner-confirmed 45-gene feature exclusion in `config/target_exclusions.csv`, while preserving the original safety/off-target reference. This differs from the earlier joint auxiliary-target model.
+
+| Model | Validation Spearman | Test Spearman | Test RMSE |
+|---|---:|---:|---:|
+| LightGBM matched control | **0.307368** | **0.325227** | **0.262547** |
+| + seven target-expression features | 0.305685 | 0.323724 | 0.262837 |
+
+The control reproduced the previous cancer-only LightGBM metrics. The added features performed slightly worse on both partitions, so **Ridge remains selected**. This does not show biological information is generally unhelpful; it concerns this feature design and tested configuration only. No statistical significance or Stage C/Stage D mechanism validation is implied.
+
+The [summary](results/target_expression_filtered_test/summary.json), [full machine-produced report](results/target_expression_filtered_test/report.json), validation selection, and recorded environment are included. Numerical results were reconciled with the downloaded report; the 45-gene exclusion-file hash matches the local configuration. **124 of 954 compounds** had no expression-mapped predicted targets and received zero added features; absence of retrieved/mapped targets is not evidence of biological inactivity. Absolute input paths were normalized without changing metrics or hashes. Scheduler status comes from the modeling lead's shared `sacct` output.
 
 - Compounds/scaffolds are held out, but cell lines are known during training; there is no unseen-patient validation.
 - Test compounds were previously inspected. These are exploratory hackathon results, not an untouched external benchmark.

@@ -1,0 +1,46 @@
+gene,action,scope
+KCNH2,DROP,Cardiac ion-channel safety
+CYP3A4,DROP,Xenobiotic-metabolism CYP
+CYP2C9,DROP,Xenobiotic-metabolism CYP
+ABCB1,DROP,Transporter
+CYP2D6,DROP,Xenobiotic-metabolism CYP
+CYP1A2,DROP,Xenobiotic-metabolism CYP
+CYP2C19,DROP,Xenobiotic-metabolism CYP
+ABCG2,DROP,Transporter
+SCN5A,DROP,Cardiac ion-channel safety
+NR1I2,DROP,Xenobiotic sensor
+CYP1B1,DROP,Xenobiotic-metabolism CYP
+CYP1A1,DROP,Xenobiotic-metabolism CYP
+CYP4A11,DROP,Xenobiotic-metabolism CYP
+CYP4F2,DROP,Xenobiotic-metabolism CYP
+CYP2C8,DROP,Xenobiotic-metabolism CYP
+AHR,DROP,Xenobiotic sensor
+ABCC1,DROP,Transporter
+ABCB11,DROP,Transporter
+CYP2A6,DROP,Xenobiotic-metabolism CYP
+CYP2B6,DROP,Xenobiotic-metabolism CYP
+NR1I3,DROP,Xenobiotic sensor
+CACNA1C,DROP,Cardiac ion-channel safety
+ALB,DROP,Plasma-protein binding
+ABCC4,DROP,Transporter
+CYP2E1,DROP,Xenobiotic-metabolism CYP
+SLCO1B1,DROP,Transporter
+ABCC2,DROP,Transporter
+ABCC9,DROP,Transporter
+SLC47A1,DROP,Transporter
+ABCC3,DROP,Transporter
+SLCO1B3,DROP,Transporter
+CYP3A5,DROP,Xenobiotic-metabolism CYP
+CYP2J2,DROP,Xenobiotic-metabolism CYP
+SLC47A2,DROP,Transporter
+CYP2A13,DROP,Xenobiotic-metabolism CYP
+CYP4Z1,DROP,Xenobiotic-metabolism CYP
+ABCC8,DROP,Transporter
+CYP4F12,DROP,Xenobiotic-metabolism CYP
+CYP3A7,DROP,Xenobiotic-metabolism CYP
+ABCC5,DROP,Transporter
+CYP4F11,DROP,Xenobiotic-metabolism CYP
+ABCB7,DROP,Transporter
+ABCB4,DROP,Transporter
+CYP3A43,DROP,Xenobiotic-metabolism CYP
+CYP4F8,DROP,Xenobiotic-metabolism CYP
