@@ -1,0 +1,582 @@
+{
+  "selected_model": "expression_coupled_penalty_100",
+  "selected_family": "expression_coupled",
+  "benchmark_complete": true,
+  "label": "sensitivity_rank",
+  "selection_rule": "Highest validation macro per-drug Spearman; ties use lower validation RMSE",
+  "data": {
+    "source": "TensorPharma-main/data/processed",
+    "frozen_split_sha256": "1400e5c0fbab24ed66d5253a1b042dd97876d5e885177a2413e5cce00c00e1a3",
+    "frozen_fingerprints_sha256": "90faeefbadc91f112f8e44973067d560c29c749aff97d500a9e6755bb3f728c3",
+    "frozen_feature_configuration": {
+      "input_sha256": "ea67c0b932bb5801e8b96560a2a0b13945f3b56811c980a2b228d4432f1a33b1",
+      "seed": 2026,
+      "rdkit_version": "2026.09.1",
+      "standardization": "cleanup_fragment_parent_uncharge_canonical_tautomer_v1"
+    },
+    "benchmark_split_sha256": "7cc9bbfdd911c7091f07918a02b8aa86962e069d4e25daa51e40e51524500963",
+    "source_response_rows": 485662,
+    "canonical_response_rows": 481506,
+    "source_drugs": 961,
+    "canonical_drugs": 954,
+    "excluded_source_drug_ids": [
+      "AECDBHGVIIRMOI-UHFFFAOYSA-N",
+      "CEGSUKYESLWKJP-UHFFFAOYSA-N",
+      "QFJCIRLUMZQUOT-HPLJOQBZSA-N",
+      "QTHCAAFKVUWAFI-DJKKODMXSA-N",
+      "TZKBVRDEOITLRB-UHFFFAOYSA-N",
+      "VSZGPKBBMSAYNT-RRFJBIMHSA-N"
+    ],
+    "excluded_response_rows_for_unresolved_structures": 3741,
+    "mapping_exclusion_report": "mapping_exclusions.csv",
+    "cells": 985,
+    "genes_selected": 1000,
+    "fingerprint_bits": 2048,
+    "excluded_cells_without_training_labels": [],
+    "compound_counts": {
+      "train": 670,
+      "validation": 140,
+      "test": 144
+    },
+    "response_counts": {
+      "train": 334427,
+      "validation": 72141,
+      "test": 74938
+    },
+    "cleaned_target_rows_in_benchmark": 9563,
+    "source_files": {
+      "responses": {
+        "bytes": 6982365,
+        "sha256": "1fd487e002038e8023f5b3f940e2a54923d8f2a9c7e1b2bbbb8fbe3286bca57f"
+      },
+      "drug_ids": {
+        "bytes": 17886,
+        "sha256": "a55a69d1d730d26326ee84914053159795444a54a89214abf918f465ec11d3b3"
+      },
+      "drugs": {
+        "bytes": 52566,
+        "sha256": "a59dbbe5b06829c9872a3f482016f74a2534e2933bc18a1c1ba54571bd65aaf7"
+      },
+      "gene_expression": {
+        "bytes": 75115130,
+        "sha256": "78bcd6edb45cbe4f5e4fa7f7dbff4e0886d6df87628c636e32cbe35ec8402cde"
+      },
+      "drug_targets": {
+        "bytes": 32969806,
+        "sha256": "6dc9633567ac82052550a21ce87413a7545b82cbc5664a571cdcf1cf41378c1c"
+      },
+      "cells": {
+        "bytes": 9484,
+        "sha256": "0d330f651ab7aec1e30eb7b0a7f769ede1c4a6026d9add55ba29e4c1de628241"
+      }
+    },
+    "notes": [
+      "Original scaffold assignments are preserved; canonical duplicate drugs are never split across partitions.",
+      "Entire source drug IDs with unresolved identity/split mappings, flagged structure conflicts, or source/frozen structure disagreement are excluded for every model before fitting.",
+      "Already-averaged response labels for ambiguous merged IDs cannot safely be reassigned to one of several structures; no first-match identity is selected.",
+      "Additional canonical duplicates are merged using source-count-weighted raw scores, then within-drug ranks are recomputed.",
+      "All models predict relative within-drug sensitivity ranks, not raw response or cell-kill probabilities.",
+      "Gene selection and projection use only cell lines with training labels; evaluation is compound-cold, cell-warm.",
+      "Known targets, MOA annotations, and the all-drug trust weights are excluded from predictive inputs.",
+      "Target supervision uses source-aggregated pChEMBL values; assay types were pooled upstream and cannot be recovered.",
+      "If canonical aliases have different source medians, their median is a representative summary, not a reconstruction of raw measurements."
+    ]
+  },
+  "validation_candidates": [
+    {
+      "name": "global_mean",
+      "family": "mean_baseline",
+      "configuration": {
+        "variant": "global"
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 140,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.27789041672464265,
+        "mae": 0.24035661335104624,
+        "macro_per_drug_rmse": 0.2743773110176567
+      }
+    },
+    {
+      "name": "cell_mean",
+      "family": "mean_baseline",
+      "configuration": {
+        "variant": "per_cell"
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.29624519627563084,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26395090107216546,
+        "mae": 0.22345959558855558,
+        "macro_per_drug_rmse": 0.2614223956563984
+      }
+    },
+    {
+      "name": "tanimoto_1",
+      "family": "similarity",
+      "configuration": {
+        "neighbors": 1
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.15329199141661368,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.3573890395358207,
+        "mae": 0.2845751958963309,
+        "macro_per_drug_rmse": 0.35415620919137014
+      }
+    },
+    {
+      "name": "tanimoto_5",
+      "family": "similarity",
+      "configuration": {
+        "neighbors": 5
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.2390843532557905,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.28265381113882576,
+        "mae": 0.2318889709521538,
+        "macro_per_drug_rmse": 0.2796506868775379
+      }
+    },
+    {
+      "name": "tanimoto_10",
+      "family": "similarity",
+      "configuration": {
+        "neighbors": 10
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.27052879064360613,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.27111191044285377,
+        "mae": 0.2249682723548951,
+        "macro_per_drug_rmse": 0.26825767524332067
+      }
+    },
+    {
+      "name": "ridge_10",
+      "family": "fingerprint_ridge",
+      "configuration": {
+        "regularization": 10
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.27643232858587463,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2693957428849002,
+        "mae": 0.22462012601950482,
+        "macro_per_drug_rmse": 0.2659194284089943
+      }
+    },
+    {
+      "name": "ridge_100",
+      "family": "fingerprint_ridge",
+      "configuration": {
+        "regularization": 100
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3010498691376697,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.263555181225103,
+        "mae": 0.2218748247271152,
+        "macro_per_drug_rmse": 0.26084424967940145
+      }
+    },
+    {
+      "name": "ridge_1000",
+      "family": "fingerprint_ridge",
+      "configuration": {
+        "regularization": 1000
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3076389943468141,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26282927687197993,
+        "mae": 0.22244553449851326,
+        "macro_per_drug_rmse": 0.2602280813816287
+      }
+    },
+    {
+      "name": "expression_coupled_penalty_10",
+      "family": "expression_coupled",
+      "configuration": {
+        "rank": 8,
+        "regularization": 10,
+        "target_weight": 0,
+        "best_epoch": 2,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3060686384634079,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2630061401586108,
+        "mae": 0.2214350057840702,
+        "macro_per_drug_rmse": 0.260329799574141
+      }
+    },
+    {
+      "name": "expression_coupled_penalty_100",
+      "family": "expression_coupled",
+      "configuration": {
+        "rank": 8,
+        "regularization": 100,
+        "target_weight": 0,
+        "best_epoch": 2,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3080475670107756,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2627056026820924,
+        "mae": 0.22146108577274773,
+        "macro_per_drug_rmse": 0.26001195039959485
+      }
+    },
+    {
+      "name": "joint_targets_expression_penalty_10",
+      "family": "joint_targets_expression",
+      "configuration": {
+        "rank": 8,
+        "regularization": 10,
+        "target_weight": 77.66535067347887,
+        "best_epoch": 3,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.29106679465635604,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2651147250136211,
+        "mae": 0.22391608649333045,
+        "macro_per_drug_rmse": 0.26230283174217645
+      }
+    },
+    {
+      "name": "joint_targets_expression_penalty_100",
+      "family": "joint_targets_expression",
+      "configuration": {
+        "rank": 8,
+        "regularization": 100,
+        "target_weight": 77.66535067347887,
+        "best_epoch": 1,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.29285202303576674,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26439190824298064,
+        "mae": 0.22368484692097815,
+        "macro_per_drug_rmse": 0.2618226638058366
+      }
+    },
+    {
+      "name": "lightgbm_leaves_15",
+      "family": "lightgbm",
+      "configuration": {
+        "feature_pre_filter": false,
+        "max_bin": 63,
+        "num_threads": 8,
+        "objective": "regression",
+        "metric": "None",
+        "learning_rate": 0.05,
+        "num_leaves": 15,
+        "min_data_in_leaf": 200,
+        "lambda_l2": 10,
+        "feature_fraction": 0.8,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "seed": 2026,
+        "feature_fraction_seed": 2026,
+        "bagging_seed": 2026,
+        "deterministic": true,
+        "force_col_wise": true,
+        "histogram_pool_size": 512,
+        "verbosity": -1,
+        "best_iteration": 593
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3020911774592408,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2635345929213182,
+        "mae": 0.22367869968220483,
+        "macro_per_drug_rmse": 0.26071067694483663
+      }
+    },
+    {
+      "name": "lightgbm_leaves_31",
+      "family": "lightgbm",
+      "configuration": {
+        "feature_pre_filter": false,
+        "max_bin": 63,
+        "num_threads": 8,
+        "objective": "regression",
+        "metric": "None",
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_data_in_leaf": 200,
+        "lambda_l2": 100,
+        "feature_fraction": 0.8,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "seed": 2026,
+        "feature_fraction_seed": 2026,
+        "bagging_seed": 2026,
+        "deterministic": true,
+        "force_col_wise": true,
+        "histogram_pool_size": 512,
+        "verbosity": -1,
+        "best_iteration": 410
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3044278248696352,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26331308320281405,
+        "mae": 0.22332829411706287,
+        "macro_per_drug_rmse": 0.26044035182268305
+      }
+    }
+  ],
+  "models": {
+    "expression_coupled": {
+      "candidate": "expression_coupled_penalty_100",
+      "configuration": {
+        "rank": 8,
+        "regularization": 100,
+        "target_weight": 0,
+        "best_epoch": 2,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3080475670107756,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2627056026820924,
+        "mae": 0.22146108577274773,
+        "macro_per_drug_rmse": 0.26001195039959485
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.31246635420649643,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26460678597776116,
+        "mae": 0.22358145856743222,
+        "macro_per_drug_rmse": 0.26186986781179583
+      }
+    },
+    "fingerprint_ridge": {
+      "candidate": "ridge_1000",
+      "configuration": {
+        "regularization": 1000
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3076389943468141,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26282927687197993,
+        "mae": 0.22244553449851326,
+        "macro_per_drug_rmse": 0.2602280813816287
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.31899968332818207,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26352169836815975,
+        "mae": 0.22347155319305886,
+        "macro_per_drug_rmse": 0.2610886447590038
+      }
+    },
+    "joint_targets_expression": {
+      "candidate": "joint_targets_expression_penalty_100",
+      "configuration": {
+        "rank": 8,
+        "regularization": 100,
+        "target_weight": 77.66535067347887,
+        "best_epoch": 1,
+        "target_heads": 650
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.29285202303576674,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26439190824298064,
+        "mae": 0.22368484692097815,
+        "macro_per_drug_rmse": 0.2618226638058366
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.306539040353684,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26508423566476097,
+        "mae": 0.2246983595360983,
+        "macro_per_drug_rmse": 0.2624937989364644
+      }
+    },
+    "lightgbm": {
+      "candidate": "lightgbm_leaves_31",
+      "configuration": {
+        "feature_pre_filter": false,
+        "max_bin": 63,
+        "num_threads": 8,
+        "objective": "regression",
+        "metric": "None",
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "min_data_in_leaf": 200,
+        "lambda_l2": 100,
+        "feature_fraction": 0.8,
+        "bagging_fraction": 0.8,
+        "bagging_freq": 1,
+        "seed": 2026,
+        "feature_fraction_seed": 2026,
+        "bagging_seed": 2026,
+        "deterministic": true,
+        "force_col_wise": true,
+        "histogram_pool_size": 512,
+        "verbosity": -1,
+        "best_iteration": 410
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.3044278248696352,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26331308320281405,
+        "mae": 0.22332829411706287,
+        "macro_per_drug_rmse": 0.26044035182268305
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.3239281034551523,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2626967494990055,
+        "mae": 0.2232270653308413,
+        "macro_per_drug_rmse": 0.2604338858229746
+      }
+    },
+    "mean_baseline": {
+      "candidate": "cell_mean",
+      "configuration": {
+        "variant": "per_cell"
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.29624519627563084,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.26395090107216546,
+        "mae": 0.22345959558855558,
+        "macro_per_drug_rmse": 0.2614223956563984
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.30984323919406936,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2646058298017325,
+        "mae": 0.22451708670297607,
+        "macro_per_drug_rmse": 0.262128068510114
+      }
+    },
+    "similarity": {
+      "candidate": "tanimoto_10",
+      "configuration": {
+        "neighbors": 10
+      },
+      "validation": {
+        "observations": 72141,
+        "macro_per_drug_spearman": 0.27052879064360613,
+        "ranking_eligible_drugs": 140,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.27111191044285377,
+        "mae": 0.2249682723548951,
+        "macro_per_drug_rmse": 0.26825767524332067
+      },
+      "test": {
+        "observations": 74938,
+        "macro_per_drug_spearman": 0.27834811598225634,
+        "ranking_eligible_drugs": 144,
+        "constant_prediction_drugs_scored_zero": 0,
+        "drugs_excluded_from_ranking": 0,
+        "rmse": 0.2718144806068216,
+        "mae": 0.2255701464967937,
+        "macro_per_drug_rmse": 0.26932855367312764
+      }
+    }
+  },
+  "selected_configuration": {
+    "rank": 8,
+    "regularization": 100,
+    "target_weight": 0,
+    "best_epoch": 2,
+    "target_heads": 650
+  },
+  "notes": [
+    "Six response model families are compared; protein-target retrieval is a separate task.",
+    "All models use identical cleaned rank labels, canonical compounds/cells, and frozen scaffold partitions.",
+    "Predicted ranks are clipped to [0, 1] before selection, evaluation, and serving.",
+    "Ranking is within each drug across cell lines; this differs from earlier raw-score within-cell metrics.",
+    "Constant predictions receive ranking score zero when true ranks vary. Constant true labels or fewer than three observations are excluded from ranking, but included in errors.",
+    "Hyperparameters, checkpoints, and the winner are chosen before test evaluation; each family's fixed finalist is evaluated once.",
+    "Test compounds were inspected in earlier raw-score experiments; this is not a pristine external validation set.",
+    "Relative sensitivity does not establish absolute killing, treatment efficacy, or calibrated probabilities.",
+    "Known target/MOA annotations and all-drug trust weights are never predictive features."
+  ]
+}
