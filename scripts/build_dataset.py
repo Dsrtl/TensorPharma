@@ -98,7 +98,7 @@ def build_drug_targets():
     ch = pd.read_csv(CHEMBL)
     n_in = len(ch)
     ch = ch[ch["activity_type"].isin(KEEP_ACTIVITY_TYPES)]
-    ch = ch.rename(columns={"inchikey": "drug_id"})
+    ch = ch.rename(columns={"inchikey": "drug_id"}).drop(columns=["target_uniprot"])
     check_unique(ch, ["drug_id", "target_chembl_id", "activity_type"], "drug_targets")
     audit["drug_targets"] = {"rows_in": n_in, "rows_kept": len(ch),
                              "activity_types_kept": KEEP_ACTIVITY_TYPES,
