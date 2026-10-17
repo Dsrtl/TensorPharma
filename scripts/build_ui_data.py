@@ -5,6 +5,10 @@ way it is evaluated), evidence for each target, safety flags, a confidence level
 the closest known relative, and the measured cell lines, cancer types and subtypes
 it kills most.
 
+If outputs/step2/predicted_responses.csv exists (drug_id, cell_id, predicted_rank: predicted
+within-drug kill rank, 0 = least, 1 = most), each drug also gets predicted top cell lines,
+cancer types and subtypes, ranked the same way as the measured ones.
+
 Kill scores (DSS3) are put on one 0-1 scale; a cell line counts as responsive at
 DSS3 >= 0.2. Drugs with no responsive line get no top cancer type.
 
@@ -36,6 +40,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from tensorpharma.targets import PROCESSED, SAFETY_GENES, TargetPredictor  # noqa: E402
 
 OUT = ROOT / "outputs/ui"
+STEP2 = ROOT / "outputs/step2/predicted_responses.csv"
 K = 25
 TOP_TARGETS = 5
 TOP_EVIDENCE = 3
@@ -59,8 +64,8 @@ def confidence(similarity):
     return "Low"
 
 
-def by_group(r, column):
-    g = (r.groupby(column).agg(avg_kill_rank=("sensitivity_rank", "mean"),
+def by_group(r, column, rank="sensitivity_rank"):
+    g = (r.groupby(column).agg(avg_kill_rank=(rank, "mean"),
                                share_responsive=("responsive", "mean"), n_cell_lines=("responsive", "size"))
          .reset_index().rename(columns={column: "name"}))
     g["rank_score"] = (g["avg_kill_rank"] * g["n_cell_lines"] + 0.5 * SHRINK) / (g["n_cell_lines"] + SHRINK)
@@ -85,9 +90,15 @@ def main():
     responses["dss3"] = responses["sensitivity_raw"] / scale
     responses["responsive"] = responses["dss3"] >= RESPONSIVE_DSS3
     by_drug = dict(tuple(responses.groupby("drug_id")))
+    predicted = {}
+    if STEP2.exists():
+        pr = pd.read_csv(STEP2).join(cells, on="cell_id")
+        pr["responsive"] = False  # step 2 predicts rank, not absolute kill
+        predicted = dict(tuple(pr.groupby("drug_id")))
+        print(f"step 2 predictions: {len(pr)} rows, {len(predicted)} drugs", flush=True)
 
     records, flat = [], {"drugs": [], "predicted_targets": [], "evidence": [], "top_cells": [],
-                         "cancer_types": [], "cancer_subtypes": [], "safety_flags": []}
+                         "cancer_types": [], "cancer_subtypes": [], "safety_flags": [], "predicted_cells": []}
     for _, d in drugs.iterrows():
         known = set(d["known_targets"].split("; ")) if isinstance(d["known_targets"], str) else set()
         known_targets = known - SAFETY_GENES  # what the accuracy check counts as a hit
@@ -147,10 +158,28 @@ def main():
             "safety_flags": safety,
             "top5_hits_known": any(t["is_known_target"] for t in targets) if known_targets else None,
         }
+        p = predicted.get(d["drug_id"])
+        if p is not None:
+            pcells = (p.sort_values("predicted_rank", ascending=False).head(TOP_CELLS)
+                      [["cell_id", "cell_name", "cancer_type", "cancer_subtype", "predicted_rank"]]
+                      .round({"predicted_rank": 3}).to_dict("records"))
+            pred = {"top_cells": pcells,
+                    "cancer_types": [{k: v for k, v in t.items() if k != "share_responsive"}
+                                     for t in by_group(p, "cancer_type", "predicted_rank")],
+                    "cancer_subtypes": [{k: v for k, v in t.items() if k != "share_responsive"}
+                                        for t in by_group(p, "cancer_subtype", "predicted_rank")]}
+            conf_sub = [t for t in pred["cancer_subtypes"] if not t["low_confidence"]]
+            base["predicted_top_cancer_subtype"] = conf_sub[0]["name"] if conf_sub else None
+            for c in pcells:
+                flat["predicted_cells"].append({"drug_id": d["drug_id"], **c})
+        else:
+            pred = None
+            base["predicted_top_cancer_subtype"] = None
+
         flat["drugs"].append({**base, "known_targets": "; ".join(sorted(known)), "safety_flags": "; ".join(safety)})
         records.append({**base, "predicted_targets": targets, "measured_top_cells": cells_list,
                         "measured_cancer_types": types_list, "measured_cancer_subtypes": subtypes_list,
-                        "predicted_cells": None, "why": None})
+                        "predicted": pred, "why": None})
 
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "library.json").write_text(json.dumps(records, indent=1, default=str))
