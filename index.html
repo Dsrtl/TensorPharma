@@ -241,10 +241,10 @@ a.node:hover { box-shadow: var(--ao-in), 0 0 0 1.5px var(--line); }
 .hero { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
 .hero h1 { font-size: clamp(32px, 5.2vw, 54px); }
 .sec { font-weight: 400; font-size: clamp(22px, 3vw, 28px); letter-spacing: -.015em; margin: 0; line-height: 1.2; text-wrap: balance; }
-.picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.picker button { border: 0; cursor: pointer; background: var(--panel); box-shadow: var(--ao-1); border-radius: 999px; padding: 6px 14px; font-size: 14px; transition: box-shadow .15s, background .15s; }
+.picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--hair); max-width: 760px; }
+.picker button { border: 1px solid var(--hair); cursor: pointer; background: none; color: var(--ink-2); border-radius: 999px; padding: 4px 12px; font-size: 13px; transition: box-shadow .15s, background .15s; }
 .picker button:hover { box-shadow: var(--ao-2); }
-.picker button.on { background: var(--ink); color: var(--panel); }
+.picker button.on { color: var(--ink); border-color: var(--ink-3); }
 .trio { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 14px; }
 @media (max-width: 860px) { .trio { grid-template-columns: 1fr; } }
 .trio .col { background: var(--display); box-shadow: var(--ao-in); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -482,7 +482,7 @@ function demoPage() {
     <div class="engr">Challenge 6 · compound → target → cancer</div>
     <h1 class="voice">Drug to mechanism.</h1>
     <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
-    <div class="picker" id="picker"><span class="engr" style="margin-right:4px">Try</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
+    <div class="picker" id="picker"><span style="font-size:13px;color:var(--ink-3);margin-right:4px">No molecule handy? Load an example:</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
   </section>
   <section id="answer"></section>
   ${OV ? dataSection() : ""}
@@ -567,12 +567,16 @@ function linkRow(g) {
 }
 const GROUP_TAG = { broad: '<span class="tag kb">broad</span> kills 1 in 5 or more of its lines', niche: '<span class="tag hy">niche</span> kills fewer than 1 in 5, in a few cancers', inactive: '<span class="tag" style="color:var(--ink-3)">inactive</span> fewer than 10 lines respond' };
 function howPage() {
-  const P = [["1", "Combine the data", "We joined three public datasets: which proteins each drug binds (ChEMBL), which cancer cell lines it kills (PharmacoDB), and which cancer each cell line comes from (DepMap).", `${LIB.length} drugs · ${OV ? OV.panel.total : 976} cancer cell lines`],
-    ["2", "Compare by similarity", "Each molecule becomes a structure fingerprint. Molecules that look alike tend to act alike, so for a new molecule the closest known ones vote on what it binds and what it kills.", "Fingerprint similarity (Tanimoto) · 25 closest look-alikes"],
-    ["3", "Report what it finds", "For any drug: the proteins it binds, the cell lines that respond, the cancer types, and why. Every score is measured on drugs the model never saw.", "Run on the HPC cluster · whole chemical families held out"]];
+  const story = [["1", "We joined the data", "Three public datasets, matched drug by drug and cell line by cell line: which proteins each drug binds (ChEMBL), which cancer cell lines it kills (PharmacoDB), and which cancer each line comes from (DepMap).", `${LIB.length} drugs · ${OV ? OV.panel.total : 976} cancer cell lines`],
+    ["2", "We used similarity as the math", "Each molecule becomes a structure fingerprint. To guess what a molecule binds, every known molecule that is at least 40% alike votes. To guess which cell lines it kills, a model learns from the fingerprints of drugs with lab results.", "Fingerprint + Tanimoto similarity · 498,671 known binders"],
+    ["3", "We tested it on drugs it never saw", "We hid whole drug families, predicted them, and checked against the lab. We also fixed 8 protein → cancer links in advance and tested them. HER2 → breast held up.", "Test scores come from runs on the ARCC HPC cluster"]];
+  const team = [["Nasir", "Data and demo", "Joined the datasets, built this site."], ["Abdulla Toleugazin", "Math PhD", "Built the models and ran them on the HPC cluster."], ["Biology PhD", "Biology", "Checked that the biology makes sense."]];
+  const card = ([i, t, s, tech]) => `<div class="score"><span class="engr">${i}</span><span style="font-size:18px;font-weight:500">${t}</span><span class="s">${s}</span>${tech ? `<span class="tech">${tech}</span>` : ""}</div>`;
   return $(`<div class="fade" style="display:flex;flex-direction:column;gap:24px">
-    <section class="hero"><div class="engr">Backstory</div><h1 class="voice">How it works, in 3 pieces.</h1></section>
-    <div class="scores">${P.map(([i, t, s, tech]) => `<div class="score"><span class="engr">Piece ${i}</span><span style="font-size:18px;font-weight:500">${t}</span><span class="s">${s}</span><span class="tech">${tech}</span></div>`).join("")}</div>
+    <section class="hero"><div class="engr">Backstory</div><h1 class="voice">What we did.</h1></section>
+    <div class="scores">${story.map(([i, ...r]) => card([`Step ${i}`, ...r])).join("")}</div>
+    <h2 class="sec" style="margin-top:20px">The team</h2>
+    <div class="scores">${team.map(([n, role, s]) => card([role, n, s])).join("")}</div>
     <div><a href="#/" style="color:var(--ink-2);font-size:13.5px">← Back to the demo</a></div></div>`);
 }
 function dataSection() {
@@ -1143,7 +1147,7 @@ function whyPlain(d) {
   const g = d.predicted_targets[0]?.gene, k = killsMost(d);
   if (!g) return `We have nothing similar enough to learn from, so we make no claim.`;
   if (!k) return `It probably hits ${g}, but it barely kills cancer cells in a dish.`;
-  return `It probably blocks ${g}. ${short(k)} cells seem to need ${g} to survive, so blocking it kills them. ${d.confidence === "Low" ? "Treat this as a weak guess: no close relative is known." : ""}`;
+  return `It probably hits ${g}, and it kills ${short(k)} cells most. ${d.confidence === "Low" ? "Treat this as a weak guess: no close relative is known." : ""}`;
 }
 
 // ---------- molecules ----------
