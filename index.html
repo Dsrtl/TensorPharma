@@ -289,6 +289,12 @@ a.score:hover { box-shadow: var(--ao-2); }
 .pill { font: 500 13px var(--mono); padding: 4px 10px; border-radius: 999px; background: var(--display); box-shadow: var(--ao-in); white-space: nowrap; }
 .pill small { font: 400 11.5px var(--sans); color: var(--ink-3); margin-left: 4px; }
 .pill.ok { color: var(--ok); }
+.hbar { display: grid; grid-template-columns: minmax(90px, 170px) minmax(0, 1fr) auto; gap: 12px; align-items: center; font-size: 13.5px; }
+.hbar span { min-width: 0; } .hbar span small { display: block; font-size: 12px; color: var(--ink-3); }
+.hbar .track { height: 10px; border-radius: 5px; background: var(--display); box-shadow: var(--ao-in); overflow: hidden; }
+.hbar .track i { display: block; height: 100%; border-radius: 5px; background: var(--ink-2); }
+.hbar.dim .track i { background: var(--ink-3); opacity: .5; }
+.hbar.big .track { height: 14px; } .hbar .readout { font-weight: 400; font-size: 13px; white-space: nowrap; }
 .fade { animation: in .35s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes in { from { opacity: 0; transform: translateY(6px); } }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .22s; }
@@ -306,7 +312,7 @@ a.score:hover { box-shadow: var(--ao-2); }
 <script src="https://unpkg.com/@rdkit/rdkit@2024.3.5-1.0.0/dist/RDKit_minimal.js"></script>
 <script>
 const DATA = "data/";
-let LIB = [], BY_ID = {}, VAL, MAPS, LINKS = null, STEP3 = { links: [], chains: {} }, STRICT = null, RDKIT = null, OPEN = 1, S1VIEW = "curve";
+let LIB = [], BY_ID = {}, VAL, MAPS, OV = null, LINKS = null, STEP3 = { links: [], chains: {} }, STRICT = null, RDKIT = null, OPEN = 1, S1VIEW = "curve";
 const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content; };
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const pct = (x) => (x == null ? "–" : Math.round(100 * x) + "%");
@@ -355,6 +361,7 @@ async function load() {
   [LIB, VAL, MAPS] = await Promise.all([get("library.json"), get("validation.json"), get("maps.json")]);
   LIB.forEach((d) => (BY_ID[d.drug_id] = d));
   try { LINKS = await get("links.json"); } catch { LINKS = null; }
+  try { OV = await get("overview.json"); } catch { OV = null; }
   try { STEP3 = await get("step3.json"); } catch { STEP3 = { links: [], chains: {} }; }
   window.RDKIT_READY = window.initRDKitModule ? initRDKitModule().then((m) => { RDKIT = m; drawMols(); return m; }).catch((e) => { console.error("rdkit", e); }) : Promise.resolve();
   setupSearch();
@@ -474,6 +481,7 @@ function demoPage() {
     <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
     <div class="picker" id="picker"><span class="engr" style="margin-right:4px">Try</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
   </section>
+  ${OV ? dataSection() : ""}
   <section id="answer"></section>
 
   <section style="display:flex;flex-direction:column;gap:16px">
@@ -554,6 +562,26 @@ function linkRow(g) {
     <span class="w">${esc(g.plain)}</span>
     <span class="n">${S3_TAG[g.status]}${g.q != null ? `<br>q ${g.q.toFixed(3)}` : ""}</span></button>`;
 }
+const GROUP_TAG = { broad: '<span class="tag kb">broad</span> kills 1 in 5 or more of its lines', niche: '<span class="tag hy">niche</span> kills fewer than 1 in 5, in a few cancers', inactive: '<span class="tag" style="color:var(--ink-3)">inactive</span> fewer than 10 lines respond' };
+function dataSection() {
+  const g = OV.groups, n = g.inactive + g.niche + g.broad, P = OV.panel;
+  const rows = [["Kills almost nothing", "fewer than 10 lines respond", g.inactive], ["Niche", "kills fewer than 1 in 5 lines", g.niche], ["Broad / pan-cancer", "kills 1 in 5 lines or more", g.broad]];
+  const slices = [...P.top.map((t) => [t.name, t.lines]), [`Other ${P.other_types} types`, P.other]];
+  const shade = [86, 68, 52, 38, 26, 12];
+  let off = 0; const C = 2 * Math.PI * 40;
+  const arcs = slices.map(([, v], i) => { const len = (C * v) / P.total, a = `<circle r="40" cx="60" cy="60" fill="none" stroke-width="22" stroke="color-mix(in srgb, var(--ink) ${shade[i]}%, var(--display))" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"/>`; off += len; return a; }).join("");
+  return `<section style="display:flex;flex-direction:column;gap:16px">
+    <h2 class="sec">The data</h2>
+    <div class="split">
+      <div class="card" style="gap:14px"><div class="engr">What kind of drugs are these? · ${n} drugs</div>
+        ${rows.map(([k, sub, v]) => `<div class="hbar big"><span>${k}<small>${sub}</small></span><div class="track"><i style="width:${(100 * v) / n}%"></i></div><b class="readout">${v}</b></div>`).join("")}
+        <div style="font-size:12.5px;color:var(--ink-2)">A line responds when its lab score (DSS3) is 0.2 or more.</div></div>
+      <div class="card" style="gap:14px"><div class="engr">Which cancers are in the panel? · ${P.total} cell lines</div>
+        <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap"><svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="Cell lines by cancer type">${arcs}</svg>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;flex:1;min-width:180px">${slices.map(([k, v], i) => `<div style="display:flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:3px;background:color-mix(in srgb, var(--ink) ${shade[i]}%, var(--display));flex:none"></i><span style="flex:1">${esc(k)}</span><b class="readout" style="font-weight:400">${Math.round((100 * v) / P.total)}%</b></div>`).join("")}</div></div>
+        <div style="font-size:12.5px;color:var(--ink-2)">Lung and blood (lymphoid) lines make up ${Math.round((100 * (P.top[0].lines + P.top[1].lines)) / P.total)}% of the panel, so results lean toward them.</div></div>
+    </div></section>`;
+}
 function step3Why(d) {
   const hits = (STEP3.chains[d.name] || []).map((c) => ({ c, l: STEP3.links.find((l) => l.id === c.id) })).filter((x) => x.l);
   if (!hits.length) return { html: `${esc(whyPlain(d))} <span style="color:var(--ink-3)">None of our 8 tested links covers this drug, so this is a lead, not a finding.</span>`, tag: '<span class="tag Medium">unproven</span>' };
@@ -564,7 +592,7 @@ function step3Why(d) {
 
 function answerCard(r) {
   if (r.error) return `<div class="note">${esc(r.error)}</div>`;
-  const d = r.d, top = d.predicted_targets.slice(0, 5), w3 = step3Why(d), pred = !!d.predicted?.top_cells;
+  const d = r.d, ov = OV?.drugs?.[d.drug_id], top = d.predicted_targets.slice(0, 5), w3 = step3Why(d), pred = !!d.predicted?.top_cells;
   const cells = (pred ? d.predicted.top_cells : d.measured_top_cells || []).slice(0, 5);
   let subs = (d.predicted?.cancer_subtypes || d.measured_cancer_subtypes || []).filter((x) => !(d.breast_screen_artifact && /breast/i.test(x.name)));
   subs = subs.filter((x) => x.share_responsive > 0).sort((a, b) => (b.rank_score ?? 0) - (a.rank_score ?? 0)).slice(0, 3);
@@ -581,15 +609,19 @@ function answerCard(r) {
       <div class="h">${d.confidence} confidence: closest known molecule is ${f2(d.nearest_similarity)} alike (1 = identical). ✓ = confirmed target.</div>
 
       <div class="q"><span class="engr">2</span>Which cancer cell lines respond?</div>
-      <div class="a">${cells.length ? cells.map((c) => `<span class="pill">${esc(c.cell_name)} <small>${esc(short(c.cancer_subtype))}</small></span>`).join("") : "No line responds strongly."}</div>
-      <div class="h">${pred ? "Predicted by the model." : "Measured in the lab."} ${d.responsive_cell_lines} of ${d.tested_cell_lines} lines respond.</div>
+      <div class="a" style="display:flex;flex-direction:column;align-items:stretch;gap:10px">
+        ${ov ? `<div class="hbar"><span>Respond</span><div class="track"><i style="width:${100 * ov.responders / ov.tested}%"></i></div><b class="readout">${ov.responders}</b></div>
+        <div class="hbar dim"><span>Don't</span><div class="track"><i style="width:${100 * (1 - ov.responders / ov.tested)}%"></i></div><b class="readout">${ov.tested - ov.responders}</b></div>` : ""}
+        <div style="display:flex;flex-wrap:wrap;gap:6px">${cells.length ? cells.map((c) => `<span class="pill">${esc(c.cell_name)} <small>${esc(short(c.cancer_subtype))}</small></span>`).join("") : ""}</div></div>
+      <div class="h">${pred ? "Predicted by the model." : "Measured in the lab."} Respond = lab score DSS3 ≥ 0.2. Pills: the 5 hardest-hit lines.</div>
 
-      <div class="q"><span class="engr">3</span>Which cancer types?</div>
-      <div class="a">${subs.length ? subs.map((x) => `<span class="pill">${esc(short(x.name))} <small>${pct(x.share_responsive)} of lines</small></span>`).join("") : "None stands out."}</div>
-      <div class="h">Types ranked by how hard their lines are hit; small groups are pulled toward average.</div>
+      <div class="q"><span class="engr">3</span>How broad, and which cancer types?</div>
+      <div class="a" style="display:flex;flex-direction:column;align-items:stretch;gap:8px">
+        ${ov && ov.top_types.length ? ov.top_types.map((t) => `<div class="hbar"><span>${esc(t.name)}</span><div class="track"><i style="width:${100 * t.responders / t.lines}%"></i></div><b class="readout">${t.responders} of ${t.lines}</b></div>`).join("") : "No cancer type stands out."}</div>
+      <div class="h">${ov ? GROUP_TAG[ov.group] : ""}<br>Bars: share of that cancer's lines that die.</div>
 
-      <div class="q"><span class="engr">4</span>Why?</div>
-      <div class="a" style="display:block;font-size:15px;line-height:1.5">${why}</div>
+      <div class="q"><span class="engr">4</span>Mechanism: what kills the cell?</div>
+      <div class="a" style="display:block;font-size:15px;line-height:1.5">${d.moa ? `<b>Known:</b> ${esc(d.moa)}.<br>` : ""}${why}</div>
       <div class="h">${w3.tag}</div>
     </div></div>`;
 }
