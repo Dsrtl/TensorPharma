@@ -45,6 +45,9 @@ RESPONSIVE_DSS3 = 0.2
 # a drug's breast lines over-represented in its top 10% far beyond chance (10%): likely a merged
 # breast-only screen on a different scale (imatinib, ixabepilone, GSK-923295, NSC-663284)
 BREAST_ARTIFACT_SHARE = 0.5
+# small groups win "top cancer type" by chance (neuroblastoma: median 5 lines per drug), so the
+# ranking score pulls each group's average toward 0.5 as if it had SHRINK extra average lines
+SHRINK = 10
 
 
 def confidence(similarity):
@@ -59,8 +62,10 @@ def confidence(similarity):
 def by_group(r, column):
     g = (r.groupby(column).agg(avg_kill_rank=("sensitivity_rank", "mean"),
                                share_responsive=("responsive", "mean"), n_cell_lines=("responsive", "size"))
-         .reset_index().rename(columns={column: "name"}).sort_values("avg_kill_rank", ascending=False))
-    g[["avg_kill_rank", "share_responsive"]] = g[["avg_kill_rank", "share_responsive"]].round(3)
+         .reset_index().rename(columns={column: "name"}))
+    g["rank_score"] = (g["avg_kill_rank"] * g["n_cell_lines"] + 0.5 * SHRINK) / (g["n_cell_lines"] + SHRINK)
+    g = g.sort_values("rank_score", ascending=False)
+    g[["avg_kill_rank", "share_responsive", "rank_score"]] = g[["avg_kill_rank", "share_responsive", "rank_score"]].round(3)
     g["low_confidence"] = g["n_cell_lines"] < MIN_LINES_FOR_CONFIDENT_TYPE
     return g.to_dict("records")
 
