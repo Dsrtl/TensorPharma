@@ -8,6 +8,7 @@ Built by the scripts in `scripts/`, in this order:
 python3 scripts/export_chembl.py    # ChEMBL dump -> data/processed/chembl_activity.csv (local only, 256 MB)
 python3 scripts/build_dataset.py    # joins everything -> the tables below + build_audit.json
 python3 scripts/trust_weights.py    # evidence reliability -> trust_weights.json
+python3 scripts/activity_type_check.py  # why Potency/ED50/AC50 are cut -> activity_type_check.json
 ```
 
 | File | One row = | Built from |
@@ -20,6 +21,7 @@ python3 scripts/trust_weights.py    # evidence reliability -> trust_weights.json
 | `processed/responses.csv.gz` | drug x cell line sensitivity, raw and ranked within drug (485,662) | PharmacoDB |
 | `processed/build_audit.json` | rows in / kept / dropped at every step | |
 | `processed/trust_weights.json` | evidence reliability weights | |
+| `processed/activity_type_check.json` | share of ChEMBL rows hitting a known target, per test type | |
 
 `.csv.gz` files are compressed CSV: pandas reads them directly, and double-clicking one on macOS unzips it.
 

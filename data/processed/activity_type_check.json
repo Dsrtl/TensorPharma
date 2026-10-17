@@ -1,0 +1,92 @@
+{
+  "all_drugs": {
+    "AC50": {
+      "rows": 3,
+      "hit_rate": 0.0
+    },
+    "EC50": {
+      "rows": 288,
+      "hit_rate": 0.49
+    },
+    "ED50": {
+      "rows": 1319,
+      "hit_rate": 0.005
+    },
+    "IC50": {
+      "rows": 2868,
+      "hit_rate": 0.218
+    },
+    "Kd": {
+      "rows": 4205,
+      "hit_rate": 0.064
+    },
+    "Ki": {
+      "rows": 900,
+      "hit_rate": 0.361
+    },
+    "Potency": {
+      "rows": 2083,
+      "hit_rate": 0.003
+    }
+  },
+  "half_a": {
+    "AC50": {
+      "rows": 2,
+      "hit_rate": 0.0
+    },
+    "EC50": {
+      "rows": 165,
+      "hit_rate": 0.467
+    },
+    "ED50": {
+      "rows": 1315,
+      "hit_rate": 0.003
+    },
+    "IC50": {
+      "rows": 1259,
+      "hit_rate": 0.249
+    },
+    "Kd": {
+      "rows": 2826,
+      "hit_rate": 0.05
+    },
+    "Ki": {
+      "rows": 443,
+      "hit_rate": 0.343
+    },
+    "Potency": {
+      "rows": 1003,
+      "hit_rate": 0.006
+    }
+  },
+  "half_b": {
+    "AC50": {
+      "rows": 1,
+      "hit_rate": 0.0
+    },
+    "EC50": {
+      "rows": 123,
+      "hit_rate": 0.52
+    },
+    "ED50": {
+      "rows": 4,
+      "hit_rate": 0.75
+    },
+    "IC50": {
+      "rows": 1609,
+      "hit_rate": 0.194
+    },
+    "Kd": {
+      "rows": 1379,
+      "hit_rate": 0.092
+    },
+    "Ki": {
+      "rows": 457,
+      "hit_rate": 0.379
+    },
+    "Potency": {
+      "rows": 1080,
+      "hit_rate": 0.001
+    }
+  }
+}
