@@ -513,7 +513,7 @@ function demoPage() {
   setTimeout(() => {
     const input = document.getElementById("smi");
     const run = (q) => {
-      QUERY = q; input.value = q;
+      QUERY = q;
       document.querySelectorAll("#picker button").forEach((b) => b.classList.toggle("on", b.dataset.q === q));
       const el = document.getElementById("answer");
       if (!RDKIT && !LIB.some((d) => d.name.toLowerCase() === q.trim().toLowerCase())) { el.innerHTML = `<div class="note">Reading the structure…</div>`; RDKIT_READY.then(() => RDKIT && QUERY === q && run(q)); return; }
