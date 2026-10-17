@@ -61,6 +61,8 @@ Still needed from Nasir: filtered compound/target activity with standardized str
 
 SSH: `<user>@<cluster-host>`. Project: `~/projects/eMerge`. Slurm account: `mpensky`; partition: `normal`.
 
+`<user>`, `<cluster-host>` and the Slurm account are placeholders for the cluster this work ran on. Substitute the values for your own authorized account before running anything below.
+
 Create the project directory on ARCC, then transfer from the Mac project directory:
 
 ```bash
@@ -79,7 +81,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-challenge6.txt
 mkdir -p results
 sbatch scripts/run_baseline.slurm
-squeue -u <user>
+squeue -u "$USER"
 ```
 
 The supplied job requests four CPUs, 8 GB RAM, and one hour on `normal`, with no GPU. It runs feature preparation and baseline fitting, records package versions, and writes a log to `results/baseline-JOBID.log`. Create `results/` before submitting so Slurm can open its log. If the cluster rejects the account or resource request, inspect the scheduler error rather than changing the allocation arbitrarily.

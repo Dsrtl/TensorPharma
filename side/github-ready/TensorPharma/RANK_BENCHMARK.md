@@ -36,7 +36,7 @@ For Spearman evaluation, drugs with constant true labels or fewer than three obs
 
 ## Run on ARCC
 
-From the Mac project directory, transfer the corrected source folder and scripts. SSH keepalives and partial-file retention help with interrupted transfers:
+From the Mac project directory, transfer the corrected source folder and scripts. SSH keepalives and partial-file retention help with interrupted transfers. `<user>` and `<cluster-host>` are placeholders — substitute your own authorized account and cluster:
 
 ```bash
 rsync -avP --exclude=__pycache__ --exclude=.DS_Store \
@@ -50,7 +50,7 @@ On ARCC:
 cd ~/projects/eMerge
 mkdir -p results
 sbatch scripts/run_rank_benchmark.slurm
-squeue -u <user>
+squeue -u "$USER"
 ```
 
 The job uses account `mpensky`, partition `normal`, eight CPUs, 32 GB RAM, and a two-hour limit. It adds LightGBM 4.x and its Narwhals dependency to the existing environment without replacing the frozen RDKit/numerical packages, then checks dependencies and records installed package versions. No GPU is requested.

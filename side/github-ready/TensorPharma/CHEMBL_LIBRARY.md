@@ -15,7 +15,7 @@ This is Q1 (SMILES → likely protein genes), separate from the six-model cell-r
 
 ## Run
 
-On the Mac, upload updated scripts and the corrected partner folder:
+On the Mac, upload updated scripts and the corrected partner folder. `<user>` and `<cluster-host>` are placeholders — substitute your own authorized account and cluster:
 
 ```bash
 cd /path/to/TensorPharma
@@ -39,7 +39,7 @@ export TP_WORK_BASE="$HOME/projects/eMerge/work"
 ```bash
 cd ~/projects/eMerge
 bash scripts/submit_chembl_library.sh
-squeue -u <user>
+squeue -u "$USER"
 ```
 
 The submission script stages small inputs on scratch and submits an 8 CPU / 64 GB / 8-hour maximum build-and-evaluation job. Actual completion depends on standardization time and queue policy. No GPU, PostgreSQL server, new dependency install, or copy of the original 2 GB dump is required. Failures leave their scratch files available for diagnosis. Completed artifacts are never silently rebuilt.
