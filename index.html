@@ -481,6 +481,7 @@ function demoPage() {
     <form class="ask" id="ask"><input id="smi" placeholder="Paste a SMILES, or type a drug name" autocomplete="off" spellcheck="false" aria-label="SMILES or drug name"><button type="submit">Predict</button></form>
     <div class="picker" id="picker"><span class="engr" style="margin-right:4px">Try</span>${EXAMPLES.filter((n) => LIB.some((d) => d.name === n)).map((n) => `<button data-q="${esc(n)}">${esc(n)}</button>`).join("")}<button data-q="${esc(NEW_EXAMPLE)}">a molecule it never saw</button></div>
   </section>
+  ${piecesSection()}
   ${OV ? dataSection() : ""}
   <section id="answer"></section>
 
@@ -563,9 +564,17 @@ function linkRow(g) {
     <span class="n">${S3_TAG[g.status]}${g.q != null ? `<br>q ${g.q.toFixed(3)}` : ""}</span></button>`;
 }
 const GROUP_TAG = { broad: '<span class="tag kb">broad</span> kills 1 in 5 or more of its lines', niche: '<span class="tag hy">niche</span> kills fewer than 1 in 5, in a few cancers', inactive: '<span class="tag" style="color:var(--ink-3)">inactive</span> fewer than 10 lines respond' };
+function piecesSection() {
+  const P = [["1", "Combine the data", "Three public sources joined on drug and cell line: ChEMBL (what each molecule binds), PharmacoDB (which cancer cell lines it kills), DepMap (which cancer each line comes from).", `${LIB.length} drugs · ${OV ? OV.panel.total : 976} cancer cell lines · 498,671 known binders`],
+    ["2", "Similarity is the math", "Every molecule becomes a 2,048-point structure fingerprint. A new molecule is compared to every known one; the closest look-alikes vote on what it binds and which lines it kills.", "Morgan fingerprint · Tanimoto similarity · 25 nearest neighbours"],
+    ["3", "Report what it finds", "For any molecule: the proteins it binds, the cell lines that respond, the cancer types, and why. Every score below is from drugs the model never saw.", "Run on the HPC cluster · whole chemical families held out"]];
+  return `<section style="display:flex;flex-direction:column;gap:16px">
+    <h2 class="sec">How it works, in 3 pieces</h2>
+    <div class="scores">${P.map(([i, t, s, tech]) => `<div class="score"><span class="engr">Piece ${i}</span><span style="font-size:18px;font-weight:500">${t}</span><span class="s">${s}</span><span class="tech">${tech}</span></div>`).join("")}</div></section>`;
+}
 function dataSection() {
   const g = OV.groups, n = g.inactive + g.niche + g.broad, P = OV.panel;
-  const rows = [["Kills almost nothing", "fewer than 10 lines respond", g.inactive], ["Niche", "kills fewer than 1 in 5 lines", g.niche], ["Broad / pan-cancer", "kills 1 in 5 lines or more", g.broad]];
+  const segs = [["Kill almost nothing", "fewer than 10 cell lines die", g.inactive, 22], ["Kill a few specific cancers", "10+ lines die, but under 1 in 5", g.niche, 55], ["Kill across many cancers", "1 in 5 lines or more die", g.broad, 85]];
   const slices = [...P.top.map((t) => [t.name, t.lines]), [`Other ${P.other_types} types`, P.other]];
   const shade = [86, 68, 52, 38, 26, 12];
   let off = 0; const C = 2 * Math.PI * 40;
@@ -573,9 +582,10 @@ function dataSection() {
   return `<section style="display:flex;flex-direction:column;gap:16px">
     <h2 class="sec">The data</h2>
     <div class="split">
-      <div class="card" style="gap:14px"><div class="engr">What kind of drugs are these? · ${n} drugs</div>
-        ${rows.map(([k, sub, v]) => `<div class="hbar big"><span>${k}<small>${sub}</small></span><div class="track"><i style="width:${(100 * v) / n}%"></i></div><b class="readout">${v}</b></div>`).join("")}
-        <div style="font-size:12.5px;color:var(--ink-2)">A line responds when its lab score (DSS3) is 0.2 or more.</div></div>
+      <div class="card" style="gap:14px"><div class="engr">Each of the ${n} drugs, sorted by how much it kills</div>
+        <div style="display:flex;height:22px;border-radius:6px;overflow:hidden;box-shadow:var(--ao-in)">${segs.map(([k, , v, s]) => `<i title="${k}: ${v}" style="width:${(100 * v) / n}%;background:color-mix(in srgb, var(--ink) ${s}%, var(--display))"></i>`).join("")}</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px">${segs.map(([k, sub, v, s]) => `<div style="display:flex;gap:10px;align-items:baseline"><i style="width:10px;height:10px;border-radius:3px;background:color-mix(in srgb, var(--ink) ${s}%, var(--display));flex:none;align-self:center"></i><span style="flex:1">${k}<small style="display:block;font-size:12px;color:var(--ink-3)">${sub}</small></span><b class="readout" style="font-weight:400">${v} drugs</b></div>`).join("")}</div>
+        <div style="font-size:12.5px;color:var(--ink-2)">Measured in the lab, not predicted. Almost half the drugs barely touch cancer cells; the rest split evenly between specific and broad killers. A line counts as killed when its lab score (DSS3) is 0.2 or more.</div></div>
       <div class="card" style="gap:14px"><div class="engr">Which cancers are in the panel? · ${P.total} cell lines</div>
         <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap"><svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="Cell lines by cancer type">${arcs}</svg>
           <div style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;flex:1;min-width:180px">${slices.map(([k, v], i) => `<div style="display:flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:3px;background:color-mix(in srgb, var(--ink) ${shade[i]}%, var(--display));flex:none"></i><span style="flex:1">${esc(k)}</span><b class="readout" style="font-weight:400">${Math.round((100 * v) / P.total)}%</b></div>`).join("")}</div></div>
