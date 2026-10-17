@@ -1,0 +1,49 @@
+{
+  "pert_id": "BRD-A45498368",
+  "name": "WYE-125132",
+  "split": "test",
+  "formal_association_partition": true,
+  "annotations": {
+    "known_target_annotations": [
+      "MTOR"
+    ],
+    "moa_annotations": [
+      "MTOR inhibitor"
+    ]
+  },
+  "annotation_evidence_tag": "source_annotation_not_model_input",
+  "links": [
+    {
+      "link_id": "MTOR_renal",
+      "kind": "external_clinical_evidence",
+      "literature_evidence_tag": "external_evidence",
+      "target_evidence_tag": "predicted_association",
+      "predicted_targets": [
+        {
+          "gene": "MTOR",
+          "score": 44.4177842438221,
+          "nearest_neighbor_similarity": 0.7297297120094299,
+          "supporting_pchembl_max": 10.1,
+          "supporting_compounds": 88,
+          "source_rows": 92,
+          "abstained": false
+        }
+      ],
+      "observed_evidence_tag": "measured_response_derived_summary",
+      "observed_full_panel": {
+        "group_cells": 17,
+        "other_cells": 437,
+        "observed_effect": 0.08304209619947736,
+        "observed_group_mean_rank": 0.5392588753563099
+      },
+      "model_evidence_tag": "predicted_association",
+      "ridge_prediction_on_observed_test_cells": {
+        "predicted_effect": 0.0027706432851182525,
+        "predicted_group_mean_rank": 0.4636395496011237
+      },
+      "context_status": "target_level_proxy_not_full_clinical_context",
+      "chain_status": "qualified_hypothesis_not_causal",
+      "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+    }
+  ]
+}

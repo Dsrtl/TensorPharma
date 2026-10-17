@@ -1,0 +1,53 @@
+{
+  "pert_id": "BRD-K92723993",
+  "name": "imatinib",
+  "split": "validation",
+  "formal_association_partition": false,
+  "annotations": {
+    "known_target_annotations": [
+      "ABL1",
+      "BCR",
+      "CSF1R",
+      "KIT",
+      "PDGFRA",
+      "PDGFRB"
+    ],
+    "moa_annotations": [
+      "Abl kinase inhibitor",
+      "KIT inhibitor",
+      "PDGFR inhibitor"
+    ]
+  },
+  "annotation_evidence_tag": "source_annotation_not_model_input",
+  "links": [
+    {
+      "link_id": "ABL1_CML",
+      "kind": "external_clinical_evidence",
+      "literature_evidence_tag": "external_evidence",
+      "target_evidence_tag": "predicted_association",
+      "predicted_targets": [
+        {
+          "gene": "ABL1",
+          "score": 59.19619184732437,
+          "nearest_neighbor_similarity": 0.8219178318977356,
+          "supporting_pchembl_max": 9.52,
+          "supporting_compounds": 98,
+          "source_rows": 101,
+          "abstained": false
+        }
+      ],
+      "observed_evidence_tag": "measured_response_derived_summary",
+      "observed_full_panel": {
+        "group_cells": 2,
+        "other_cells": 816,
+        "observed_effect": 0.4408890571855729,
+        "observed_group_mean_rank": 0.9938875305623471
+      },
+      "model_evidence_tag": "predicted_association",
+      "ridge_prediction_on_observed_test_cells": null,
+      "context_status": "two_curated_cell_anchors_only",
+      "chain_status": "qualified_hypothesis_not_causal",
+      "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+    }
+  ]
+}

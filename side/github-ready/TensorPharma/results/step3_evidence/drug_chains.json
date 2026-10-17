@@ -1,0 +1,2723 @@
+[
+  {
+    "pert_id": "BRD-A45498368",
+    "name": "WYE-125132",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "MTOR"
+      ],
+      "moa_annotations": [
+        "MTOR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MTOR_renal",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MTOR",
+            "score": 44.4177842438221,
+            "nearest_neighbor_similarity": 0.7297297120094299,
+            "supporting_pchembl_max": 10.1,
+            "supporting_compounds": 88,
+            "source_rows": 92,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 17.0,
+          "other_cells": 437.0,
+          "observed_effect": 0.08304209619947736,
+          "observed_group_mean_rank": 0.5392588753563099
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0027706432851182525,
+          "predicted_group_mean_rank": 0.4636395496011237
+        },
+        "context_status": "target_level_proxy_not_full_clinical_context",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-A85667082",
+    "name": "fulvestrant",
+    "split": "validation",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "ESR1"
+      ],
+      "moa_annotations": [
+        "Estrogen receptor antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 3.186520278453827,
+            "nearest_neighbor_similarity": 0.5421686768531799,
+            "supporting_pchembl_max": 10.4,
+            "supporting_compounds": 7,
+            "source_rows": 9,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 49.0,
+          "other_cells": 756.0,
+          "observed_effect": 0.11719856045650243,
+          "observed_group_mean_rank": 0.5931930536189631
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-A97701745",
+    "name": "pindolol",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ADRB1",
+        "ADRB2",
+        "HTR1A"
+      ],
+      "moa_annotations": [
+        "Adrenergic receptor antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 0.48275861144065857,
+            "nearest_neighbor_similarity": 0.48275861144065857,
+            "supporting_pchembl_max": 7.64,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 8.0,
+          "other_cells": 431.0,
+          "observed_effect": -0.17638625970000277,
+          "observed_group_mean_rank": 0.3180523917995444
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.007961106547902427,
+          "predicted_group_mean_rank": 0.4998765351954207
+        },
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K00337317",
+    "name": "NU-7441",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "PRKDC"
+      ],
+      "moa_annotations": [
+        "DNA dependent protein kinase inhibitor",
+        "P-glycoprotein inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MTOR_renal",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MTOR",
+            "score": 0.9153846204280853,
+            "nearest_neighbor_similarity": 0.5,
+            "supporting_pchembl_max": 6.38,
+            "supporting_compounds": 2,
+            "source_rows": 2,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": null,
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "target_level_proxy_not_full_clinical_context",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K03390685",
+    "name": "cobimetinib",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MEK_melanoma",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MAP2K1",
+            "score": 4.017169952392578,
+            "nearest_neighbor_similarity": 0.6612903475761414,
+            "supporting_pchembl_max": 8.7,
+            "supporting_compounds": 8,
+            "source_rows": 8,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 38.0,
+          "other_cells": 427.0,
+          "observed_effect": 0.36691137232196636,
+          "observed_group_mean_rank": 0.8267685342388228
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.03165507664556814,
+          "predicted_group_mean_rank": 0.5231710512998149
+        },
+        "context_status": "BRAF_status_and_combination_context_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K03449891",
+    "name": "foretinib",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "KDR",
+        "MET"
+      ],
+      "moa_annotations": [
+        "VEGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 30.38526239991188,
+            "nearest_neighbor_similarity": 0.6333333253860474,
+            "supporting_pchembl_max": 9.0,
+            "supporting_compounds": 66,
+            "source_rows": 68,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 40.0,
+          "other_cells": 873.0,
+          "observed_effect": -0.06979579695645949,
+          "observed_group_mean_rank": 0.41612814895947425
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.02018488560956103,
+          "predicted_group_mean_rank": 0.49513062944310465
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K04833372",
+    "name": "GSK-1904529A",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "IGF1R",
+        "INSR"
+      ],
+      "moa_annotations": [
+        "IGF-1 inhibitor",
+        "Insulin receptor ligand"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 9.616351038217545,
+            "nearest_neighbor_similarity": 0.6454545259475708,
+            "supporting_pchembl_max": 8.0,
+            "supporting_compounds": 17,
+            "source_rows": 17,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 35.0,
+          "other_cells": 736.0,
+          "observed_effect": 0.13759982516209637,
+          "observed_group_mean_rank": 0.6210487307763574
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.013364922491779205,
+          "predicted_group_mean_rank": 0.4929101254813431
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 8.783750742673874,
+            "nearest_neighbor_similarity": 0.6454545259475708,
+            "supporting_pchembl_max": 6.0,
+            "supporting_compounds": 15,
+            "source_rows": 15,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 44.0,
+          "other_cells": 727.0,
+          "observed_effect": -3.542564640644265e-05,
+          "observed_group_mean_rank": 0.4931169673387572
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.009451608403436814,
+          "predicted_group_mean_rank": 0.47469473493737785
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K05445342",
+    "name": "wp1066",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 0.5636363625526428,
+            "nearest_neighbor_similarity": 0.5636363625526428,
+            "supporting_pchembl_max": 6.235,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 439.0,
+          "observed_effect": -0.08301460953730294,
+          "observed_group_mean_rank": 0.46263881046489747
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0008289359237311274,
+          "predicted_group_mean_rank": 0.5440080528669123
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K09416995",
+    "name": "lovastatin",
+    "split": "validation",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "HMGCR"
+      ],
+      "moa_annotations": [
+        "HMGCR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "HMGCR_glioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "HMGCR",
+            "score": 1.9670682847499847,
+            "nearest_neighbor_similarity": 0.5866666436195374,
+            "supporting_pchembl_max": 6.49,
+            "supporting_compounds": 4,
+            "source_rows": 4,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 43.0,
+          "other_cells": 755.0,
+          "observed_effect": 0.1798430676889609,
+          "observed_group_mean_rank": 0.5956752345981232
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "preclinical_and_clinically_unconfirmed",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K11590034",
+    "name": "morin",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 1.4797618985176086,
+            "nearest_neighbor_similarity": 0.574999988079071,
+            "supporting_pchembl_max": 7.67,
+            "supporting_compounds": 3,
+            "source_rows": 3,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 19.0,
+          "other_cells": 422.0,
+          "observed_effect": 0.00934595664528952,
+          "observed_group_mean_rank": 0.4794724907506862
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.00050338089862069,
+          "predicted_group_mean_rank": 0.4680781821736637
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K12343256",
+    "name": "trametinib",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "MAP2K1",
+        "MAP2K2"
+      ],
+      "moa_annotations": [
+        "MEK inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MEK_melanoma",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MAP2K1",
+            "score": 0.41489362716674805,
+            "nearest_neighbor_similarity": 0.41489362716674805,
+            "supporting_pchembl_max": 9.15,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 45.0,
+          "other_cells": 812.0,
+          "observed_effect": 0.3493243548311976,
+          "observed_group_mean_rank": 0.819551406715934
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "BRAF_status_and_combination_context_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K13514097",
+    "name": "everolimus",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "MTOR"
+      ],
+      "moa_annotations": [
+        "MTOR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MTOR_renal",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MTOR",
+            "score": 3.6946240067481995,
+            "nearest_neighbor_similarity": 0.8474576473236084,
+            "supporting_pchembl_max": 8.48,
+            "supporting_compounds": 5,
+            "source_rows": 5,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 17.0,
+          "other_cells": 469.0,
+          "observed_effect": 0.05982044377769099,
+          "observed_group_mean_rank": 0.5157346889373032
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "target_level_proxy_not_full_clinical_context",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K16485616",
+    "name": "mocetinostat",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "HDAC1",
+        "HDAC11",
+        "HDAC2",
+        "HDAC3"
+      ],
+      "moa_annotations": [
+        "HDAC inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ABL1_CML",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ABL1",
+            "score": 2.213882088661194,
+            "nearest_neighbor_similarity": 0.49275362491607666,
+            "supporting_pchembl_max": 7.7,
+            "supporting_compounds": 5,
+            "source_rows": 5,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": null,
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "two_curated_cell_anchors_only",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K18961567",
+    "name": "LY-2801653",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 0.43157893419265747,
+            "nearest_neighbor_similarity": 0.43157893419265747,
+            "supporting_pchembl_max": 6.2,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 448.0,
+          "observed_effect": 0.010674533852897862,
+          "observed_group_mean_rank": 0.550909258746423
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.002774188624655029,
+          "predicted_group_mean_rank": 0.5461656396685988
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K19540840",
+    "name": "saracatinib",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ABL1",
+        "SRC"
+      ],
+      "moa_annotations": [
+        "Src inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 3.287313461303711,
+            "nearest_neighbor_similarity": 0.8311688303947449,
+            "supporting_pchembl_max": 7.37,
+            "supporting_compounds": 6,
+            "source_rows": 6,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 32.0,
+          "other_cells": 813.0,
+          "observed_effect": -0.037247419291484694,
+          "observed_group_mean_rank": 0.4616124260355029
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.018782580157332626,
+          "predicted_group_mean_rank": 0.5243967327069479
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K19687926",
+    "name": "lapatinib",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR",
+        "ERBB2"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor",
+        "ErbB2 inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 93.85483846068382,
+            "nearest_neighbor_similarity": 0.8734177350997925,
+            "supporting_pchembl_max": 8.97,
+            "supporting_compounds": 173,
+            "source_rows": 174,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 40.0,
+          "other_cells": 904.0,
+          "observed_effect": -0.013370674188421382,
+          "observed_group_mean_rank": 0.4687235169491525
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 68.4531053006649,
+            "nearest_neighbor_similarity": 0.8734177350997925,
+            "supporting_pchembl_max": 9.3,
+            "supporting_compounds": 121,
+            "source_rows": 121,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 58.0,
+          "other_cells": 886.0,
+          "observed_effect": 0.10140266061051058,
+          "observed_group_mean_rank": 0.5762163939216832
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K22134346",
+    "name": "simvastatin",
+    "split": "validation",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "HMGCR"
+      ],
+      "moa_annotations": [
+        "HMGCR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "HMGCR_glioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "HMGCR",
+            "score": 1.8469449579715729,
+            "nearest_neighbor_similarity": 0.5733333230018616,
+            "supporting_pchembl_max": 6.49,
+            "supporting_compounds": 4,
+            "source_rows": 4,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 45.0,
+          "other_cells": 720.0,
+          "observed_effect": 0.16358967653605472,
+          "observed_group_mean_rank": 0.5866957153231662
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "preclinical_and_clinically_unconfirmed",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K22385716",
+    "name": "LY-303511",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "BRD2",
+        "BRD3",
+        "BRD4"
+      ],
+      "moa_annotations": [
+        "Casein kinase inhibitor",
+        "PI3K inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MTOR_renal",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MTOR",
+            "score": 0.4727272689342499,
+            "nearest_neighbor_similarity": 0.4727272689342499,
+            "supporting_pchembl_max": 6.21,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 15.0,
+          "other_cells": 442.0,
+          "observed_effect": 0.10160237921083132,
+          "observed_group_mean_rank": 0.5443471918307805
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0032360391028263408,
+          "predicted_group_mean_rank": 0.44549496432590835
+        },
+        "context_status": "target_level_proxy_not_full_clinical_context",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K24556098",
+    "name": "deoxycorticosterone-acetate",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 0.4126984179019928,
+            "nearest_neighbor_similarity": 0.4126984179019928,
+            "supporting_pchembl_max": 7.58,
+            "supporting_compounds": 1,
+            "source_rows": 2,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 439.0,
+          "observed_effect": 0.05025923979730583,
+          "observed_group_mean_rank": 0.5216919739696312
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 3.9336725722342414e-05,
+          "predicted_group_mean_rank": 0.4742276250457277
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K26838195",
+    "name": "AST-1306",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR",
+        "ERBB2"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 204.54744416475296,
+            "nearest_neighbor_similarity": 0.6790123581886292,
+            "supporting_pchembl_max": 10.43,
+            "supporting_compounds": 432,
+            "source_rows": 447,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 18.0,
+          "other_cells": 382.0,
+          "observed_effect": 0.09058290772233164,
+          "observed_group_mean_rank": 0.6377777777777777
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.023862805876131116,
+          "predicted_group_mean_rank": 0.572117401273891
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 104.61616113781929,
+            "nearest_neighbor_similarity": 0.6883116960525513,
+            "supporting_pchembl_max": 9.3,
+            "supporting_compounds": 211,
+            "source_rows": 213,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 19.0,
+          "other_cells": 381.0,
+          "observed_effect": 0.19730407033191458,
+          "observed_group_mean_rank": 0.6634210526315789
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.006815936913495763,
+          "predicted_group_mean_rank": 0.4800384263097697
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K34533029",
+    "name": "BRD-K34533029",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 2.519509792327881,
+            "nearest_neighbor_similarity": 0.6458333134651184,
+            "supporting_pchembl_max": 7.0,
+            "supporting_compounds": 4,
+            "source_rows": 4,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 444.0,
+          "observed_effect": -0.10189809912135203,
+          "observed_group_mean_rank": 0.4438134251931847
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.0029935767452258116,
+          "predicted_group_mean_rank": 0.535721365557795
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K35189033",
+    "name": "levonorgestrel",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "PGR"
+      ],
+      "moa_annotations": [
+        "Estrogen receptor agonist",
+        "Glucocorticoid receptor antagonist",
+        "Progesterone receptor agonist",
+        "Progesterone receptor antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 1.2551961243152618,
+            "nearest_neighbor_similarity": 0.4303797483444214,
+            "supporting_pchembl_max": 8.25,
+            "supporting_compounds": 3,
+            "source_rows": 3,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 8.0,
+          "other_cells": 444.0,
+          "observed_effect": -0.044036487423318144,
+          "observed_group_mean_rank": 0.4460730088495575
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.010715651566300109,
+          "predicted_group_mean_rank": 0.5016040065690737
+        },
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K37270826",
+    "name": "mifepristone",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "AR",
+        "NR3C1",
+        "PGR"
+      ],
+      "moa_annotations": [
+        "Glucocorticoid receptor antagonist",
+        "Progesterone receptor antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 4.268192559480667,
+            "nearest_neighbor_similarity": 0.4444444477558136,
+            "supporting_pchembl_max": 8.21,
+            "supporting_compounds": 10,
+            "source_rows": 10,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 443.0,
+          "observed_effect": 0.013594792759786865,
+          "observed_group_mean_rank": 0.48455522971652004
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.0034576152572919393,
+          "predicted_group_mean_rank": 0.4711274895447042
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 54.748451828956604,
+            "nearest_neighbor_similarity": 0.7727272510528564,
+            "supporting_pchembl_max": 9.61,
+            "supporting_compounds": 108,
+            "source_rows": 108,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 9.0,
+          "other_cells": 456.0,
+          "observed_effect": 0.11398556653916084,
+          "observed_group_mean_rank": 0.5945041816009558
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.00978556516943305,
+          "predicted_group_mean_rank": 0.49513884170219363
+        },
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K38775274",
+    "name": "dexamethasone",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "NR3C1"
+      ],
+      "moa_annotations": [
+        "Glucocorticoid receptor agonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 32.416423708200455,
+            "nearest_neighbor_similarity": 0.8135592937469482,
+            "supporting_pchembl_max": 9.3,
+            "supporting_compounds": 60,
+            "source_rows": 63,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 9.0,
+          "other_cells": 722.0,
+          "observed_effect": 0.007938613355320479,
+          "observed_group_mean_rank": 0.4771241830065359
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K40718343",
+    "name": "AEE-788",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 29.681203097105026,
+            "nearest_neighbor_similarity": 0.694915235042572,
+            "supporting_pchembl_max": 10.0,
+            "supporting_compounds": 62,
+            "source_rows": 62,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 437.0,
+          "observed_effect": 0.23777550755580948,
+          "observed_group_mean_rank": 0.7668714555765596
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.00735399002295129,
+          "predicted_group_mean_rank": 0.5475371768128763
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 11.576691389083862,
+            "nearest_neighbor_similarity": 0.6029411554336548,
+            "supporting_pchembl_max": 7.0,
+            "supporting_compounds": 22,
+            "source_rows": 22,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 438.0,
+          "observed_effect": 0.14872513079000266,
+          "observed_group_mean_rank": 0.6152667984189722
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.007540338596420932,
+          "predicted_group_mean_rank": 0.4804004852663111
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K43149758",
+    "name": "myricetin",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "PIK3CG"
+      ],
+      "moa_annotations": [
+        "Androgen receptor agonist",
+        "Cytochrome P450 inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 0.8969344794750214,
+            "nearest_neighbor_similarity": 0.4651162922382355,
+            "supporting_pchembl_max": 7.67,
+            "supporting_compounds": 2,
+            "source_rows": 2,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 32.0,
+          "other_cells": 703.0,
+          "observed_effect": -0.07475186110971407,
+          "observed_group_mean_rank": 0.4047831632653061
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.0016864719096345993,
+          "predicted_group_mean_rank": 0.47870687704404735
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K43236057",
+    "name": "polydatin",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ICAM1"
+      ],
+      "moa_annotations": [
+        "ICAM-1 expression inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 0.4285714328289032,
+            "nearest_neighbor_similarity": 0.4285714328289032,
+            "supporting_pchembl_max": 6.11,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 21.0,
+          "other_cells": 437.0,
+          "observed_effect": 0.012185930143912291,
+          "observed_group_mean_rank": 0.48388438344770224
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0021246336798527114,
+          "predicted_group_mean_rank": 0.47143967285459487
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K46386702",
+    "name": "ARRY-334543",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR",
+        "ERBB2"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 2.465477079153061,
+            "nearest_neighbor_similarity": 0.6785714030265808,
+            "supporting_pchembl_max": 8.52,
+            "supporting_compounds": 5,
+            "source_rows": 5,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 448.0,
+          "observed_effect": 0.2227913107005297,
+          "observed_group_mean_rank": 0.7523308409489522
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.027627735007999806,
+          "predicted_group_mean_rank": 0.5697525257538816
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 1.3828652799129486,
+            "nearest_neighbor_similarity": 0.4845360815525055,
+            "supporting_pchembl_max": 7.8,
+            "supporting_compounds": 3,
+            "source_rows": 3,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 449.0,
+          "observed_effect": 0.09180538906683193,
+          "observed_group_mean_rank": 0.5606060606060606
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.004738303938847417,
+          "predicted_group_mean_rank": 0.4806607829646806
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K47635719",
+    "name": "dexamethasone",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "NR3C1"
+      ],
+      "moa_annotations": [
+        "Glucocorticoid receptor agonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 26.410389184951782,
+            "nearest_neighbor_similarity": 0.75,
+            "supporting_pchembl_max": 9.3,
+            "supporting_compounds": 51,
+            "source_rows": 54,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 7.0,
+          "other_cells": 370.0,
+          "observed_effect": 0.12831842540032581,
+          "observed_group_mean_rank": 0.6218264494126563
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K50140147",
+    "name": "NVP-TAE684",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ALK"
+      ],
+      "moa_annotations": [
+        "ALK inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 66.02181604504585,
+            "nearest_neighbor_similarity": 0.8082191944122314,
+            "supporting_pchembl_max": 10.235,
+            "supporting_compounds": 141,
+            "source_rows": 151,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 28.0,
+          "other_cells": 738.0,
+          "observed_effect": -0.21829860792379163,
+          "observed_group_mean_rank": 0.2951324132786273
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.016538771215847885,
+          "predicted_group_mean_rank": 0.5337551334801817
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K51465424",
+    "name": "ritodrine",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ADRB2"
+      ],
+      "moa_annotations": [
+        "Adrenergic receptor agonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 0.4444444477558136,
+            "nearest_neighbor_similarity": 0.4444444477558136,
+            "supporting_pchembl_max": 8.19,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 443.0,
+          "observed_effect": 0.10470909606370644,
+          "observed_group_mean_rank": 0.5713587487781036
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.006236229555851612,
+          "predicted_group_mean_rank": 0.48004423598097445
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K56291712",
+    "name": "voxtalisib",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "MTOR",
+        "PIK3CA"
+      ],
+      "moa_annotations": [
+        "MTOR inhibitor",
+        "PI3K inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MTOR_renal",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MTOR",
+            "score": 2.073034346103668,
+            "nearest_neighbor_similarity": 0.4444444477558136,
+            "supporting_pchembl_max": 7.97,
+            "supporting_compounds": 5,
+            "source_rows": 5,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 17.0,
+          "other_cells": 453.0,
+          "observed_effect": 0.09554668857698759,
+          "observed_group_mean_rank": 0.551188986232791
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0032666672944758153,
+          "predicted_group_mean_rank": 0.46141076286855437
+        },
+        "context_status": "target_level_proxy_not_full_clinical_context",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K57080016",
+    "name": "selumetinib",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "MAP2K1"
+      ],
+      "moa_annotations": [
+        "MEK inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "MEK_melanoma",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "MAP2K1",
+            "score": 11.902157366275787,
+            "nearest_neighbor_similarity": 0.5890411138534546,
+            "supporting_pchembl_max": 8.47,
+            "supporting_compounds": 26,
+            "source_rows": 26,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 51.0,
+          "other_cells": 885.0,
+          "observed_effect": 0.26364204387194945,
+          "observed_group_mean_rank": 0.7234581866934809
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "BRAF_status_and_combination_context_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K61097567",
+    "name": "SB-218795",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "TACR3"
+      ],
+      "moa_annotations": [
+        "Tachykinin antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 0.4117647111415863,
+            "nearest_neighbor_similarity": 0.4117647111415863,
+            "supporting_pchembl_max": 6.98,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 21.0,
+          "other_cells": 420.0,
+          "observed_effect": 0.0860762922191026,
+          "observed_group_mean_rank": 0.624554583738257
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0029943376570667813,
+          "predicted_group_mean_rank": 0.5473460919300659
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K61536336",
+    "name": "SB-366791",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "TRPV1"
+      ],
+      "moa_annotations": [
+        "TRPV antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 2.455830216407776,
+            "nearest_neighbor_similarity": 0.4264705777168274,
+            "supporting_pchembl_max": 7.355,
+            "supporting_compounds": 6,
+            "source_rows": 6,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 437.0,
+          "observed_effect": 0.014563886821554168,
+          "observed_group_mean_rank": 0.5548204158790171
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.004160628767383285,
+          "predicted_group_mean_rank": 0.5433436286944848
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K63828191",
+    "name": "raloxifene",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "ESR1",
+        "ESR2"
+      ],
+      "moa_annotations": [
+        "Estrogen receptor antagonist",
+        "Selective estrogen receptor modulator"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 94.14581972360611,
+            "nearest_neighbor_similarity": 0.7419354915618896,
+            "supporting_pchembl_max": 10.04,
+            "supporting_compounds": 200,
+            "source_rows": 211,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 13.0,
+          "other_cells": 319.0,
+          "observed_effect": 0.06325333913701463,
+          "observed_group_mean_rank": 0.540778498609824
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.004432077600731626,
+          "predicted_group_mean_rank": 0.5026634188144489
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K64052750",
+    "name": "gefitinib",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 318.50512781739235,
+            "nearest_neighbor_similarity": 0.8571428656578064,
+            "supporting_pchembl_max": 10.68,
+            "supporting_compounds": 647,
+            "source_rows": 660,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 39.0,
+          "other_cells": 882.0,
+          "observed_effect": 0.2643132102932799,
+          "observed_group_mean_rank": 0.7421420418163089
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 88.29412519931793,
+            "nearest_neighbor_similarity": 0.7297297120094299,
+            "supporting_pchembl_max": 9.225,
+            "supporting_compounds": 191,
+            "source_rows": 195,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 59.0,
+          "other_cells": 862.0,
+          "observed_effect": 0.0894833507296339,
+          "observed_group_mean_rank": 0.5631222510535712
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K66175015",
+    "name": "afatinib",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR",
+        "ERBB2",
+        "ERBB4"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ABL1_CML",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ABL1",
+            "score": 1.0752688646316528,
+            "nearest_neighbor_similarity": 0.5376344323158264,
+            "supporting_pchembl_max": 6.66,
+            "supporting_compounds": 2,
+            "source_rows": 2,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 2.0,
+          "other_cells": 913.0,
+          "observed_effect": -0.0610602732822586,
+          "observed_group_mean_rank": 0.507103825136612
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.003765324480031183,
+          "predicted_group_mean_rank": 0.5628548826390544
+        },
+        "context_status": "two_curated_cell_anchors_only",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 225.48836863040924,
+            "nearest_neighbor_similarity": 0.9473684430122375,
+            "supporting_pchembl_max": 10.01,
+            "supporting_compounds": 461,
+            "source_rows": 471,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 40.0,
+          "other_cells": 875.0,
+          "observed_effect": 0.29693407259117377,
+          "observed_group_mean_rank": 0.7691803278688524
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.02599510000932197,
+          "predicted_group_mean_rank": 0.5011528369930532
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 72.7568302154541,
+            "nearest_neighbor_similarity": 0.9473684430122375,
+            "supporting_pchembl_max": 9.02,
+            "supporting_compounds": 154,
+            "source_rows": 156,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 58.0,
+          "other_cells": 857.0,
+          "observed_effect": 0.11738365162655698,
+          "observed_group_mean_rank": 0.5946862634256642
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.00029940434152711596,
+          "predicted_group_mean_rank": 0.47609090488412714
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K69726342",
+    "name": "atorvastatin",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "DPP4",
+        "HMGCR"
+      ],
+      "moa_annotations": [
+        "HMGCR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "HMGCR_glioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "HMGCR",
+            "score": 6.527696967124939,
+            "nearest_neighbor_similarity": 0.84375,
+            "supporting_pchembl_max": 8.24,
+            "supporting_compounds": 14,
+            "source_rows": 14,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 32.0,
+          "other_cells": 426.0,
+          "observed_effect": 0.17319137080199332,
+          "observed_group_mean_rank": 0.6262963973799127
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "preclinical_and_clinically_unconfirmed",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K70401845",
+    "name": "erlotinib",
+    "split": "train",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "EGFR"
+      ],
+      "moa_annotations": [
+        "EGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 113.2202732861042,
+            "nearest_neighbor_similarity": 0.9038461446762085,
+            "supporting_pchembl_max": 9.77,
+            "supporting_compounds": 228,
+            "source_rows": 233,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 40.0,
+          "other_cells": 915.0,
+          "observed_effect": 0.002559178210095555,
+          "observed_group_mean_rank": 0.4841361256544502
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 17.515383929014206,
+            "nearest_neighbor_similarity": 0.7704917788505554,
+            "supporting_pchembl_max": 7.92,
+            "supporting_compounds": 36,
+            "source_rows": 36,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 57.0,
+          "other_cells": 898.0,
+          "observed_effect": 0.02165362168859498,
+          "observed_group_mean_rank": 0.5037200330669607
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K71512533",
+    "name": "SNS-314",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "AURKA",
+        "AURKB",
+        "AURKC"
+      ],
+      "moa_annotations": [
+        "Aurora kinase inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 0.8369230926036835,
+            "nearest_neighbor_similarity": 0.4266666769981384,
+            "supporting_pchembl_max": 7.66,
+            "supporting_compounds": 2,
+            "source_rows": 2,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 21.0,
+          "other_cells": 424.0,
+          "observed_effect": 0.03921315342436606,
+          "observed_group_mean_rank": 0.5811663991439272
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.01725671568716727,
+          "predicted_group_mean_rank": 0.5599290282033808
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K75958547",
+    "name": "pitavastatin",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "HMGCR"
+      ],
+      "moa_annotations": [
+        "HMGCR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "HMGCR_glioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "HMGCR",
+            "score": 8.007020175457,
+            "nearest_neighbor_similarity": 0.4383561611175537,
+            "supporting_pchembl_max": 8.24,
+            "supporting_compounds": 19,
+            "source_rows": 19,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 20.0,
+          "other_cells": 312.0,
+          "observed_effect": 0.19850049305896833,
+          "observed_group_mean_rank": 0.6621987951807229
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.0043955247426196034,
+          "predicted_group_mean_rank": 0.5040177373090275
+        },
+        "context_status": "preclinical_and_clinically_unconfirmed",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K80334323",
+    "name": "noretynodrel",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "PGR"
+      ],
+      "moa_annotations": [
+        "Progestogen hormone"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 1.376682698726654,
+            "nearest_neighbor_similarity": 0.484375,
+            "supporting_pchembl_max": 8.0,
+            "supporting_compounds": 3,
+            "source_rows": 5,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 449.0,
+          "observed_effect": -0.0531152623978165,
+          "observed_group_mean_rank": 0.4229878401852924
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.0020642579325390246,
+          "predicted_group_mean_rank": 0.4723604046957836
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "NR3C1_mesothelioma",
+        "kind": "exploratory_repurposing_hypothesis",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "NR3C1",
+            "score": 3.5874158442020416,
+            "nearest_neighbor_similarity": 0.47297295928001404,
+            "supporting_pchembl_max": 8.25,
+            "supporting_compounds": 8,
+            "source_rows": 8,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 9.0,
+          "other_cells": 462.0,
+          "observed_effect": 0.13520278749287365,
+          "observed_group_mean_rank": 0.6173625855154516
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.01154261576814859,
+          "predicted_group_mean_rank": 0.4967714550328803
+        },
+        "context_status": "limited_preclinical_evidence_not_clinically_validated",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K92723993",
+    "name": "imatinib",
+    "split": "validation",
+    "formal_association_partition": false,
+    "annotations": {
+      "known_target_annotations": [
+        "ABL1",
+        "BCR",
+        "CSF1R",
+        "KIT",
+        "PDGFRA",
+        "PDGFRB"
+      ],
+      "moa_annotations": [
+        "Abl kinase inhibitor",
+        "KIT inhibitor",
+        "PDGFR inhibitor"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ABL1_CML",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ABL1",
+            "score": 59.19619184732437,
+            "nearest_neighbor_similarity": 0.8219178318977356,
+            "supporting_pchembl_max": 9.52,
+            "supporting_compounds": 98,
+            "source_rows": 101,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 2.0,
+          "other_cells": 816.0,
+          "observed_effect": 0.4408890571855729,
+          "observed_group_mean_rank": 0.9938875305623471
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "two_curated_cell_anchors_only",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 7.526573121547699,
+            "nearest_neighbor_similarity": 0.5890411138534546,
+            "supporting_pchembl_max": 8.22,
+            "supporting_compounds": 17,
+            "source_rows": 17,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 32.0,
+          "other_cells": 786.0,
+          "observed_effect": -0.06661790682503577,
+          "observed_group_mean_rank": 0.43637301344743273
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": null,
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K95292280",
+    "name": "SB-657510",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [
+        "UTS2R"
+      ],
+      "moa_annotations": [
+        "Urotensin receptor antagonist"
+      ]
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 0.47297295928001404,
+            "nearest_neighbor_similarity": 0.47297295928001404,
+            "supporting_pchembl_max": 6.0,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 19.0,
+          "other_cells": 422.0,
+          "observed_effect": 0.04881964085581584,
+          "observed_group_mean_rank": 0.5172454946891037
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.010842291887334453,
+          "predicted_group_mean_rank": 0.45740924495445084
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K96188950",
+    "name": "BRD-K96188950",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 1.2712093889713287,
+            "nearest_neighbor_similarity": 0.4363636374473572,
+            "supporting_pchembl_max": 7.0,
+            "supporting_compounds": 3,
+            "source_rows": 3,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 23.0,
+          "other_cells": 440.0,
+          "observed_effect": 0.0550237087995007,
+          "observed_group_mean_rank": 0.5940463893323316
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.008956886548936067,
+          "predicted_group_mean_rank": 0.5295518471870891
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ESR1_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ESR1",
+            "score": 0.43478259444236755,
+            "nearest_neighbor_similarity": 0.43478259444236755,
+            "supporting_pchembl_max": 6.06,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 22.0,
+          "other_cells": 441.0,
+          "observed_effect": -0.07282029188847354,
+          "observed_group_mean_rank": 0.40506577655605724
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.005361325180328166,
+          "predicted_group_mean_rank": 0.47584025186363055
+        },
+        "context_status": "ER_status_and_action_not_inferred_from_binding",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  },
+  {
+    "pert_id": "BRD-K98572433",
+    "name": "AZD-8931",
+    "split": "test",
+    "formal_association_partition": true,
+    "annotations": {
+      "known_target_annotations": [],
+      "moa_annotations": []
+    },
+    "annotation_evidence_tag": "source_annotation_not_model_input",
+    "links": [
+      {
+        "link_id": "ABL1_CML",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ABL1",
+            "score": 0.4545454680919647,
+            "nearest_neighbor_similarity": 0.4545454680919647,
+            "supporting_pchembl_max": 6.04,
+            "supporting_compounds": 1,
+            "source_rows": 1,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 2.0,
+          "other_cells": 784.0,
+          "observed_effect": -0.45406305587990214,
+          "observed_group_mean_rank": 0.11513994910941475
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.012559134206286474,
+          "predicted_group_mean_rank": 0.5715003357243282
+        },
+        "context_status": "two_curated_cell_anchors_only",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "EGFR_head_neck",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "EGFR",
+            "score": 112.19605374336243,
+            "nearest_neighbor_similarity": 0.6794871687889099,
+            "supporting_pchembl_max": 10.8,
+            "supporting_compounds": 240,
+            "source_rows": 245,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 37.0,
+          "other_cells": 749.0,
+          "observed_effect": 0.3327919389233638,
+          "observed_group_mean_rank": 0.809607317240905
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": 0.027186275419545332,
+          "predicted_group_mean_rank": 0.5093132013215539
+        },
+        "context_status": "clinical_modality_differs_from_small_molecule_panel",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      },
+      {
+        "link_id": "ERBB2_breast",
+        "kind": "external_clinical_evidence",
+        "literature_evidence_tag": "external_evidence",
+        "target_evidence_tag": "predicted_association",
+        "predicted_targets": [
+          {
+            "gene": "ERBB2",
+            "score": 27.015893816947937,
+            "nearest_neighbor_similarity": 0.9154929518699646,
+            "supporting_pchembl_max": 9.02,
+            "supporting_compounds": 59,
+            "source_rows": 61,
+            "abstained": false
+          }
+        ],
+        "observed_evidence_tag": "measured_response_derived_summary",
+        "observed_full_panel": {
+          "group_cells": 48.0,
+          "other_cells": 738.0,
+          "observed_effect": 0.06425975680742843,
+          "observed_group_mean_rank": 0.5463051314673452
+        },
+        "model_evidence_tag": "predicted_association",
+        "ridge_prediction_on_observed_test_cells": {
+          "predicted_effect": -0.0014026833454363697,
+          "predicted_group_mean_rank": 0.47557814166955364
+        },
+        "context_status": "HER2_status_missing",
+        "chain_status": "qualified_hypothesis_not_causal",
+        "caution": "Full-panel summaries are descriptive, not additional significance tests. No response means zero observed rows, not inactivity. Binding/action/clinical context must not be inferred from the target vote."
+      }
+    ]
+  }
+]

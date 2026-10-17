@@ -1,0 +1,196 @@
+[
+  {
+    "id": "ABL1_CML",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "ABL1"
+    ],
+    "label": "BCR::ABL1 inhibition and BCR::ABL1-positive CML",
+    "cell_ids": [
+      "ACH-000551",
+      "ACH-000074"
+    ],
+    "example_drugs": [
+      "imatinib"
+    ],
+    "context": "The clinical link is BCR::ABL1-positive CML, not all myeloid cancers or high ABL1 expression. Only the two externally checked cell lines are mapped; other Myeloproliferative Neoplasms entries are not assumed to be CML.",
+    "context_status": "two_curated_cell_anchors_only",
+    "sources": [
+      {
+        "title": "NCI: How Imatinib Transformed Leukemia Treatment",
+        "url": "https://www.cancer.gov/research/progress/discovery/gleevec"
+      },
+      {
+        "title": "Cellosaurus: K-562, BCR-ABL1-positive blast-phase CML",
+        "url": "https://www.cellosaurus.org/CVCL_0004"
+      },
+      {
+        "title": "Cellosaurus: Ku812, BCR-ABL1-positive CML",
+        "url": "https://www.cellosaurus.org/CVCL_0379"
+      }
+    ]
+  },
+  {
+    "id": "MEK_melanoma",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "MAP2K1",
+      "MAP2K2"
+    ],
+    "label": "MEK inhibition in BRAF V600-mutant melanoma",
+    "cancer_subtype": "Melanoma",
+    "example_drugs": [
+      "trametinib",
+      "selumetinib"
+    ],
+    "context": "Clinical evidence includes BRAF V600-selected melanoma and BRAF/MEK combinations. Our table lacks mutation status and combination-treatment information; a melanoma-only association is an anatomical proxy, not a replication of that clinical context. Do not generalize this link to all colorectal or pancreatic cancer.",
+    "context_status": "BRAF_status_and_combination_context_missing",
+    "sources": [
+      {
+        "title": "NCI: Dabrafenib plus trametinib in BRAF-mutant melanoma",
+        "url": "https://www.cancer.gov/types/skin/research/dabrafenib-trametinib"
+      },
+      {
+        "title": "NCI: Melanoma Treatment PDQ, MEK1/MEK2 inhibition",
+        "url": "https://www.cancer.gov/types/skin/hp/melanoma-treatment-pdq"
+      }
+    ]
+  },
+  {
+    "id": "EGFR_head_neck",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "EGFR"
+    ],
+    "label": "EGFR targeting in head-and-neck squamous-cell cancer",
+    "cancer_subtype": "Head and Neck Squamous Cell Carcinoma",
+    "example_drugs": [
+      "erlotinib",
+      "gefitinib"
+    ],
+    "context": "Clinical anchor is cetuximab, an EGFR antibody with treatment-context requirements. Small-molecule EGFR inhibitors in our panel are not equivalent to cetuximab; this is a target-level association check, not validation of an approved use for those small molecules.",
+    "context_status": "clinical_modality_differs_from_small_molecule_panel",
+    "sources": [
+      {
+        "title": "NCI: Cetuximab uses, including head-and-neck squamous-cell cancer",
+        "url": "https://www.cancer.gov/about-cancer/treatment/drugs/cetuximab"
+      },
+      {
+        "title": "NCI: Cetuximab targets EGFR",
+        "url": "https://www.cancer.gov/publications/dictionaries/cancer-drug/def/cetuximab"
+      }
+    ]
+  },
+  {
+    "id": "ERBB2_breast",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "ERBB2"
+    ],
+    "label": "HER2 targeting in HER2-positive breast cancer",
+    "cancer_type": "Breast",
+    "example_drugs": [
+      "lapatinib"
+    ],
+    "context": "Requires HER2-positive disease; the provided cell metadata lacks HER2 status. All-breast analysis is only an anatomical proxy, not proof that HER2-negative cells should respond.",
+    "context_status": "HER2_status_missing",
+    "sources": [
+      {
+        "title": "NCI: HER2-directed agents and lapatinib",
+        "url": "https://www.cancer.gov/types/breast/research/altto-qa"
+      }
+    ]
+  },
+  {
+    "id": "ESR1_breast",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "ESR1"
+    ],
+    "label": "Estrogen-receptor blockade/degradation in hormone-receptor-positive breast cancer",
+    "cancer_type": "Breast",
+    "example_drugs": [
+      "fulvestrant"
+    ],
+    "context": "Requires an appropriate receptor-positive context and antagonist/degrader action. Predicted ESR1 binding does not distinguish agonists from antagonists. The cell table lacks ER status; all-breast association is a proxy only.",
+    "context_status": "ER_status_and_action_not_inferred_from_binding",
+    "sources": [
+      {
+        "title": "NCI: Hormone therapy and fulvestrant in receptor-positive breast cancer",
+        "url": "https://www.cancer.gov/types/breast/treatment/hormone-therapy"
+      }
+    ]
+  },
+  {
+    "id": "MTOR_renal",
+    "kind": "external_clinical_evidence",
+    "target_genes": [
+      "MTOR"
+    ],
+    "label": "mTOR inhibition in renal-cell carcinoma",
+    "cancer_subtype": "Renal Cell Carcinoma",
+    "example_drugs": [
+      "everolimus",
+      "sirolimus"
+    ],
+    "context": "Everolimus is a clinical anchor in advanced renal-cell carcinoma with treatment-history requirements. Rapalogs act through FKBP12 complexes; a generic MTOR affinity vote is not a full representation of drug action or treatment context.",
+    "context_status": "target_level_proxy_not_full_clinical_context",
+    "sources": [
+      {
+        "title": "NCI: Everolimus, mTOR inhibition and renal-cell carcinoma",
+        "url": "https://www.cancer.gov/about-cancer/treatment/drugs/everolimus"
+      },
+      {
+        "title": "NCI: Everolimus and the FKBP12/mTOR complex",
+        "url": "https://www.cancer.gov/publications/dictionaries/cancer-drug/def/everolimus"
+      }
+    ]
+  },
+  {
+    "id": "HMGCR_glioma",
+    "kind": "exploratory_repurposing_hypothesis",
+    "target_genes": [
+      "HMGCR"
+    ],
+    "label": "Statin/HMGCR-associated response in diffuse glioma",
+    "cancer_subtype": "Diffuse Glioma",
+    "example_drugs": [
+      "simvastatin",
+      "lovastatin",
+      "pitavastatin",
+      "atorvastatin"
+    ],
+    "context": "This is not a novel literature hypothesis or an established glioma treatment. Preclinical simvastatin studies exist, while a secondary analysis of glioblastoma trials found no survival association with statin co-medication. HMGCR target votes do not themselves identify a statin or prove HMGCR-dependent efficacy; curated drug class/action must be shown separately.",
+    "context_status": "preclinical_and_clinically_unconfirmed",
+    "sources": [
+      {
+        "title": "Wu et al.: Simvastatin in glioma cell proliferation, migration and apoptosis",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3711082/"
+      },
+      {
+        "title": "Happold et al. 2018: No survival association for statin co-medication in pooled glioblastoma trials",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29423540/"
+      }
+    ]
+  },
+  {
+    "id": "NR3C1_mesothelioma",
+    "kind": "exploratory_repurposing_hypothesis",
+    "target_genes": [
+      "NR3C1"
+    ],
+    "label": "Glucocorticoid/NR3C1-associated response in pleural mesothelioma",
+    "cancer_subtype": "Pleural Mesothelioma",
+    "example_drugs": [
+      "dexamethasone"
+    ],
+    "context": "Specify glucocorticoids, not all steroids. A 1995 cell-line study included a dexamethasone-responsive mesothelioma line; this is therefore not a novel literature discovery or clinical efficacy claim. NR3C1 votes do not identify agonism. Curated action annotations are separate evidence, and growth effects can depend on cell and treatment context.",
+    "context_status": "limited_preclinical_evidence_not_clinically_validated",
+    "sources": [
+      {
+        "title": "Hofmann et al. 1995: Glucocorticoid receptors and dexamethasone growth effects, including MSTO-211H",
+        "url": "https://www.sciencedirect.com/science/article/pii/0959804995004319"
+      }
+    ]
+  }
+]

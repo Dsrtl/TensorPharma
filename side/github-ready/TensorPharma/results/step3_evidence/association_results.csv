@@ -1,0 +1,9 @@
+status,eligible_test_drugs,scaffolds,positive_vote_scaffolds,zero_vote_scaffolds,spearman,p_value,ci95_low,ci95_high,link_id,kind,group_cells_full_panel,group_cells_shared_panel,context_status,q_value,fdr_association,bootstrap_defined
+insufficient_group_cells_in_shared_panel,0,0,0,0,,,,,ABL1_CML,external_clinical_evidence,2,0,two_curated_cell_anchors_only,,False,
+insufficient_coverage,117,96,1,95,,,,,MEK_melanoma,external_clinical_evidence,51,37,BRAF_status_and_combination_context_missing,,False,
+tested_exploratory,117,96,15,81,0.243546118891874,0.0165983401659834,-0.015848743850022814,0.4772798836121044,EGFR_head_neck,external_clinical_evidence,42,21,clinical_modality_differs_from_small_molecule_panel,0.0663933606639336,False,2000.0
+tested_exploratory,117,96,7,89,0.33669968020092433,0.0006999300069993001,0.1846738953265819,0.46660183958531404,ERBB2_breast,external_clinical_evidence,63,20,HER2_status_missing,0.005599440055994401,True,2000.0
+tested_exploratory,117,96,6,90,0.0351108742341935,0.7358264173582642,-0.12250748909652136,0.18917435877865582,ESR1_breast,external_clinical_evidence,63,20,ER_status_and_action_not_inferred_from_binding,1.0,False,1993.0
+insufficient_coverage,117,96,3,93,,,,,MTOR_renal,external_clinical_evidence,23,16,target_level_proxy_not_full_clinical_context,,False,
+insufficient_coverage,117,96,0,96,,,,,HMGCR_glioma,exploratory_repurposing_hypothesis,46,32,preclinical_and_clinically_unconfirmed,,False,
+insufficient_coverage,117,96,3,93,,,,,NR3C1_mesothelioma,exploratory_repurposing_hypothesis,10,8,limited_preclinical_evidence_not_clinically_validated,,False,

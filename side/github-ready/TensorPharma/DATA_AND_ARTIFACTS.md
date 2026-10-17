@@ -7,6 +7,7 @@
 - Final cancer-only response summary/full report/environment and dataset-change report from completed ARCC job 950090.
 - Earlier mixed-cell response reports from ARCC job 949920, retained separately as historical evidence.
 - Completed target-expression test (job 950385): compact summary, full machine-produced report, validation selection, and environment. The 45-gene filter hash was verified locally. Added features did not improve the matched control; 124 of 954 drugs had no expression-mapped target features.
+- Completed local Step 3: source-backed literature cards, eight observed-response association outcomes, 47 evidence-tagged drug records, fixed configuration, script, and documented examples. See `STEP3.md`; this is not causal MoA validation.
 - Response data audit, mapping exclusions, four low-rank optimization histories, and descriptive LightGBM feature importance.
 
 Source-path strings in copied JSON reports are normalized to a repository-relative path. All metrics, source hashes, and split hashes remain unchanged. No dataset archive, response-label table, test-prediction table, model binary, target reference, or cancer-only `input/` directory is included.

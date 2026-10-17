@@ -32,6 +32,8 @@ __pycache__/
 /containers/
 /partner-handoff/
 /github-ready/
+/partner-share/
+/provenance/original_reports/
 /data/*
 !/data/README.md
 /TensorPharma-main/data/*
@@ -59,3 +61,5 @@ __pycache__/
 !/results/target_expression_filtered_test/report.json
 !/results/target_expression_filtered_test/validation_selection.json
 !/results/target_expression_filtered_test/environment.txt
+/results/target_expression_filtered_test/target_predictions.jsonl
+/results/target_expression_filtered_test/configuration.json

@@ -8,12 +8,15 @@ This folder is a **code, documentation, and results handoff**, not a complete de
 
 ## Start here
 
+**For the complete team handoff, start with [PARTNER_HANDOFF.md](PARTNER_HANDOFF.md).** The private partner archive includes final runtime/data artifacts; this GitHub-ready folder intentionally does not. Step 3 is now complete as an exploratory, evidence-tagged association analysis—not causal MoA validation.
+
 | Partner task | Read |
 |---|---|
 | Understand the project and completed results | This README |
 | Review the final cancer-only comparison | [Response summary](results/rank_benchmark_cancer_only/summary.json), [full report](results/rank_benchmark_cancer_only/benchmark_report.json) |
 | Review the earlier mixed-cell comparison | [Historical summary](results/rank_benchmark/summary.json) |
 | Review protein-target retrieval | [Target metrics](results/chembl_library/metrics.json), [reference manifest](results/chembl_library/manifest.json) |
+| Review Step 3, sources, hypotheses, and drug chains | [Step 3 explanation](STEP3.md), [association report](results/step3_evidence/report.json) |
 | Get the missing data/models for integration | [DATA_AND_ARTIFACTS.md](DATA_AND_ARTIFACTS.md) |
 | Reproduce the response experiment | [RANK_BENCHMARK.md](RANK_BENCHMARK.md) |
 | Build/score the full target library | [CHEMBL_LIBRARY.md](CHEMBL_LIBRARY.md) |
@@ -203,6 +206,14 @@ The [target-expression test](TARGET_EXPRESSION_TEST.md) compared the fixed cance
 The control reproduced the previous cancer-only LightGBM metrics. The added features performed slightly worse on both partitions, so **Ridge remains selected**. This does not show biological information is generally unhelpful; it concerns this feature design and tested configuration only. No statistical significance or Stage C/Stage D mechanism validation is implied.
 
 The [summary](results/target_expression_filtered_test/summary.json), [full machine-produced report](results/target_expression_filtered_test/report.json), validation selection, and recorded environment are included. Numerical results were reconciled with the downloaded report; the 45-gene exclusion-file hash matches the local configuration. **124 of 954 compounds** had no expression-mapped predicted targets and received zero added features; absence of retrieved/mapped targets is not evidence of biological inactivity. Absolute input paths were normalized without changing metrics or hashes. Scheduler status comes from the modeling lead's shared `sacct` output.
+
+### Step 3 completed: external evidence and exploratory associations
+
+The [Step 3 analysis](STEP3.md) supplies **six externally supported clinical-context cards**, **two exploratory repurposing hypotheses**, all **eight association outcomes**, and evidence-tagged chains for **47 compounds**. Primary tests compare predicted target-vote mass with **observed held-out response contrasts**, adjusted by training-only cell means, on a training-defined 440-cell screening panel. Response-model predictions are not used as the statistical outcome.
+
+One ERBB2–breast anatomical-proxy association survived the eight-link correction (Spearman 0.337, 95% scaffold-bootstrap interval 0.185–0.467, BH q 0.00560). HER2 status is missing and only seven positive-vote scaffolds contribute; this is not clinical validation, target causality, or a new mechanism discovery. EGFR–head-and-neck did not survive correction (q 0.0664); ESR1–breast was nonsignificant. CML, MEK, mTOR, and both repurposing hypotheses lacked sufficient primary coverage. All failures and limitations are preserved.
+
+The two CML anchors are externally checked K-562/KU812, not an assumption that every myeloid line is CML. Imatinib is a **validation-fold** descriptive example, not an unseen test success. Statin–glioma and glucocorticoid–mesothelioma ideas already have prior literature and remain unvalidated hypotheses here. See `examples/` for separately tagged predicted, observed, and external evidence.
 
 - Compounds/scaffolds are held out, but cell lines are known during training; there is no unseen-patient validation.
 - Test compounds were previously inspected. These are exploratory hackathon results, not an untouched external benchmark.
