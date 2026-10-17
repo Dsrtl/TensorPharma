@@ -16,8 +16,9 @@ app/              demo interface
 ## Setup
 
 ```bash
-mamba env create -f environment.yml
-conda activate tensorpharma
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+brew install libomp   # macOS only, needed by LightGBM
 ```
 
 Then place the datasets under `data/raw/` as described in [data/README.md](data/README.md).
