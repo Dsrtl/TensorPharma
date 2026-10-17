@@ -22,16 +22,17 @@
   "cells": {
     "cell_lines_in_responses": 1204,
     "with_expression": 985,
-    "with_expression_and_cancer_type": 985,
-    "cancer_types": 28,
+    "non_cancerous_dropped": 9,
+    "cancer_cell_lines_kept": 976,
+    "cancer_types": 27,
     "genes": 19215
   },
   "responses": {
     "rows_in": 512950,
-    "rows_after_drug_and_cell_match": 493311,
-    "rows_after_merging_duplicate_drugs": 485662,
-    "pairs_averaged": 7649,
+    "rows_after_drug_and_cell_match": 491297,
+    "rows_after_merging_duplicate_drugs": 483705,
+    "pairs_averaged": 7592,
     "drugs": 961,
-    "cells": 985
+    "cells": 976
   }
 }

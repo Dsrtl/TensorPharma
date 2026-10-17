@@ -11,7 +11,7 @@ Outputs (data/processed/):
     drugs.csv.gz            one row per drug, keyed by InChIKey
     drug_ids.csv.gz         LINCS pert_id -> drug_id
     drug_targets.csv.gz     cleaned ChEMBL drug-protein potency library
-    cells.csv.gz            one row per cell line with cancer type
+    cells.csv.gz            one row per cancer cell line with cancer type (non-cancerous lines dropped)
     gene_expression.csv.gz  cell line x gene expression (default entries only)
     responses.csv.gz        drug x cell line sensitivity, raw and ranked within drug
     build_audit.json     rows in / kept / dropped at every step
@@ -116,7 +116,10 @@ def build_cells(cell_ids):
     cells = cells[["ModelID", "CellLineName", "OncotreeLineage", "OncotreePrimaryDisease"]].rename(
         columns={"ModelID": "cell_id", "CellLineName": "cell_name",
                  "OncotreeLineage": "cancer_type", "OncotreePrimaryDisease": "cancer_subtype"})
-    cells = cells.dropna(subset=["cancer_type"]).sort_values("cell_id")
+    cells = cells.dropna(subset=["cancer_type"])
+    # the task predicts cancer cells: drop normal fibroblasts and benign lines
+    non_cancer = cells["cancer_subtype"] == "Non-Cancerous"
+    cells = cells[~non_cancer].sort_values("cell_id")
     check_unique(cells, "cell_id", "cells")
 
     expr = pd.read_csv(EXPRESSION)
@@ -127,7 +130,8 @@ def build_cells(cell_ids):
 
     audit["cells"] = {"cell_lines_in_responses": len(cell_ids),
                       "with_expression": len(cell_ids & with_expr),
-                      "with_expression_and_cancer_type": len(cells),
+                      "non_cancerous_dropped": int(non_cancer.sum()),
+                      "cancer_cell_lines_kept": len(cells),
                       "cancer_types": int(cells["cancer_type"].nunique()),
                       "genes": expr.shape[1] - 1}
     return cells, expr
