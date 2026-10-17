@@ -518,7 +518,8 @@ function demoPage() {
       document.querySelectorAll("#picker button").forEach((b) => b.classList.toggle("on", b.dataset.q === q));
       const el = document.getElementById("answer");
       if (!RDKIT && !LIB.some((d) => d.name.toLowerCase() === q.trim().toLowerCase())) { el.innerHTML = `<div class="note">Reading the structure…</div>`; RDKIT_READY.then(() => RDKIT && QUERY === q && run(q)); return; }
-      swap(() => { try { el.innerHTML = answerCard(resolve(q)); } catch (err) { el.innerHTML = `<div class="note">Could not read that molecule (${esc(err.message || err)}).</div>`; } drawMols(); });
+      swap(() => { try { el.innerHTML = answerCard(resolve(q)); } catch (err) { el.innerHTML = `<div class="note">Could not read that molecule (${esc(err.message || err)}).</div>`; } drawMols();
+        el.querySelectorAll(".lookalike").forEach((a) => (a.onclick = (e) => { e.preventDefault(); run(a.dataset.q); })); });
     };
     document.getElementById("ask").onsubmit = (e) => { e.preventDefault(); run(input.value); };
     document.querySelectorAll("#picker button").forEach((b) => (b.onclick = () => run(b.dataset.q)));
@@ -552,11 +553,10 @@ function resolve(q) {
   if (d) return { d, how: "name" };
   if (!RDKIT) return { error: "The structure reader is still loading. Try again in a second." };
   const fp = fpOf(q);
-  if (!fp) return { error: `"${q}" is not a drug in our set or a valid SMILES.` };
+  if (!fp) return { error: `<b>"${esc(q)}" is not one of our ${LIB.length} drugs.</b> Paste its SMILES instead (PubChem lists it under "Canonical SMILES") and we will predict from its structure.` };
   if (!LIBFP) LIBFP = LIB.map((x) => fpOf(x.smiles));
-  let best = null, bs = -1;
-  LIB.forEach((x, i) => { if (!LIBFP[i]) return; const s = tanimoto(fp, LIBFP[i]); if (s > bs) { bs = s; best = x; } });
-  return { d: best, how: bs > 0.999 ? "smiles" : "nearest", sim: bs, smiles: q };
+  const near = LIB.map((x, i) => ({ d: x, sim: LIBFP[i] ? tanimoto(fp, LIBFP[i]) : 0 })).sort((a, b) => b.sim - a.sim);
+  return { d: near[0].d, how: near[0].sim > 0.999 ? "smiles" : "nearest", sim: near[0].sim, smiles: q, near };
 }
 
 const S3_TAG = { holds: '<span class="tag kb">holds up</span>', trend: '<span class="tag hy">trend</span>', none: '<span class="tag Low">no link</span>', untestable: '<span class="tag" style="color:var(--ink-3)">too few drugs</span>' };
@@ -607,8 +607,36 @@ function step3Why(d) {
   return { html: `Predicted to hit <b>${esc(x.l.protein)}</b>, which links to <b>${esc(x.l.cancer)}</b>.${eff} ${esc(x.l.plain)}`, tag: S3_TAG[x.l.status] };
 }
 
+// A molecule we never screened: proteins are predicted by a similarity vote (look-alikes at least 40% alike, the cluster's cutoff);
+// cell-line response is not predicted here, only what the look-alikes did in the lab.
+const VOTE_CUTOFF = 0.4;
+function newMolCard(r) {
+  const votersAll = r.near.filter((x) => x.sim >= VOTE_CUTOFF), voters = votersAll.filter((x) => x.d.known_targets?.length);
+  const votes = {};
+  voters.forEach((x) => x.d.known_targets.forEach((g) => (votes[g] = (votes[g] || 0) + x.sim)));
+  const top = Object.entries(votes).sort((a, b) => b[1] - a[1]).slice(0, 5), total = voters.reduce((a, x) => a + x.sim, 0);
+  const look = r.near.slice(0, 3).map((x) => { const ov = OV?.drugs?.[x.d.drug_id], t = ov?.top_types?.[0];
+    return `<div class="hbar"><span><a href="#/" data-q="${esc(x.d.name)}" class="lookalike">${esc(x.d.name)}</a><small>${f2(x.sim)} alike</small></span><span style="font-size:13px;color:var(--ink-2)">${ov ? `${ov.responders} of ${ov.tested} cell lines respond${t ? ` · most in ${esc(t.name)}` : ""}` : "no lab data"}</span><span>${ov ? GROUP_TAG[ov.group].split("</span>")[0] + "</span>" : ""}</span></div>`; }).join("");
+  const g0 = top.length ? (/^MAP2K[12]$/.test(top[0][0]) ? "MEK" : top[0][0]) : null, s3 = g0 ? STEP3.links.find((l) => l.id.split("_")[0] === g0) : null;
+  return `<div class="card fade" style="gap:16px">
+    <div class="head"><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="mol" data-smiles="${esc(r.smiles)}" data-w="150" data-h="90" style="min-height:80px;width:150px;flex:none"></div>
+      <div><div style="font-size:22px;font-weight:500">New molecule</div><div style="font-size:13px;color:var(--ink-2)">Not in our ${LIB.length} screened drugs, so there is no lab data for it. Below is what we can predict from its structure alone.</div></div></div></div>
+    <div class="qa">
+      <div class="q"><span class="engr">1</span>Which proteins does it bind?</div>
+      <div class="a">${top.length ? top.map(([g, v]) => `<span class="tag Medium" style="text-transform:none">${esc(g)} · ${Math.round((100 * v) / total)}%</span>`).join("") : `<span style="color:var(--ink-2)">No prediction.</span>`}</div>
+      <div class="h">${top.length ? `<b>Predicted.</b> ${voters.length} known drug${voters.length > 1 ? "s" : ""} at least 40% alike voted, weighted by how alike. % = share of those look-alikes that bind it.` : `No known drug is at least 40% alike (closest: ${esc(r.d.name)}, ${f2(r.sim)}). Too different to guess, so we abstain.`}</div>
+      <div class="q"><span class="engr">2–3</span>Which cell lines and cancers respond?</div>
+      <div class="a" style="flex-direction:column;align-items:stretch;gap:8px">${look}</div>
+      <div class="h"><b>Not predicted.</b> These are its 3 closest screened drugs and what they did in the lab. Look-alikes alone ranked cell lines worse than the simple baseline on the cluster (0.278 vs 0.310), so we don't claim a response for a new molecule.</div>
+      <div class="q"><span class="engr">4</span>Mechanism: what kills the cell?</div>
+      <div class="a">${s3 ? `If it hits <b>${esc(top[0][0])}</b>: our tested link ${esc(s3.protein)} → ${esc(s3.cancer)} ${{ holds: "held up on unseen drugs", trend: "trended on unseen drugs", none: "did not hold", untestable: "had too few drugs to test" }[s3.status]}.` : `No claim. A mechanism needs lab data on this molecule, or a predicted protein covered by one of our 8 tested links.`}</div>
+      <div class="h">${s3 ? S3_TAG[s3.status] : '<span class="tag" style="color:var(--ink-3)">no claim</span>'}</div>
+    </div></div>`;
+}
+
 function answerCard(r) {
-  if (r.error) return `<div class="note">${esc(r.error)}</div>`;
+  if (r.error) return `<div class="note">${r.error}</div>`;
+  if (r.how === "nearest") return newMolCard(r);
   const d = r.d, ov = OV?.drugs?.[d.drug_id], top = d.predicted_targets.slice(0, 5), w3 = step3Why(d), pred = !!d.predicted?.top_cells;
   const cells = (pred ? d.predicted.top_cells : d.measured_top_cells || []).slice(0, 5);
   let subs = (d.predicted?.cancer_subtypes || d.measured_cancer_subtypes || []).filter((x) => !(d.breast_screen_artifact && /breast/i.test(x.name)));
