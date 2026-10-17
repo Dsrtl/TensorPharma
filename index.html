@@ -493,11 +493,16 @@ function demoPage() {
 
   <section style="display:flex;flex-direction:column;gap:16px">
     <h2 class="sec">Can you trust it?</h2>
-    <div class="story">
-      <div>We hid whole drug families from the models, then asked them about those drugs. All scores are from the ARCC HPC cluster.</div>
-      <div><b>The proteins: 80%.</b> For 67 of 84 unseen compounds, a known target was in our top 5. That is target recovery, not an 80% chance a binding is real.</div>
-      <div><b>The cell lines: 0.319 vs 0.310.</b> On 144 unseen drugs, our model ordered cell lines from most to least responsive slightly better than guessing each line's usual sensitivity. A modest gain.</div>
-      <div><b>The why: ${STEP3.links.filter((l) => l.status === "holds").length} of ${STEP3.links.length} links held.</b> We fixed 8 protein → cancer links in advance. HER2 → breast held up after correction; EGFR → head &amp; neck pointed the same way but did not.</div>
+    <div class="scores">
+      <div class="score"><span class="engr">Proteins</span><span class="big">80%</span>
+        <span class="s">For 67 of 84 unseen compounds, a known target was in our top 5. Target recovery, not an 80% chance a binding is real.</span>
+        <span class="tech">HPC run · scaffold split · 498,671 ChEMBL reference compounds</span></div>
+      <div class="score"><span class="engr">Cell lines</span><span class="big">0.319</span>
+        <span class="s">How well we order cell lines on 144 unseen drugs, against 0.310 for guessing each line's usual sensitivity. A modest gain.</span>
+        <span class="tech">HPC run · 74,640 responses · Spearman</span></div>
+      <div class="score"><span class="engr">Why</span><span class="big">${STEP3.links.filter((l) => l.status === "holds").length} of ${STEP3.links.length}</span>
+        <span class="s">protein → cancer links, fixed in advance, held up on unseen drugs: HER2 → breast. EGFR → head &amp; neck trended but did not survive correction.</span>
+        <span class="tech">HPC outputs · 117 test drugs, 96 scaffolds · BH over 8 links</span></div>
     </div>
   </section>
 
