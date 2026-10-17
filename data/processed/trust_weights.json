@@ -1,0 +1,18 @@
+{
+  "scope": "all drugs",
+  "drugs_used": 514,
+  "groups": {
+    "1 result": {
+      "rows": 5793,
+      "hits": 516,
+      "hit_rate": 0.0891,
+      "weight": 0.26
+    },
+    "2+ results": {
+      "rows": 2468,
+      "hits": 845,
+      "hit_rate": 0.3424,
+      "weight": 1.0
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "drugs": {
+    "pert_ids": 972,
+    "unique_drugs": 961,
+    "merged_duplicate_ids": 11,
+    "with_known_targets": 649,
+    "structure_conflicts_flagged": 5,
+    "in_chembl": 702
+  },
+  "drug_targets": {
+    "rows_in": 1588552,
+    "rows_kept": 1017693,
+    "activity_types_kept": [
+      "IC50",
+      "Ki",
+      "Kd",
+      "EC50"
+    ],
+    "compounds": 652788,
+    "targets": 4516
+  },
+  "cells": {
+    "cell_lines_in_responses": 1204,
+    "with_expression": 985,
+    "with_expression_and_cancer_type": 985,
+    "cancer_types": 28,
+    "genes": 19215
+  },
+  "responses": {
+    "rows_in": 512950,
+    "rows_after_drug_and_cell_match": 493311,
+    "rows_after_merging_duplicate_drugs": 485662,
+    "pairs_averaged": 7649,
+    "drugs": 961,
+    "cells": 985
+  }
+}

@@ -8,12 +8,12 @@ Inputs (data/raw/):
 and data/processed/chembl_activity.csv (from scripts/export_chembl.py).
 
 Outputs (data/processed/):
-    drugs.csv            one row per drug, keyed by InChIKey
-    drug_ids.csv         LINCS pert_id -> drug_id
-    drug_targets.csv     cleaned ChEMBL drug-protein potency library
-    cells.csv            one row per cell line with cancer type
-    gene_expression.csv  cell line x gene expression (default entries only)
-    responses.csv        drug x cell line sensitivity, raw and ranked within drug
+    drugs.csv.gz            one row per drug, keyed by InChIKey
+    drug_ids.csv.gz         LINCS pert_id -> drug_id
+    drug_targets.csv.gz     cleaned ChEMBL drug-protein potency library
+    cells.csv.gz            one row per cell line with cancer type
+    gene_expression.csv.gz  cell line x gene expression (default entries only)
+    responses.csv.gz        drug x cell line sensitivity, raw and ranked within drug
     build_audit.json     rows in / kept / dropped at every step
 
 Usage (from the repo root):
@@ -163,12 +163,12 @@ def main():
     drugs["in_chembl"] = drugs["drug_id"].isin(set(drug_targets["drug_id"]))
     audit["drugs"]["in_chembl"] = int(drugs["in_chembl"].sum())
 
-    drugs.to_csv(OUT / "drugs.csv", index=False)
-    drug_ids.to_csv(OUT / "drug_ids.csv", index=False)
-    drug_targets.to_csv(OUT / "drug_targets.csv", index=False)
-    cells.to_csv(OUT / "cells.csv", index=False)
-    expr.to_csv(OUT / "gene_expression.csv", index=False)
-    responses.to_csv(OUT / "responses.csv", index=False)
+    drugs.to_csv(OUT / "drugs.csv.gz", index=False)
+    drug_ids.to_csv(OUT / "drug_ids.csv.gz", index=False)
+    drug_targets.to_csv(OUT / "drug_targets.csv.gz", index=False)
+    cells.to_csv(OUT / "cells.csv.gz", index=False)
+    expr.to_csv(OUT / "gene_expression.csv.gz", index=False)
+    responses.to_csv(OUT / "responses.csv.gz", index=False)
     (OUT / "build_audit.json").write_text(json.dumps(audit, indent=2))
     print(json.dumps(audit, indent=2))
 

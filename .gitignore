@@ -1,6 +1,12 @@
 # Data stays local: raw downloads are ~100 GB and far past GitHub's limits
 data/*
 !data/README.md
+# Processed tables are committed (compressed); the large intermediate ChEMBL export is not
+!data/processed/
+data/processed/*
+!data/processed/*.csv.gz
+!data/processed/*.json
+data/processed/chembl_activity*
 *.gctx
 *.h5
 *.parquet

@@ -23,8 +23,8 @@ PROCESSED = ROOT / "data/processed"
 
 
 def main():
-    drugs = pd.read_csv(PROCESSED / "drugs.csv")
-    targets = pd.read_csv(PROCESSED / "drug_targets.csv",
+    drugs = pd.read_csv(PROCESSED / "drugs.csv.gz")
+    targets = pd.read_csv(PROCESSED / "drug_targets.csv.gz",
                           usecols=["drug_id", "target_gene", "n_measurements"])
 
     scope = "all drugs"
