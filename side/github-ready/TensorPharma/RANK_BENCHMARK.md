@@ -59,6 +59,16 @@ The terminal for this coding session cannot reach ARCC directly; submit from the
 
 ## Outputs and handoff
 
+### Cancer-only scope correction
+
+**Completed:** ARCC job 950090 finished successfully in 5 minutes 22 seconds. The final selected model is `ridge_1000` (validation Spearman 0.307394; test Spearman 0.318915). LightGBM is essentially tied on validation (0.307368); no significant advantage is claimed. Final reports are in `results/rank_benchmark_cancer_only/`. The original mixed-cell experiment remains historical evidence under `results/rank_benchmark/`.
+
+The subsequent update in `data/updated_cancer_cell_data/` removes nine cells labelled `Non-Cancerous`, leaving 976 cells and 483,705 source response rows. Retained raw scores/source counts and gene-expression values are unchanged; within-drug percentile ranks were recomputed. This changes the evaluated cell panel, not proof that all bias was removed.
+
+Run `sbatch scripts/run_cancer_only_rank.slurm` from the ARCC project after transferring the updated three `.csv.gz` files and current scripts. The job snapshots those files plus the unchanged drug/target mappings into `results/rank_benchmark_cancer_only/input/`, checks that retained responses and cell metadata are unchanged, and refits the same six families using the same frozen chemical split. It uses the already-installed environment, 8 CPUs, 32 GB RAM, and a two-hour maximum, with logs at `results/cancer-only-rank-JOBID.log`. No new dependency installation or target-library rebuild is needed.
+
+Read `results/rank_benchmark_cancer_only/summary.json` and `dataset_change_report.json` after completion. The original `results/rank_benchmark/` is not changed. Use the cancer-only version for its intended scope, not because its scores happen to be better. Rankings/errors across different cell panels are not strictly identical evaluation tasks. Prediction must explicitly use `--benchmark results/rank_benchmark_cancer_only`; the exporter's default still points at the original benchmark.
+
 Under `results/rank_benchmark/`:
 
 - `summary.json`: compact comparison of each family's validation-selected finalist and the overall winner.

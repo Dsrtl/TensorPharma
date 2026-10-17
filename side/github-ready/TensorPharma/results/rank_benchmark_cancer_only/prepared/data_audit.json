@@ -1,0 +1,78 @@
+{
+  "source": "results/rank_benchmark_cancer_only/input",
+  "frozen_split_sha256": "1400e5c0fbab24ed66d5253a1b042dd97876d5e885177a2413e5cce00c00e1a3",
+  "frozen_fingerprints_sha256": "90faeefbadc91f112f8e44973067d560c29c749aff97d500a9e6755bb3f728c3",
+  "frozen_feature_configuration": {
+    "input_sha256": "ea67c0b932bb5801e8b96560a2a0b13945f3b56811c980a2b228d4432f1a33b1",
+    "seed": 2026,
+    "rdkit_version": "2026.09.1",
+    "standardization": "cleanup_fragment_parent_uncharge_canonical_tautomer_v1"
+  },
+  "benchmark_split_sha256": "7cc9bbfdd911c7091f07918a02b8aa86962e069d4e25daa51e40e51524500963",
+  "source_response_rows": 483705,
+  "canonical_response_rows": 479571,
+  "source_drugs": 961,
+  "canonical_drugs": 954,
+  "excluded_source_drug_ids": [
+    "AECDBHGVIIRMOI-UHFFFAOYSA-N",
+    "CEGSUKYESLWKJP-UHFFFAOYSA-N",
+    "QFJCIRLUMZQUOT-HPLJOQBZSA-N",
+    "QTHCAAFKVUWAFI-DJKKODMXSA-N",
+    "TZKBVRDEOITLRB-UHFFFAOYSA-N",
+    "VSZGPKBBMSAYNT-RRFJBIMHSA-N"
+  ],
+  "excluded_response_rows_for_unresolved_structures": 3720,
+  "mapping_exclusion_report": "mapping_exclusions.csv",
+  "cells": 976,
+  "genes_selected": 1000,
+  "fingerprint_bits": 2048,
+  "excluded_cells_without_training_labels": [],
+  "compound_counts": {
+    "train": 670,
+    "validation": 140,
+    "test": 144
+  },
+  "response_counts": {
+    "train": 333114,
+    "validation": 71817,
+    "test": 74640
+  },
+  "cleaned_target_rows_in_benchmark": 9563,
+  "source_files": {
+    "responses": {
+      "bytes": 6969315,
+      "sha256": "bddef65002baf8454f952f2d95a4a11f3f2b4d55ad7828dcf36abd2021e655b7"
+    },
+    "drug_ids": {
+      "bytes": 17886,
+      "sha256": "a55a69d1d730d26326ee84914053159795444a54a89214abf918f465ec11d3b3"
+    },
+    "drugs": {
+      "bytes": 52566,
+      "sha256": "a59dbbe5b06829c9872a3f482016f74a2534e2933bc18a1c1ba54571bd65aaf7"
+    },
+    "gene_expression": {
+      "bytes": 74433762,
+      "sha256": "5fce3563854919ffb1b2250c6686c22761b59d85066a4de7937ef93293ac977c"
+    },
+    "drug_targets": {
+      "bytes": 32969806,
+      "sha256": "6dc9633567ac82052550a21ce87413a7545b82cbc5664a571cdcf1cf41378c1c"
+    },
+    "cells": {
+      "bytes": 9392,
+      "sha256": "845391842048b2bd492272cb7e116b74263f3aab1dae30d814c42b1ddd329985"
+    }
+  },
+  "notes": [
+    "Original scaffold assignments are preserved; canonical duplicate drugs are never split across partitions.",
+    "Entire source drug IDs with unresolved identity/split mappings, flagged structure conflicts, or source/frozen structure disagreement are excluded for every model before fitting.",
+    "Already-averaged response labels for ambiguous merged IDs cannot safely be reassigned to one of several structures; no first-match identity is selected.",
+    "Additional canonical duplicates are merged using source-count-weighted raw scores, then within-drug ranks are recomputed.",
+    "All models predict relative within-drug sensitivity ranks, not raw response or cell-kill probabilities.",
+    "Gene selection and projection use only cell lines with training labels; evaluation is compound-cold, cell-warm.",
+    "Known targets, MOA annotations, and the all-drug trust weights are excluded from predictive inputs.",
+    "Target supervision uses source-aggregated pChEMBL values; assay types were pooled upstream and cannot be recovered.",
+    "If canonical aliases have different source medians, their median is a representative summary, not a reconstruction of raw measurements."
+  ]
+}

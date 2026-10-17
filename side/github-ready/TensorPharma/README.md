@@ -11,7 +11,8 @@ This folder is a **code, documentation, and results handoff**, not a complete de
 | Partner task | Read |
 |---|---|
 | Understand the project and completed results | This README |
-| Review the six response-model comparison | [Response summary](results/rank_benchmark/summary.json), [full report](results/rank_benchmark/benchmark_report.json) |
+| Review the final cancer-only comparison | [Response summary](results/rank_benchmark_cancer_only/summary.json), [full report](results/rank_benchmark_cancer_only/benchmark_report.json) |
+| Review the earlier mixed-cell comparison | [Historical summary](results/rank_benchmark/summary.json) |
 | Review protein-target retrieval | [Target metrics](results/chembl_library/metrics.json), [reference manifest](results/chembl_library/manifest.json) |
 | Get the missing data/models for integration | [DATA_AND_ARTIFACTS.md](DATA_AND_ARTIFACTS.md) |
 | Reproduce the response experiment | [RANK_BENCHMARK.md](RANK_BENCHMARK.md) |
@@ -20,12 +21,13 @@ This folder is a **code, documentation, and results handoff**, not a complete de
 
 ## What has actually completed
 
-Both current ARCC jobs finished successfully on October 17, 2026:
+All three ARCC jobs below finished successfully on October 17, 2026. **The cancer-only run is the final response model for integration**; the earlier run is retained as historical evidence.
 
 | Experiment | Job | Runtime | Outcome |
 |---|---:|---:|---|
 | Expanded ChEMBL target retrieval | 949350 | 57 min 56 sec | Completed, exit `0:0` |
-| Six-family ranked-response comparison | 949920 | 5 min 29 sec | Completed, exit `0:0` |
+| Earlier mixed-cell response comparison | 949920 | 5 min 29 sec | Completed, exit `0:0`; historical |
+| Final cancer-only response comparison | 950090 | 5 min 22 sec | Completed, exit `0:0`; selected `ridge_1000` |
 
 ### 1. Protein-target retrieval
 
@@ -42,18 +44,22 @@ The reference contains **498,671 standardized compounds** and **674,883 compound
 
 ### 2. Cancer-cell-response comparison
 
-Six model families used the same corrected data, structure handling, and frozen compound/scaffold assignments. Candidate selection used validation macro within-drug Spearman, with validation RMSE breaking ties.
+Six model families used the same cancer-only data, structure handling, and original frozen compound/scaffold assignments. Nine cell lines labelled `Non-Cancerous` and their 1,957 source response rows were removed. Retained raw response and expression values were unchanged, and within-drug percentile ranks were recomputed. This is a scope correction, not proof of general bias removal; it prevents a cancer-versus-normal selectivity assessment on this panel. See the [dataset change report](results/rank_benchmark_cancer_only/dataset_change_report.json).
+
+Candidate selection used validation macro within-drug Spearman, with validation RMSE breaking ties. Final results:
 
 | Family | Selected candidate | Validation Spearman | Test Spearman | Test RMSE |
 |---|---|---:|---:|---:|
-| **Expression-coupled — selected overall** | `expression_coupled_penalty_100` | **0.3080** | 0.3125 | 0.26461 |
-| Fingerprint ridge | `ridge_1000` | 0.3076 | 0.3190 | 0.26352 |
-| LightGBM | `lightgbm_leaves_31` | 0.3044 | 0.3239 | 0.26270 |
-| Cell-average baseline | `cell_mean` | 0.2962 | 0.3098 | 0.26461 |
-| Joint targets + expression | `joint_targets_expression_penalty_100` | 0.2929 | 0.3065 | 0.26508 |
-| Chemical similarity | `tanimoto_10` | 0.2705 | 0.2783 | 0.27181 |
+| **Fingerprint ridge — selected overall** | `ridge_1000` | **0.307394** | 0.318915 | 0.263563 |
+| LightGBM | `lightgbm_leaves_31` | 0.307368 | 0.325227 | 0.262547 |
+| Expression-coupled | `expression_coupled_penalty_100` | 0.304637 | 0.309855 | 0.265274 |
+| Cell-average baseline | `cell_mean` | 0.296002 | 0.309785 | 0.264650 |
+| Joint targets + expression | `joint_targets_expression_penalty_100` | 0.295086 | 0.307355 | 0.265244 |
+| Chemical similarity | `tanimoto_10` | 0.270241 | 0.278410 | 0.271808 |
 
-**Interpretation:** expression coupling won validation by a very small margin over ridge. Its test gain over the cell-average baseline was tiny, and test RMSE was essentially unchanged. LightGBM scored highest on test, but we do not switch the selected model after inspecting test results. No substantial multilayer advantage or statistical significance has been established. Adding protein-target supervision did not help under this configuration.
+**Interpretation:** Ridge won validation over LightGBM by only about **0.000026 Spearman**—an essentially tied result, not demonstrated scientific superiority. LightGBM scored highest on test, but we do not change the selected winner using test results. Ridge's improvement over the cell-average baseline is modest. The multilayer models did not win, and adding protein-target supervision did not help under this configuration. No statistical significance or clinical usefulness has been established.
+
+The previous mixed-cell run selected expression coupling by a narrow validation margin. Its original reports remain under `results/rank_benchmark/`; they are not overwritten. Different cell panels define different ranking tasks, so the cancer-only version is chosen for its intended scope, not because its score happens to be better.
 
 Spearman is ranking correlation, **not percentage accuracy**. Prediction targets are relative cell-line response percentiles within a drug—not absolute cell killing, viability, or clinical response probabilities. Higher predicted ranks follow the source score direction; its biological interpretation still needs provider confirmation.
 
@@ -61,11 +67,11 @@ Final benchmark data:
 
 | Partition | Canonical compounds | Response observations |
 |---|---:|---:|
-| Training | 670 | 334,427 |
-| Validation | 140 | 72,141 |
-| Test | 144 | 74,938 |
+| Training | 670 | 333,114 |
+| Validation | 140 | 71,817 |
+| Test | 144 | 74,640 |
 
-There are 954 canonical compounds, 985 known cell lines, and 1,000 selected gene features. Six unresolved/flagged source drug IDs and their 3,741 response rows were excluded before fitting every model; further canonical duplicate aggregation also changes row counts. See the [audit](results/rank_benchmark/prepared/data_audit.json) and [exclusion records](results/rank_benchmark/prepared/mapping_exclusions.csv). Source data and original scaffold assignments were not rewritten.
+There are 954 canonical compounds, 976 known cell lines, and 1,000 selected gene features. Six unresolved/flagged source drug IDs and their 3,720 cancer-only response rows were excluded before fitting every model; further canonical duplicate aggregation also changes row counts. See the [audit](results/rank_benchmark_cancer_only/prepared/data_audit.json) and [exclusion records](results/rank_benchmark_cancer_only/prepared/mapping_exclusions.csv). Source files and original scaffold assignments were not rewritten.
 
 ## How it works
 
@@ -98,7 +104,8 @@ scripts/                       Modeling, preparation, prediction, Slurm jobs
 TensorPharma-main/scripts/      Partner's original data-preparation scripts
 TensorPharma-main/data/README.md Required private/local input-table layout
 data/README.md                 Frozen-feature and historical-input requirements
-results/rank_benchmark/         Completed response metrics, audit, histories
+results/rank_benchmark_cancer_only/ Final response metrics, audit, histories
+results/rank_benchmark/         Earlier mixed-cell results, preserved
 results/chembl_library/         Completed target metrics and provenance
 requirements-challenge6.txt    Base dependency ranges
 requirements-reproducible.txt  Core package versions from the completed ARCC job
@@ -106,7 +113,7 @@ DATA_AND_ARTIFACTS.md          How to obtain missing runtime artifacts
 .gitignore                    Dataset/model/cache exclusions
 ```
 
-Raw datasets, training labels, test-prediction tables, fitted model binaries, reference evidence, and environment directories are intentionally not included. Reports' absolute source paths are normalized to `TensorPharma-main/data/processed`; numerical results and original input hashes are preserved.
+Raw datasets, training labels, test-prediction tables, fitted model binaries, reference evidence, and environment directories are intentionally not included. Reports' absolute source paths are normalized to their repository-relative input locations; numerical results and original input hashes are preserved.
 
 ## Environment
 
@@ -134,24 +141,33 @@ The supplied Slurm templates use account `mpensky`, partition `normal`, and modu
 
 ## Reproduction and inference
 
-First obtain the input tables and original frozen feature artifacts described in [DATA_AND_ARTIFACTS.md](DATA_AND_ARTIFACTS.md). A clone alone cannot retrain or serve predictions.
+First obtain the cancer-only input tables and original frozen feature artifacts described in [DATA_AND_ARTIFACTS.md](DATA_AND_ARTIFACTS.md). A clone alone cannot retrain or serve predictions. The selected final model is **Ridge (`ridge_1000`)**, not the earlier expression-coupled artifact.
 
 The included `results/` directories are completed evidence, protected from overwrite. For a deliberately new response run, use a different output directory inside an appropriate compute allocation:
 
 ```bash
 .venv/bin/python scripts/rank_benchmark.py \
-  --output results/rank_benchmark_reproduction --threads 8
+  --source results/rank_benchmark_cancer_only/input \
+  --output results/rank_benchmark_cancer_only_reproduction --threads 8
 ```
 
 Then score a query against that run:
 
 ```bash
 .venv/bin/python scripts/predict_rank.py \
-  --benchmark results/rank_benchmark_reproduction \
+  --benchmark results/rank_benchmark_cancer_only_reproduction \
   --smiles 'CCO' --output results/example_response.json
 ```
 
-Alternatively, obtain the actual completed `best_model.npz` and place it in `results/rank_benchmark/` to score against the included report. `CCO` is only a command example, not a candidate cancer drug.
+Alternatively, obtain the actual final `best_model.npz`, place it in `results/rank_benchmark_cancer_only/`, and score without retraining:
+
+```bash
+.venv/bin/python scripts/predict_rank.py \
+  --benchmark results/rank_benchmark_cancer_only \
+  --smiles 'CCO' --output results/example_response.json
+```
+
+Always pass `--benchmark results/rank_benchmark_cancer_only` for final integration: the script's default still points at the earlier mixed-cell directory. `CCO` is only a command example, not a candidate cancer drug.
 
 For an existing target library, with its directory supplied as `LIBRARY_PATH`:
 

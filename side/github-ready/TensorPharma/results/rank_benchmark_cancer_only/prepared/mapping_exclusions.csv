@@ -1,0 +1,9 @@
+pert_id,drug_id,inchi_key,split,exclusion_reason,name,smiles
+BRD-K20696416,AECDBHGVIIRMOI-UHFFFAOYSA-N,AECDBHGVIIRMOI-UHFFFAOYSA-N,validation,source_structure_conflict_flag,NVP-AEW541,C1CN(C1)CC2CC(C2)N3C=C(C4=C3N=CN=C4N)C5=CC(=CC=C5)OCC6=CC=CC=C6
+BRD-K35329391,TZKBVRDEOITLRB-UHFFFAOYSA-N,TZKBVRDEOITLRB-UHFFFAOYSA-N,train,source_structure_conflict_flag,GZD-824,CN1CCN(Cc2ccc(NC(=O)c3ccc(C)c(c3)C#Cc3cnc4[nH]ncc4c3)cc2C(F)(F)F)CC1
+BRD-K49371609,QTHCAAFKVUWAFI-DJKKODMXSA-N,QTHCAAFKVUWAFI-UHFFFAOYSA-N,train,source_structure_conflict_flag,PIK-75,CN(N=Cc1cnc2ccc(Br)cn12)S(=O)(=O)c1cc(ccc1C)[N+]([O-])=O
+BRD-K65924316,CEGSUKYESLWKJP-UHFFFAOYSA-N,CEGSUKYESLWKJP-UHFFFAOYSA-N,test,source_structure_conflict_flag,serdemetan,C(Cc1c[nH]c2ccccc12)Nc1ccc(Nc2ccncc2)cc1
+BRD-K76011241,VSZGPKBBMSAYNT-RRFJBIMHSA-N,VSZGPKBBMSAYNT-RRFJBIMHSA-N,train,source_structure_conflict_flag,oseltamivir-phosphate,CCOC(=O)C1=C[C@@H](OC(CC)CC)[C@H](NC(C)=O)[C@@H](N)C1
+BRD-K84937637,QFJCIRLUMZQUOT-HPLJOQBZSA-N,DVSZTYJRXBBIFA-DYJQOERISA-N,train,merged_source_id_has_multiple_frozen_identities;source_structure_disagrees_with_frozen_identity,sirolimus,CO[C@@H]1C[C@H](C[C@@H](C)[C@@H]2CC(=O)[C@H](C)C=C(C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)C=C/C=C/C=C(C)/[C@H](C[C@@H]3CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@H]3C(=O)O2)OC)CC[C@H]1O
+BRD-K89626439,QFJCIRLUMZQUOT-HPLJOQBZSA-N,DVSZTYJRXBBIFA-WEZNMVJQSA-N,train,merged_source_id_has_multiple_frozen_identities;source_structure_disagrees_with_frozen_identity,sirolimus,CO[C@@H]1C[C@H](C[C@@H](C)[C@@H]2CC(=O)[C@H](C)C=C(C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)C=C/C=C/C=C(C)/[C@H](C[C@@H]3CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@H]3C(=O)O2)OC)CC[C@H]1O
+BRD-M16762496,QTHCAAFKVUWAFI-DJKKODMXSA-N,QTHCAAFKVUWAFI-UHFFFAOYSA-N,train,source_structure_conflict_flag,PIK-75,CN(N=Cc1cnc2ccc(Br)cn12)S(=O)(=O)c1cc(ccc1C)[N+]([O-])=O

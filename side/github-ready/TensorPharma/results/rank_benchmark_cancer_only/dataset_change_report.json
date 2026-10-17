@@ -1,0 +1,68 @@
+{
+  "variant": "cancer_only_scope_correction",
+  "reason": "Exclude source cell lines labelled Non-Cancerous, not a claim of general bias removal",
+  "old_cells": 985,
+  "new_cells": 976,
+  "removed_cells": [
+    {
+      "cell_id": "ACH-000043",
+      "cell_name": "Hs 895.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000133",
+      "cell_name": "Hs 729",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000135",
+      "cell_name": "Hs 940.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000154",
+      "cell_name": "Hs 888.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000180",
+      "cell_name": "Hs 839.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000194",
+      "cell_name": "Hs 934.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000229",
+      "cell_name": "Hs 822.T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-000306",
+      "cell_name": "Hs 688(A).T",
+      "cancer_type": "Fibroblast",
+      "cancer_subtype": "Non-Cancerous"
+    },
+    {
+      "cell_id": "ACH-001453",
+      "cell_name": "BPH-1",
+      "cancer_type": "Prostate",
+      "cancer_subtype": "Non-Cancerous"
+    }
+  ],
+  "removed_response_rows": 1957,
+  "retained_raw_response_and_source_counts_unchanged": true,
+  "within_drug_ranks_recomputed": true,
+  "chemical_split": "Original frozen assignments retained",
+  "selection": "Same six-family grid; validation only; previous test inspection makes results exploratory",
+  "previous_results": "results/rank_benchmark (not modified)"
+}

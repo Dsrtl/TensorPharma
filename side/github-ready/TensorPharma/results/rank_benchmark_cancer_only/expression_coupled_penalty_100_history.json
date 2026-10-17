@@ -1,0 +1,98 @@
+[
+  {
+    "epoch": 1,
+    "training_objective": 329867.96939501015,
+    "validation_rmse": 0.2637340101862555,
+    "selection_loss": -0.29833915364619445
+  },
+  {
+    "epoch": 2,
+    "training_objective": 316737.86744992144,
+    "validation_rmse": 0.26307026393770094,
+    "selection_loss": -0.3031736885897458
+  },
+  {
+    "epoch": 3,
+    "training_objective": 313655.694425479,
+    "validation_rmse": 0.2631865493050927,
+    "selection_loss": -0.3035648131667311
+  },
+  {
+    "epoch": 4,
+    "training_objective": 312570.67028182326,
+    "validation_rmse": 0.26335824404793023,
+    "selection_loss": -0.303278122882349
+  },
+  {
+    "epoch": 5,
+    "training_objective": 312043.35749103775,
+    "validation_rmse": 0.2634404456062225,
+    "selection_loss": -0.30359020733545145
+  },
+  {
+    "epoch": 6,
+    "training_objective": 311779.42594810424,
+    "validation_rmse": 0.26346653358415095,
+    "selection_loss": -0.3035352886667322
+  },
+  {
+    "epoch": 7,
+    "training_objective": 311639.07741805137,
+    "validation_rmse": 0.26347336005350475,
+    "selection_loss": -0.3039802952908287
+  },
+  {
+    "epoch": 8,
+    "training_objective": 311557.91197529616,
+    "validation_rmse": 0.2634771629074013,
+    "selection_loss": -0.3042497018114483
+  },
+  {
+    "epoch": 9,
+    "training_objective": 311507.13955405983,
+    "validation_rmse": 0.263482405228625,
+    "selection_loss": -0.3044309837006037
+  },
+  {
+    "epoch": 10,
+    "training_objective": 311473.20934691833,
+    "validation_rmse": 0.263489484435951,
+    "selection_loss": -0.3045754104185344
+  },
+  {
+    "epoch": 11,
+    "training_objective": 311449.20582014706,
+    "validation_rmse": 0.26349781253768373,
+    "selection_loss": -0.30463702984570135
+  },
+  {
+    "epoch": 12,
+    "training_objective": 311431.31023187155,
+    "validation_rmse": 0.26350677118212923,
+    "selection_loss": -0.3040178993362963
+  },
+  {
+    "epoch": 13,
+    "training_objective": 311417.27364998835,
+    "validation_rmse": 0.26351592897656845,
+    "selection_loss": -0.3039632083935588
+  },
+  {
+    "epoch": 14,
+    "training_objective": 311405.70709958265,
+    "validation_rmse": 0.26352503699618457,
+    "selection_loss": -0.30390770505965853
+  },
+  {
+    "epoch": 15,
+    "training_objective": 311395.7246668718,
+    "validation_rmse": 0.2635339752087673,
+    "selection_loss": -0.30386065565040316
+  },
+  {
+    "epoch": 16,
+    "training_objective": 311386.75086609175,
+    "validation_rmse": 0.2635427016373918,
+    "selection_loss": -0.3038003612292659
+  }
+]

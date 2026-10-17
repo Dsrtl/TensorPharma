@@ -4,20 +4,23 @@
 
 - Scientific and data-preparation source code, Slurm templates, and dependency specifications.
 - Target metrics/manifest/environment from completed ARCC job 949350.
-- Response summary/full report/environment from completed ARCC job 949920.
+- Final cancer-only response summary/full report/environment and dataset-change report from completed ARCC job 950090.
+- Earlier mixed-cell response reports from ARCC job 949920, retained separately as historical evidence.
 - Response data audit, mapping exclusions, four low-rank optimization histories, and descriptive LightGBM feature importance.
 
-Source-path strings in copied JSON reports are normalized to a repository-relative path. All metrics, source hashes, and split hashes remain unchanged. No dataset archive, response-label table, test-prediction table, model binary, or target reference is included.
+Source-path strings in copied JSON reports are normalized to a repository-relative path. All metrics, source hashes, and split hashes remain unchanged. No dataset archive, response-label table, test-prediction table, model binary, target reference, or cancer-only `input/` directory is included.
 
 ## To run the selected response predictor
 
 Ask the modeling lead for:
 
 ```text
-results/rank_benchmark/best_model.npz
+results/rank_benchmark_cancer_only/best_model.npz
 ```
 
-It belongs with the included `benchmark_report.json` and the recorded environment. The selected winner is `expression_coupled_penalty_100`, so it does **not** need a LightGBM text model. A future LightGBM winner would require both NPZ preprocessing and `best_model.txt`.
+It belongs with the included cancer-only `benchmark_report.json` and recorded environment. The final selected winner is **`ridge_1000`**, so it does **not** need a LightGBM text model. The earlier mixed-cell `expression_coupled_penalty_100` artifact is not the final integration model. A future LightGBM winner would require both NPZ preprocessing and `best_model.txt`.
+
+Always use `predict_rank.py --benchmark results/rank_benchmark_cancer_only`; the CLI default still selects the earlier directory. Do not copy an artifact between reports: the exporter checks selected-model agreement.
 
 The NPZ contains model state and data-derived preprocessing/training context. It is excluded from Git by default; agree on redistribution permissions before attaching it to a public release. Private shared storage is sufficient for team integration.
 
@@ -51,7 +54,9 @@ Append `/library` to that directory. The original work base was explicitly chose
 
 ## To reproduce training
 
-Obtain all corrected partner input tables and the original `data/features/` triplet. Verify their hashes against the audit. Six source IDs were excluded before fitting because of unresolved/flagged chemical mappings; do not restore their averaged labels by assigning the first matching structure.
+Obtain all corrected partner input tables and the original `data/features/` triplet. For final reproduction, obtain the six-file snapshot in `results/rank_benchmark_cancer_only/input/`, or reconstruct it with the updated `cells.csv.gz`, `responses.csv.gz`, and `gene_expression.csv.gz` plus the original unchanged `drugs.csv.gz`, `drug_ids.csv.gz`, and `drug_targets.csv.gz`. Verify hashes against the cancer-only audit. The three updated tables can be staged under `data/updated_cancer_cell_data/` for the supplied Slurm script.
+
+This update removes nine `Non-Cancerous` cells and recomputes within-drug ranks. It does not demonstrate general bias removal or cancer-versus-normal selectivity. The final panel contains 976 cells. Six source IDs and 3,720 response rows were separately excluded because of unresolved/flagged chemical mappings; do not restore their averaged labels by assigning the first matching structure.
 
 Existing result folders contain completed evidence. Use a new experiment output directory and keep the original reports unchanged. More repeated tuning on this already-inspected test set does not create independent validation.
 

@@ -1,0 +1,38 @@
+[
+  {
+    "epoch": 1,
+    "training_objective": 397665.807213421,
+    "validation_rmse": 0.26509084423735707,
+    "selection_loss": -0.2912348447186246
+  },
+  {
+    "epoch": 2,
+    "training_objective": 383120.1871770353,
+    "validation_rmse": 0.2652345222829069,
+    "selection_loss": -0.29023579248676623
+  },
+  {
+    "epoch": 3,
+    "training_objective": 375137.1530988958,
+    "validation_rmse": 0.2653346905583668,
+    "selection_loss": -0.2896361406642715
+  },
+  {
+    "epoch": 4,
+    "training_objective": 369431.2561180735,
+    "validation_rmse": 0.26538698619232687,
+    "selection_loss": -0.2890998181213159
+  },
+  {
+    "epoch": 5,
+    "training_objective": 365226.19257934013,
+    "validation_rmse": 0.2653993147925179,
+    "selection_loss": -0.2893178872937886
+  },
+  {
+    "epoch": 6,
+    "training_objective": 362033.61688276933,
+    "validation_rmse": 0.2653791302464092,
+    "selection_loss": -0.28967476313633883
+  }
+]
